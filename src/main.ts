@@ -7,6 +7,7 @@ import { environment } from './environments/environment';
 if (environment.production) {
   enableProdMode();
 }
+document.documentElement.setAttribute("data-bs-theme", 'light');
 
 platformBrowserDynamic()
   .bootstrapModule(AppModule)

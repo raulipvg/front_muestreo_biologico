@@ -1,59 +1,27 @@
-<<<<<<< HEAD
-# Demo1
+# Sistema formularios
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.x.x.
+Es necesario verificar que el equipo cuente con ``Angular ^17.3.3``, ``NodeJS ^20.11``.
 
-## Development server
+## Iniciar el proyecto
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Verificar que se tenga ``Angular ^17.3.3`` instalado, sino, instalar la última versión (quitando la anterior).
 
-## Code scaffolding
+    npm uninstall --global @angular/cli
+    npm install --global @angular/cli@latest
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Luego, una vez dentro del directorio del proyecto, limpiar caché e instalar los módulos de NodeJS.
 
-## Build
+    npm cache clean --force
+    npm install --legacy-peer-deps
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Finalmente, para iniciar el proyecto usar el comando
 
-## Running unit tests
+    ng serve
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+El cual levantará el servidor en [http://localhost:4200](http://localhost:4200)
 
-## Running end-to-end tests
+## Construir el proyecto
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Ejecutar `ng build` para construir el proyecto. El resultado se creará en el directorio `dist/`.
 
-## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-=======
-# README #
-
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
->>>>>>> 81a70253412179603d7160fa5e9140cb5527869b
