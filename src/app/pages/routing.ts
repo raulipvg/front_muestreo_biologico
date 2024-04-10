@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { PruebasComponent } from './pruebas/pruebas.component'
 
 const Routing: Routes = [
   {
@@ -8,6 +9,10 @@ const Routing: Routes = [
   {
     path: 'biologico',
     loadChildren: () => import('./biologico/biologico.module').then((m) => m.BiologicoModule),
+  },
+  {
+    path: 'pruebas',
+    component:PruebasComponent
   },
   {
     path: '',
