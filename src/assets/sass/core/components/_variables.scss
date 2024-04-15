@@ -71,8 +71,8 @@ $light-clarity: 				rgba($white, 0.2) !default;
 $light-inverse:					$gray-800 !default;
 
 // Success colors
-$success: 						#17C653 !default; 
-$success-active: 				#04B440 !default;
+$success: 						#3c9464 !default; 
+$success-active: 				#47be7d !default;
 $success-light: 				#DFFFEA !default;
 $success-clarity: 				rgba(#17C653, 0.2) !default;
 $success-inverse: 				$white !default;
@@ -99,7 +99,7 @@ $danger-clarity: 				rgba(#F8285A, 0.2) !default;
 $danger-inverse: 				$white !default;
 
 // Dark colors
-$dark: 							#1E2129 !default;
+$dark: 							#353A40 !default;
 $dark-active: 					#111318 !default;
 $dark-light: 					#F9F9F9 !default; 
 $dark-clarity: 					rgba(#1E2129, 0.2) !default;
@@ -769,8 +769,11 @@ $pagination-hover-color:                            var(--#{$prefix}component-ho
 $pagination-hover-bg:                               var(--#{$prefix}component-hover-bg) !default;
 $pagination-hover-border-color:                     transparent !default;
 
-$pagination-active-color:                           var(--#{$prefix}component-active-color) !default;
-$pagination-active-bg:                              var(--#{$prefix}component-active-bg) !default;
+$pagination-active-color:                           var(--#{$prefix}component-active-color) !default;                       
+
+//$pagination-active-bg:                              var(--#{$prefix}component-active-bg) !default;
+$pagination-active-bg:                              #252f4a !default;
+
 $pagination-active-border-color:                    transparent !default;
 
 $pagination-disabled-color:                         var(--#{$prefix}gray-400) !default;

@@ -19,7 +19,7 @@
         justify-content: space-between;
         align-items: stretch;
         flex-wrap: wrap;
-        min-height: $card-header-height;
+        //min-height: $card-header-height;
         padding: 0 $card-px;
         color: var(--#{$prefix}card-cap-color);
         background-color: var(--#{$prefix}card-cap-bg);

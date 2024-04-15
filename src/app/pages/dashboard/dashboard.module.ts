@@ -10,9 +10,11 @@ import { DashboardComponent } from './dashboard.component';
     RouterModule.forChild([
       {
         path: '',
-        component: DashboardComponent,
+        component: DashboardComponent
       },
     ])
   ],
 })
-export class DashboardModule {}
+export class DashboardModule {
+  
+}

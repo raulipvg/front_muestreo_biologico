@@ -1,0 +1,32 @@
+<app-modal #modal [modalConfig]="modalConfig">
+    <div class="row">
+        <div class="col mb-2">
+            <div class="fv-row">
+                <label for="NombreInput" class="form-label">Nombre</label>
+                <input type="text" class="form-control form-control-solid h-input text-capitalize" placeholder="Ingrese el nombre" id="NombreInput" name="Nombre" />
+                
+            </div>
+        </div>
+        <div class="col-md-6 mb-2">
+            <div class="fv-row">
+                <label for="ApellidoInput" class="form-label">Apellido</label>
+                <input type="text" class="form-control form-control-solid h-input text-capitalize" placeholder="Ingrese el apellido" id="ApellidoInput" name="Apellido" />
+                
+            </div>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-2">
+            <div class="fv-row">
+                
+                <label for="ApellidoInput" class="form-label">Apellido</label>
+                <ng-select [multiple]="true" [(ngModel)]="selectedCars" class="ng-appearance-outline">
+                    @for ( car of cars; track car.id ){
+                        <ng-option [value]="car.id" [disabled]="car.disabled">{{car.name}}</ng-option>
+                    }
+                </ng-select>
+            </div>
+        </div>
+    </div>
+    
+</app-modal>
