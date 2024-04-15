@@ -1,0 +1,19 @@
+<app-modal #modal [modalConfig]="modalConfig">
+    ESTE ES EL CONTENIDO DEL MODAL PAPI
+    <div class="form-floating fv-row">
+        <input type="text" class="form-control h-input text-capitalize" placeholder="Ingrese el nombre" id="NombreInput" name="Nombre" />
+        <label for="NombreInput" class="form-label">Nombre</label>
+    </div>
+    <div class="form-floating fv-row">
+        <input type="text" class="form-control h-input text-capitalize" placeholder="Ingrese el nombre" id="ApellidoInput" name="Apellido" />
+        <label for="ApellidoInput" class="form-label">Apellido</label>
+    </div>
+    <div class="form-floating fv-row">
+        <ng-select [multiple]="true" [(ngModel)]="selectedCars">
+            @for (car of cars; track $index) {
+                <ng-option [value]="car.id" [disabled]="car.disabled">{{car.name}}</ng-option>
+            }
+            <ng-option [value]="'custom'">Custom</ng-option>
+        </ng-select>
+    </div>
+</app-modal>

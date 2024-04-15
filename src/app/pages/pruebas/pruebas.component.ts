@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild, viewChild} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild, viewChild} from '@angular/core';
 import { DataTablesModule } from 'angular-datatables';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -55,7 +55,8 @@ export class PruebasComponent implements OnInit, AfterViewInit, OnDestroy  {
   constructor(
     private userService: UsersService, 
     private renderer: Renderer2,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private el:ElementRef
   ) { }
 
   
@@ -163,9 +164,21 @@ export class PruebasComponent implements OnInit, AfterViewInit, OnDestroy  {
               this.dtTrigger.next(null);
               this.cdRef.detectChanges();
       });
-  }  
+  }
 
-
+  // NO FUNCIONÓ, A FORZARLO MEJOR
+/*
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    const closestBtn = (event.target as HTMLElement).closest('.btn-action');
+    if (closestBtn) {
+      const action = closestBtn.dataset.action;
+      const id = closestBtn.dataset.id;
+      console.log(Clic en botón con acción: ${action} e ID: ${id});
+      // Lógica adicional aquí, como abrir un modal
+    }
+  }
+*/
  /*
   getUsersViaDatatable(): void {
 

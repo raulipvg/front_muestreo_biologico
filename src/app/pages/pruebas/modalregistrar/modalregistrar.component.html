@@ -22,7 +22,7 @@
                 <label for="ApellidoInput" class="form-label">Apellido</label>
                 <ng-select [multiple]="true" [(ngModel)]="selectedCars" class="ng-appearance-outline">
                     @for ( car of cars; track car.id ){
-                        <ng-option [value]="car.id" [disabled]="car.disabled">{{car.name}}</ng-option>
+                        <ng-option [value]="car.id" [disabled]="">{{car.name}}</ng-option>
                     }
                 </ng-select>
             </div>

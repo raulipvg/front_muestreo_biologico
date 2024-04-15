@@ -1,4 +1,4 @@
-import { Component, Output, ViewChild, EventEmitter, Input } from '@angular/core';
+import { Component, ViewChild, EventEmitter, Input, ChangeDetectorRef  } from '@angular/core';
 import { ModalConfig, ModalsModule, ModalComponent } from 'src/app/_metronic/partials';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
@@ -15,19 +15,18 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './modalregistrar.component.html',
   styleUrl: './modalregistrar.component.scss'
 })
-
-       //Modal config
-       //Modal config
       
 export class ModalRegistrarComponent {
   @ViewChild('modal') private modalComponent: ModalComponent;
   @Input() abrirModal = new EventEmitter();
 
+  constructor(private cdRef: ChangeDetectorRef){}  
+
   selectedCars: number[] = [];
   flag: boolean =false;
   cars = [
     { id: 1, name: 'Volvo' },
-    { id: 2, name: 'Saab', disabled: true },
+    { id: 2, name: 'Saab' },
     { id: 3, name: 'Opel' },
     { id: 4, name: 'Audi' },
 ];
@@ -47,13 +46,13 @@ export class ModalRegistrarComponent {
     switch (action) {
       case 'ver':
         this.selectedCars = [1];
-        //this.cdRef.detectChanges();
+        this.cdRef.detectChanges();
         break;
       case 'edit':
         this.flag=false;
        // this.modalito.AbrirModal(action, id);
         this.selectedCars = [];
-        //this.cdRef.detectChanges();
+        this.cdRef.detectChanges();
         break;
       case 'delete':
         //console.log('delete');
@@ -64,7 +63,7 @@ export class ModalRegistrarComponent {
         break;
     }
     //this.selectedCars = [];
-              //this.cdRef.detectChanges();
+    this.cdRef.detectChanges();
     return await this.modalComponent.open();
   }
 }

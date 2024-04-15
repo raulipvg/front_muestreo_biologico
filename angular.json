@@ -39,9 +39,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
               "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css",
-              "node_modules/@ng-select/ng-select/scss/material.theme.scss"
+              "src/styles.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
