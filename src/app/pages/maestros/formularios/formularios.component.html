@@ -1,0 +1,53 @@
+<!--begin::Content-->
+<div class="d-flex flex-column flex-column-fluid">
+
+    <div class="card mx-5">
+        <div class="card-header bg-dark">
+            <h3 class="card-title text-uppercase text-white">Formularios</h3>
+
+        </div>
+        <div class="card-body pt-2">
+            <!--begin::Tabla Formularios-->
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-row-dashed table-hover rounded gy-2 gs-md-3 nowrap">
+                <thead>
+                </thead>
+                <tbody class="tabla-body fw-semibold text-gray-600">
+                    @if(allFormularios && allFormularios.length >0){
+                        @for ( formulario of allFormularios; track formulario.id ){
+                            <tr>
+                                <td>{{ formulario.id }}</td>
+                                <td>{{ formulario.name }}</td>
+                                <td>{{ formulario.email }}</td>
+                                <td>{{ formulario.phone}}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-icon btn-success w-30px h-30px btn-action" data-action="ver"  [attr.data-id]="formulario.id" ngbTooltip="Ver" placement="top">
+                                            <i class="ki-duotone ki-eye fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                                        </button>
+                                        <button class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" [attr.data-id]="formulario.id" ngbTooltip="Editar" placement="top" tooltipClass="black">
+                                            <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
+                                        </button>
+                                    </div>
+                                </td> <!-- Usar innerHTML para insertar el botón HTML generado dinámicamente -->
+                          </tr>
+                        }
+                        @empty {
+                            <tr>
+                                <td colspan="5">No hay formularios para mostrar.</td>
+                            </tr>
+                        }
+                    }@else {
+                        <tr>
+                            <td colspan="5">Cargando</td>
+                        </tr>
+                    }
+                </tbody>
+              </table>
+            <!--end::Tabla Usuario-->
+        </div>
+    </div>
+        
+</div>
+<!--end::Content-->
+
+<modal-acciones #modal></modal-acciones>

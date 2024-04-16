@@ -1,0 +1,47 @@
+<app-modal #modal [modalConfig]="modalConfig">
+<form [formGroup]="formulario" #formDir="ngForm">
+    <div
+        class="cross-validation"
+        [class.cross-validation-error]="
+          formulario.errors?.['identityRevealed'] &&
+          (formulario.touched || formulario.dirty)
+        "
+      >
+    <div class="row">
+        <div class="col mb-2 form-group">
+            <div class="fv-row">
+                <label for="NombreInput" class="form-label">Nombre</label>
+                <input type="text" class="form-control form-control-solid h-input text-capitalize" placeholder="Ingrese el nombre" id="NombreInput" formControlName="Nombre" required/>
+            </div>
+            
+        </div>
+
+        </div>
+        <div class="col-md-6 mb-2 form-group">
+            <div class="fv-row">
+                <label for="ApellidoInput" class="form-label">Apellido</label>
+                <input type="text" class="form-control form-control-solid h-input text-capitalize" placeholder="Ingrese el apellido" id="ApellidoInput" formControlName="Apellido" />
+                
+            </div>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-2 form-group">
+            <div class="fv-row">
+                <label for="AutoInput" class="form-label">Auto</label>
+                <ng-select [multiple]="true" [items]="selectedCars" class="ng-appearance-outline" formControlName="Auto" id="Auto">
+                    @for ( car of cars; track car.id ){
+                        <ng-option [value]="car.id" [disabled]="">{{car.name}}</ng-option>
+                    }
+                </ng-select>
+            </div>
+        </div>
+    </div>
+    <button
+        type="submit"
+        class="btn btn-default"
+      >
+        Submit
+      </button>
+</form>
+</app-modal>

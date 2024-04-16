@@ -1,0 +1,48 @@
+
+<app-modal #modal [modalConfig]="modalConfig">
+    <form class="form-horizontal" [formGroup]="registerForm" (ngSubmit)="registerFormSubmit()">
+
+    <div class="modal-body">
+
+    <div class="row">
+        <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" formControlName="nombre" id="nombre" class="form-control form-control-solid text-capitalize" placeholder="Nombre del formulario" required 
+            [ngClass]="{
+                        'is-invalid': f.nombre.invalid && (f.nombre.dirty || f.nombre.touched), 
+                        'is-valid': f.nombre.valid 
+                        }"
+            >
+            <div *ngIf="f.nombre.errors" class="invalid-feedback">
+                <div *ngIf="f.nombre.errors?.['required']">Name is required!</div>
+                <div *ngIf="f.nombre.errors?.['minlength']">Minimo 4 po!</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mb-2">
+            <div class="fv-row">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <input type="text" class="form-control form-control-solid h-input text-capitalize" placeholder="Descripción del formulario" id="descripcion" name="descripcion" />
+                
+            </div>
+        </div>       
+    </div>
+    <div class="row">
+        
+    </div>
+
+</div>
+<div class="modal-footer bg-light p-2">   
+    <button type="button" class="btn btn-light-dark" (click)="CerrarModal()"
+    *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()">
+      {{ modalConfig.closeButtonLabel }}
+    </button>
+    <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary">Registrar
+
+    </button>
+    
+  </div>
+</form>
+</app-modal>

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { PruebasComponent } from './pruebas/pruebas.component'
 import { Pruebas2Component } from './pruebas2/pruebas2.component'
 import { RespuestaComponent } from './respuesta/respuesta.component';
+import { FormulariosComponent } from './maestros/formularios/formularios.component';
 
 const Routing: Routes = [
   {
@@ -23,6 +24,10 @@ const Routing: Routes = [
   {
     path: 'respuesta',
     component: RespuestaComponent
+  },
+  {
+    path: 'maestros/formularios',
+    component: FormulariosComponent
   },
   {
     path: '',
