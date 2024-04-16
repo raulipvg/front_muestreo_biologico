@@ -1,9 +1,31 @@
+
 <app-modal #modal [modalConfig]="modalConfig">
+    <form class="form-horizontal" [formGroup]="registerForm" (ngSubmit)="registerFormSubmit()">
+
+    <div class="modal-body">
+
+    <div class="row">
+        <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" formControlName="name" id="name" class="form-control form-control-solid text-capitalize" placeholder="Name" required 
+            [ngClass]="{
+                        'is-invalid': f.name.invalid && (f.name.dirty || f.name.touched), 
+                        'is-valid': f.name.valid 
+                        }"
+            >
+            <div *ngIf="f.name.errors" class="invalid-feedback">
+                <div *ngIf="f.name.errors?.['required']">Name is required!</div>
+                <div *ngIf="f.name.errors?.['minlength']">Minimo 4 po!</div>
+            </div>
+        </div>
+    </div>
+
+ 
     <div class="row">
         <div class="col mb-2">
             <div class="fv-row">
                 <label for="NombreInput" class="form-label">Nombre</label>
-                <input type="text" class="form-control form-control-solid h-input text-capitalize" placeholder="Ingrese el nombre" id="NombreInput" name="Nombre" />
+                <input type="text"  class="form-control form-control-solid h-input text-capitalize" placeholder="Ingrese el nombre" id="NombreInput" name="Nombre" />
                 
             </div>
         </div>
@@ -17,16 +39,37 @@
     </div>
     <div class="row">
         <div class="col-md-6 mb-2">
-            <div class="fv-row">
-                
-                <label for="ApellidoInput" class="form-label">Apellido</label>
-                <ng-select [multiple]="true" [(ngModel)]="selectedCars" class="ng-appearance-outline">
+            <div class="fv-row">                
+                <label for="ApellidoInput" class="form-label">Auto</label>
+                <ng-select formControlName="auto" [multiple]="true" [ngModel]="selectedCars" class="form-control form-control-solid"
+                    [ngClass]="{
+                        'is-invalid': (f.auto.invalid && (f.auto.dirty || f.auto.touched)),
+                        'is-valid': selectedCars.length > 0
+                    }"                >
                     @for ( car of cars; track car.id ){
                         <ng-option [value]="car.id" [disabled]="">{{car.name}}</ng-option>
                     }
                 </ng-select>
+                <div *ngIf="f.auto.errors" class="invalid-feedback">
+                    <div *ngIf="f.auto.errors?.['required']">Auto is required!</div>
+                </div>
             </div>
         </div>
     </div>
+    <div class="row">
+        
+    </div>
+
+</div>
+<div class="modal-footer bg-light p-2">   
+    <button type="button" class="btn btn-light-dark" (click)="CerrarModal($event)"
+    *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()">
+      {{ modalConfig.closeButtonLabel }}
+    </button>
+    <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary">Registrar
+
+    </button>
     
+  </div>
+</form>
 </app-modal>

@@ -12,20 +12,8 @@
       </div>
       <!--end::Close-->
     </div>
-    <div class="modal-body">
-      <ng-content></ng-content>
-    </div>
-    <div class="modal-footer bg-light p-2">   
-      <button type="button" class="btn btn-light-dark" (click)="close()"
-        *ngIf="modalConfig.hideCloseButton === undefined || !modalConfig.hideCloseButton()"
-        [disabled]="modalConfig.disableCloseButton !== undefined && modalConfig.disableCloseButton()">
-        {{ modalConfig.closeButtonLabel }}
-      </button>
-      <button type="button" class="btn btn-success" (click)="dismiss()"
-        *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()"
-        [disabled]="modalConfig.disableDismissButton !== undefined && modalConfig.disableDismissButton()">
-        {{ modalConfig.dismissButtonLabel }}
-      </button>
-    </div>
+    <ng-content></ng-content>
+    
+   
   </div>
 </ng-template>
