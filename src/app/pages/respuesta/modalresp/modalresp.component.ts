@@ -1,14 +1,11 @@
-import { Component, Output, ViewChild, EventEmitter, Input, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ModalConfig, ModalsModule, ModalComponent } from 'src/app/_metronic/partials';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { FormsModule } from '@angular/forms';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { ModalComponent, ModalConfig, ModalsModule } from 'src/app/_metronic/partials';
 
 @Component({
-  selector: 'modal-registrar',
+  selector: 'modal-resp',
   standalone: true,
   imports: [
     NgSelectModule,
@@ -17,15 +14,19 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     CommonModule
   ],
-  templateUrl: './modalregistrar.component.html',
-  styleUrl: './modalregistrar.component.scss'
+  templateUrl: './modalresp.component.html',
+  styleUrl: './modalresp.component.scss'
 })
-
-export class ModalRegistrarComponent implements OnInit {
-  
+export class ModalRespComponent implements OnInit{
   @ViewChild('modal') private modalComponent: ModalComponent;
-  @Input() abrirModal = new EventEmitter();
-
+  
+  modalConfig: ModalConfig = {
+    modalTitle: 'Ver Respuesta',
+    dismissButtonLabel: 'Actualizar',
+    closeButtonLabel: 'Cerrar',
+    onClose(): boolean{ return false;}
+  };
+  
   selectedCars: number[] = [];
   flag: boolean =false;
   cars = [
@@ -33,31 +34,22 @@ export class ModalRegistrarComponent implements OnInit {
     { id: 2, name: 'Saab', disabled: true },
     { id: 3, name: 'Opel' },
     { id: 4, name: 'Audi' },
-];
+  ];
   formulario: FormGroup;
   caca='';
-  modalConfig: ModalConfig = {
-    modalTitle: 'GRAN TITULO GRAN DEL MODAL',
-    dismissButtonLabel: 'Enviar',
-    closeButtonLabel: 'Cerrar',
-    onClose(): boolean{ return false;}
-  };
-  constructor( 
-    private fb: FormBuilder,
-    private cdRef: ChangeDetectorRef,
-  )
-  {};
+  constructor(
+    private fb: FormBuilder
+  ){};
+
+  
   ngOnInit(): void {
-   
     this.initValidacion();
 
     this.formulario.get('auto')?.valueChanges.subscribe(value => {
       console.log('Valor seleccionado:', value);
     });
-  
   }
   initValidacion() {
-    
     this.formulario = this.fb.group({
       name: ['',Validators.compose([
                 Validators.required,
@@ -67,16 +59,12 @@ export class ModalRegistrarComponent implements OnInit {
                   ])],
 
     });
-
-    
-   
   }
-  registerFormSubmit() {
+  FormSubmit() {
     this.formulario.markAllAsTouched();
-    if (this.formulario.valid) {
-      // Enviar el formulario aquí (por ejemplo, usando un servicio o llamada a la API)
-      console.log('¡Formulario enviado!');
-     this.caca = JSON.stringify(this.formulario.getRawValue());
+    if (this.formulario.valid) {    
+      this.caca = JSON.stringify(this.formulario.getRawValue());
+      console.log(`¡Formulario enviado! ${this.caca}`);
     }
   }
   get f() { return this.formulario.controls; }
@@ -84,7 +72,7 @@ export class ModalRegistrarComponent implements OnInit {
   async AbrirModal(action?: string, id?:number){
     this.flag=true;
     this.formulario.reset();
-    console.log(action+ ' '+id);
+    console.log('sdas '+id);
     switch (action) {
       case 'ver':
         this.formulario.get('auto')?.setValue([3]);
@@ -113,8 +101,11 @@ export class ModalRegistrarComponent implements OnInit {
     return await this.modalComponent.open();
   }
 
+
   async CerrarModal(){
     //event.stopPropagation(); 
     return await this.modalComponent.dismiss();
   }
+
+
 }

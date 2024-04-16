@@ -1,6 +1,6 @@
 
 <app-modal #modal [modalConfig]="modalConfig">
-    <form class="form-horizontal" [formGroup]="formulario" (ngSubmit)="registerFormSubmit()">
+    <form class="form-horizontal" [formGroup]="formulario" (ngSubmit)="FormSubmit()">
 
     <div class="modal-body">
 
@@ -66,7 +66,7 @@
     *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()">
       {{ modalConfig.closeButtonLabel }}
     </button>
-    <button type="submit" [disabled]="formulario.invalid" class="btn btn-primary">Registrar
+    <button type="submit" [disabled]="formulario.invalid" class="btn btn-success">Registrar
 
     </button>
     

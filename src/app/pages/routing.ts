@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { PruebasComponent } from './pruebas/pruebas.component'
 import { Pruebas2Component } from './pruebas2/pruebas2.component'
+import { RespuestaComponent } from './respuesta/respuesta.component';
 
 const Routing: Routes = [
   {
@@ -18,6 +19,10 @@ const Routing: Routes = [
   {
     path: 'pruebas2',
     component:Pruebas2Component
+  },
+  {
+    path: 'respuesta',
+    component: RespuestaComponent
   },
   {
     path: '',

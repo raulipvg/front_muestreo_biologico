@@ -53,7 +53,7 @@ export class PruebasComponent implements OnInit, AfterViewInit, OnDestroy  {
   
  //ng-select data 
   constructor(
-    private userService: UsersService, 
+    private userService : UsersService, 
     private renderer: Renderer2,
     private cdRef: ChangeDetectorRef,
     private el:ElementRef
@@ -75,8 +75,7 @@ export class PruebasComponent implements OnInit, AfterViewInit, OnDestroy  {
           if (btn) {
             const { action, id } = btn.dataset;
             //this.idInAction = id;
-            this.modalito.AbrirModal(action, id);
-            
+            this.modalito.AbrirModal(action, id);          
           }
         
         });
