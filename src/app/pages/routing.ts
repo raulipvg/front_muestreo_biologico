@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { PruebasComponent } from './pruebas/pruebas.component'
 import { Pruebas2Component } from './pruebas2/pruebas2.component'
-import { RespuestaComponent } from './respuesta/respuesta.component';
+import { RespuestaComponent } from './maestros/respuesta/respuesta.component';
 import { FormulariosComponent } from './maestros/formularios/formularios.component';
 
 const Routing: Routes = [
@@ -22,7 +22,7 @@ const Routing: Routes = [
     component:Pruebas2Component
   },
   {
-    path: 'respuesta',
+    path: 'maestros/respuestas',
     component: RespuestaComponent
   },
   {
