@@ -1,21 +1,21 @@
 
 <app-modal #modal [modalConfig]="modalConfig">
-    <form class="form-horizontal" [formGroup]="registerForm" (ngSubmit)="registerFormSubmit()">
+    <form class="form-horizontal" [formGroup]="formulario" (ngSubmit)="registerFormSubmit()">
 
     <div class="modal-body">
 
     <div class="row">
         <div class="form-group">
-        <label for="nombre">Nombre:</label>
-        <input type="text" formControlName="nombre" id="nombre" class="form-control form-control-solid text-capitalize" placeholder="Nombre del formulario" required 
+        <label for="nombre" class="form-label">Nombre:</label>
+        <input type="text" formControlName="titulo" class="form-control form-control-solid text-capitalize" placeholder="Nombre del formulario" required 
             [ngClass]="{
-                        'is-invalid': f.nombre.invalid && (f.nombre.dirty || f.nombre.touched), 
-                        'is-valid': f.nombre.valid 
+                        'is-invalid': f.titulo.invalid && (f.titulo.dirty || f.titulo.touched), 
+                        'is-valid': f.titulo.valid 
                         }"
             >
-            <div *ngIf="f.nombre.errors" class="invalid-feedback">
-                <div *ngIf="f.nombre.errors?.['required']">Name is required!</div>
-                <div *ngIf="f.nombre.errors?.['minlength']">Minimo 4 po!</div>
+            <div *ngIf="f.titulo.errors" class="invalid-feedback">
+                <div *ngIf="f.titulo.errors?.['required']">Name is required!</div>
+                <div *ngIf="f.titulo.errors?.['minlength']">Minimo 4 po!</div>
             </div>
         </div>
     </div>
@@ -23,14 +23,30 @@
     <div class="row">
         <div class="col mb-2">
             <div class="fv-row">
-                <label for="descripcion" class="form-label">Descripción</label>
-                <input type="text" class="form-control form-control-solid h-input text-capitalize" placeholder="Descripción del formulario" id="descripcion" name="descripcion" />
+                <label  class="form-label">Descripción</label>
+                <input type="text" formControlName="descripcion" class="form-control form-control-solid h-input text-capitalize" placeholder="Descripción del formulario" />
                 
             </div>
         </div>       
     </div>
     <div class="row">
-        
+        <div class="col-md-6 mb-2">
+            <div class="fv-row">                
+                <label for="ApellidoInput" class="form-label">Estado</label>
+                <ng-select formControlName="enabled" class="form-control form-control-solid"
+                    [ngClass]="{
+                        'is-invalid': (f.enabled.invalid && (f.enabled.dirty || f.enabled.touched)),
+                        'is-valid': f.enabled.valid
+                    }"                >
+                    @for ( item of items; track item.id ){
+                        <ng-option [value]="item.id" [disabled]="">{{item.name}}</ng-option>
+                    }
+                </ng-select>
+                <div *ngIf="f.enabled.errors" class="invalid-feedback">
+                    <div *ngIf="f.enabled.errors?.['required']">Estado is required!</div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -39,7 +55,7 @@
     *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()">
       {{ modalConfig.closeButtonLabel }}
     </button>
-    <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary">Registrar
+    <button type="submit" [disabled]="formulario.invalid" class="btn btn-succes">Registrar
 
     </button>
     

@@ -92,10 +92,10 @@ export class RespuestaComponent implements OnInit, AfterViewInit, OnDestroy {
       language: languageConfig,
       responsive:true,
       columns:[
-        { title:'Id', data: 'id' },
-        { title:'Nombre', data: 'name' },
-        { title:'Email', data: 'email' },
-        { title: 'Phone', data: 'phone' },
+        { title:'Id', data: 'Id' },
+        { title:'Titulo', data: 'Titulo' },
+        { title:'Fecha', data: 'created_at' },
+        { title: 'Enabled', data: 'Enabled' },
         { title: 'Accion', data: 'actions'}
         //{ title: 'Actions', data: 'actions'}
       ],
@@ -118,7 +118,7 @@ export class RespuestaComponent implements OnInit, AfterViewInit, OnDestroy {
     if(containerElement){
       // Este código se ejecutará cuando getUsers() haya completado su ejecución
       this.renderer.listen(containerElement, 'click', (event) => {
-        const btn = event.target.closest('.btn');
+        const btn = event.target.closest('.btn');        
         if (btn) {
           const { action, id } = btn.dataset;
           //this.idInAction = id;

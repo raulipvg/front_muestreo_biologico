@@ -26,13 +26,11 @@ export class ModalAccionesComponent implements OnInit {
   @ViewChild('modal') private modalComponent: ModalComponent;
   nombre ?: string = 'Oye que gran formulario';
   selectedCars: number[] = [];
-  cars = [
-    { id: 1, name: 'Volvo' },
-    { id: 2, name: 'Saab', disabled: true },
-    { id: 3, name: 'Opel' },
-    { id: 4, name: 'Audi' },
+  items = [
+    { id: true, name: 'Habilitado' },
+    { id: false, name: 'Deshabilitado' }
 ];
-  registerForm: FormGroup;
+  formulario: FormGroup;
   caca='';
   modalConfig: ModalConfig = {
     modalTitle: `Formulario: ${this.nombre}`,
@@ -54,8 +52,9 @@ export class ModalAccionesComponent implements OnInit {
   }
   initValidacion() {
     
-    this.registerForm = this.fb.group({
-      nombre: ['',Validators.compose([
+    this.formulario = this.fb.group({
+      id: [''],
+      titulo: ['',Validators.compose([
                 Validators.required,
                 Validators.minLength(4) ])],
       descripcion: ['',Validators.compose([
@@ -69,24 +68,30 @@ export class ModalAccionesComponent implements OnInit {
     });
   }
   registerFormSubmit() {
-    this.registerForm.markAllAsTouched();
-    if (this.registerForm.valid) {
+    this.formulario.markAllAsTouched();
+    if (this.formulario.valid) {
       // Enviar el formulario aquí (por ejemplo, usando un servicio o llamada a la API)
       console.log('¡Formulario enviado!');
-     this.caca = JSON.stringify(this.registerForm.getRawValue());
+     this.caca = JSON.stringify(this.formulario.getRawValue());
     }
   }
-  get f() { return this.registerForm.controls; }
+  get f() { return this.formulario.controls; }
 
-  async AbrirModal(action?: string, id?:number){
-    this.registerForm.reset();
+  async AbrirModal(action?: string, id?:number, data?:any){
+    this.formulario.reset();
     
     switch (action) {
       case 'ver':
         this.cdRef.detectChanges();
         break;
       case 'edit':
-        this.cdRef.detectChanges();
+        console.log(data);
+        //this.formulario.get('nombre')?.setValue(data.Titulo);
+        //this.formulario.get('descripcion')?.setValue(data.Descripcion);
+        //this.formulario.get('enabled')?.setValue(data.Enabled);
+        this.formulario.setValue(data);
+
+        //this.cdRef.detectChanges();
         break;
       default:
         this.cdRef.detectChanges();

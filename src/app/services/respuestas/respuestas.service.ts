@@ -11,8 +11,17 @@ export class RespuestasService {
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<any> {
-    return this.http.get('https://jsonplaceholder.typicode.com/users');
+    return this.http.get('http://127.0.0.1:8000/api/respuesta/getall');
   }
+
+  getOne(): Observable<any> {
+    return this.http.get('http://127.0.0.1:8000/api/respuesta/getone');
+  }
+
+  editOne(): Observable<any> {  
+    return this.http.get('http://127.0.0 .1:8000/api/respuesta/edit');
+  }
+
 
   
 }

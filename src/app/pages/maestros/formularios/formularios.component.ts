@@ -118,10 +118,15 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
       if(containerElement){
         // Este código se ejecutará cuando getUsers() haya completado su ejecución
         this.renderer.listen(containerElement, 'click', (event) => {
-          const btn = event.target.closest('.btn');
+          const btn = event.target.closest('.btn-action');
           if (btn) {
             const { action, id } = btn.dataset;
-            this.modal.AbrirModal(action, id)
+            if(action === 'edit' || action === 'ver'){
+                this.formulariosService.getOne(id).subscribe((data: any) => {
+                this.modal.AbrirModal(action, id,data);
+              });
+            }
+            
           }
         });
       }

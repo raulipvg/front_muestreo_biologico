@@ -14,10 +14,10 @@
                     @if(allRespuestas && allRespuestas.length >0){
                         @for ( item of allRespuestas; track item.id ){
                             <tr>
-                                <td>{{ item.id }}</td>
-                                <td>{{ item.name }}</td>
-                                <td>{{ item.email }}</td>
-                                <td>{{ item.phone}}</td>
+                                <td>{{ item.Id }}</td>
+                                <td>{{ item.Titulo }}</td>
+                                <td>{{ item.Enabled }}</td>
+                                <td>{{ item.created_at}}</td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button class="btn btn-icon btn-success w-30px h-30px btn-action" data-action="ver"  [attr.data-id]="item.id" ngbTooltip="Ver" placement="top">
@@ -36,9 +36,12 @@
                             </tr>
                         }
                     }@else {
-                        <tr>
-                            <td colspan="5">Cargando</td>
-                        </tr>
+                        <td colspan="5" class="">
+                            <div class="flex-column text-center">
+                                <div class="spinner-border text-warning border-2" role="status"></div>
+                                <div class="text-gray-800 fs-6 fw-semibold">Cargando</div>
+                            </div>
+                        </td>
                     }
                 </tbody>
               </table>
