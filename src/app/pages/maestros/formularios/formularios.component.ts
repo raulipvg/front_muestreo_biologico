@@ -79,10 +79,10 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
       language: languageConfig,
       responsive:true,
       columns:[
-        { title:'Id', data: 'id' },
-        { title:'Nombre', data: 'nombre' },
-        { title:'Descripción', data: 'descripcion' },
-        { title: 'Estado', data: 'estado' },
+        { title:'Id', data: 'Id' },
+        { title:'Titulo', data: 'Titulo' },
+        { title:'Descripción', data: 'Descripcion' },
+        { title: 'Estado', data: 'Enabled' },
         { title: 'Accion', data: 'actions'}
       ],
       initComplete: () => {

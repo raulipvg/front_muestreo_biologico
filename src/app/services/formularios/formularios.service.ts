@@ -9,6 +9,6 @@ export class FormulariosService {
 
   constructor(private http: HttpClient) { }
   getAll(): Observable<any> {
-    return this.http.get('https://jsonplaceholder.typicode.com/users');
+    return this.http.get('http://127.0.0.1:8000/api/formulario/getall');
   }
 }

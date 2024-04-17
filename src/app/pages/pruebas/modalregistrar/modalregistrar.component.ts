@@ -65,8 +65,10 @@ export class ModalRegistrarComponent implements OnInit {
       auto: ['',Validators.compose([
                 Validators.required
                   ])],
-
+      
+                  
     });
+    
 
     
    
@@ -77,6 +79,8 @@ export class ModalRegistrarComponent implements OnInit {
       // Enviar el formulario aquí (por ejemplo, usando un servicio o llamada a la API)
       console.log('¡Formulario enviado!');
      this.caca = JSON.stringify(this.formulario.getRawValue());
+
+
     }
   }
   get f() { return this.formulario.controls; }

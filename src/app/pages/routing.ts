@@ -12,6 +12,7 @@ const Routing: Routes = [
   {
     path: 'biologico',
     loadChildren: () => import('./biologico/biologico.module').then((m) => m.BiologicoModule),
+    
   },
   {
     path: 'pruebas',
