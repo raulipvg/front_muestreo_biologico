@@ -17,4 +17,8 @@ export class FormulariosService {
     return this.http.get(this.url+'/get/'+id);
   }
 
+  editOne(id: number, data: any): Observable<any> {
+    return this.http.put(this.url+'/edit/'+id, data);
+  }
+
 }
