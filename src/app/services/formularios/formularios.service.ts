@@ -21,4 +21,8 @@ export class FormulariosService {
     return this.http.put(this.url+'/edit/'+id, data);
   }
 
+  changeState(id: number): Observable<any> {
+    return this.http.post(this.url+'/cambiarestado/', {id});
+  }
+
 }

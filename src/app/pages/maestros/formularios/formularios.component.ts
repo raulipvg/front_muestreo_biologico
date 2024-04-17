@@ -4,6 +4,7 @@ import { languageConfig } from '../../../../assets/sass/core/base/datatables/lan
 import { FormulariosService } from '../../../services/formularios/formularios.service';
 import { ModalAccionesComponent } from './modalAciones/modalacciones.component'
 import { Subject } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-formularios',
@@ -128,16 +129,22 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
               });
             }
             else{
-              if(btn.classList.contains('btn-light-success')){
-                btn.classList.remove('btn-light-success');
-                btn.classList.add('btn-light-warning');
-                btn.querySelector('.indicator-label').textContent = 'DESHABILITADO';
-              }
-              else if(btn.classList.contains('btn-light-warning')){
-                btn.classList.remove('btn-light-warning');
-                btn.classList.add('btn-light-success');
-                btn.querySelector('.indicator-label').textContent = 'HABILITADO';
-              }
+              this.formulariosService.changeState(id).subscribe((data)=>{
+                if(btn.classList.contains('btn-light-success')){
+                  btn.classList.remove('btn-light-success');
+                  btn.classList.add('btn-light-warning');
+                  btn.querySelector('.indicator-label').textContent = 'DESHABILITADO';
+                }
+                else if(btn.classList.contains('btn-light-warning')){
+                  btn.classList.remove('btn-light-warning');
+                  btn.classList.add('btn-light-success');
+                  btn.querySelector('.indicator-label').textContent = 'HABILITADO';
+                }
+              }, (error: HttpErrorResponse) => {
+                console.log('error: '+error.status);
+                //MANEJAR ERROR
+              });
+              
             }
           }
           
