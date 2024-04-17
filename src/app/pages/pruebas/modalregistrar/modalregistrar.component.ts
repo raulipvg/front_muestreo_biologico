@@ -1,10 +1,9 @@
 import { Component, Output, ViewChild, EventEmitter, Input, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ModalConfig, ModalsModule, ModalComponent } from 'src/app/_metronic/partials';
+import { ModalConfig, ModalsModule, ModalComponent, DropdownMenusModule } from 'src/app/_metronic/partials';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
 
 
 @Component({
@@ -15,7 +14,8 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     ModalsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    DropdownMenusModule
   ],
   templateUrl: './modalregistrar.component.html',
   styleUrl: './modalregistrar.component.scss'

@@ -46,7 +46,6 @@ export class ModalAccionesComponent implements OnInit {
   )
   {};
   ngOnInit(): void {
-   
     this.initValidacion();
   
   }
@@ -63,8 +62,7 @@ export class ModalAccionesComponent implements OnInit {
                   ])],
       enabled: ['',Validators.compose([
                 Validators.required
-                ])],
-
+                ])]
     });
   }
   registerFormSubmit() {

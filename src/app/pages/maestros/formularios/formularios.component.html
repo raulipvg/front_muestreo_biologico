@@ -18,7 +18,22 @@
                                 <td>{{ formulario.id }}</td>
                                 <td>{{ formulario.titulo }}</td>
                                 <td>{{ formulario.descripcion }}</td>
-                                <td>{{ formulario.enabled}}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px"
+                                                [attr.data-action]="formulario.enabled"
+                                                [attr.data-id]="formulario.id" 
+                                                data-bs-toggle="tooltip" 
+                                                data-bs-custom-class="tooltip-inverse" 
+                                                data-bs-placement="top"
+                                                [class.btn-light-success]="formulario.enabled"  [class.btn-light-warning]="!formulario.enabled">
+                                            <span class="indicator-label">{{ formulario.enabled ? 'HABILITADO' : 'DESHABILITADO'}}</span>
+                                            <span class="indicator-progress">
+                                                <span class="spinner-border spinner-border-sm align-middle"></span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button class="btn btn-icon btn-success w-30px h-30px btn-action" data-action="ver"  [attr.data-id]="formulario.id" ngbTooltip="Ver" placement="top">

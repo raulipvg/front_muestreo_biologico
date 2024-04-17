@@ -22,7 +22,8 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
 
   @ViewChild('modal') modal: ModalAccionesComponent;
 
-  allFormularios: any[] =[];
+  allFormularios: any[];
+  estadoBoton : any[];
   private getFormulariosCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
 
 
@@ -103,10 +104,10 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
     this.formulariosService
     .getAll()
     .subscribe(
-      (data: any[]) => {
+      (data: any) => {
               this.getFormulariosCompleted.next();
               this.getFormulariosCompleted.complete();
-              this.allFormularios = data;       
+              this.allFormularios = data;    
               this.dtTrigger.next(null);
               this.cdRef.detectChanges();
       });
@@ -126,8 +127,20 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
                 this.modal.AbrirModal(action, id,data);
               });
             }
-            
+            else{
+              if(btn.classList.contains('btn-light-success')){
+                btn.classList.remove('btn-light-success');
+                btn.classList.add('btn-light-warning');
+                btn.querySelector('.indicator-label').textContent = 'DESHABILITADO';
+              }
+              else if(btn.classList.contains('btn-light-warning')){
+                btn.classList.remove('btn-light-warning');
+                btn.classList.add('btn-light-success');
+                btn.querySelector('.indicator-label').textContent = 'HABILITADO';
+              }
+            }
           }
+          
         });
       }
     });
