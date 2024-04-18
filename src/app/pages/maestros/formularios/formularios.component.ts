@@ -6,6 +6,8 @@ import { ModalAccionesComponent } from './modalAciones/modalacciones.component'
 import { Observable, Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { KTHelpers, KTUtil } from 'src/app/_metronic/kt';
+import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -13,7 +15,8 @@ import { KTHelpers, KTUtil } from 'src/app/_metronic/kt';
   standalone: true,
   imports: [
     DataTablesModule,
-    ModalAccionesComponent
+    ModalAccionesComponent,
+    PageLoadingComponent
   ],
   templateUrl: './formularios.component.html',
   styleUrl: './formularios.component.scss'
@@ -45,6 +48,11 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
     this.inicializarTabla();
     this.getFormularios();
     //this.isLoading = false;
+  }
+
+  cambiaLoading(){
+    this.isLoading = !this.isLoading;
+    this.cdRef.detectChanges();
   }
 
   // Inicializar datatable
@@ -177,7 +185,8 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
           const btn = event.target.closest('.btn-action');
           if (btn) {
             btn.setAttribute('data-kt-indicator','on');
-
+            
+            this.cambiaLoading();
             //ACCIONES
             
             const { action, id } = btn.dataset;
@@ -192,11 +201,11 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
                   },
                   complete: () => {
                     btn.removeAttribute('data-kt-indicator');
+                    this.cambiaLoading();
                   }
                 });
             }
             else if(action === 'cambiar-estado'){
-
               this.formulariosService.cambiarestado(id).subscribe({
                 next: (data: IFormularioModel) => {
                   if(btn.classList.contains('btn-light-success')){
@@ -216,13 +225,12 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
                 },
                 complete: () => {
                   btn.removeAttribute('data-kt-indicator');
+                  this.cambiaLoading();
                 }
               });
     
             }
             //END ACCIONES
-            
-
           }
           
         });

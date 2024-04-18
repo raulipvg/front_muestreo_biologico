@@ -51,7 +51,7 @@ export class ModalAccionesComponent implements OnInit {
   swalOptions: SweetAlertOptions = {};
   @Output() cambiosAllUsuariosEvent = new EventEmitter<IFormularioModel>();
 
-  isLoading = false;
+  @Input() isLoading : boolean;
   constructor(
     private formulariosService: FormulariosService, 
     private fb: FormBuilder,

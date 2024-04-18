@@ -17,7 +17,8 @@ export interface IFormularioModel {
 export class FormulariosService {
 
   constructor(private http: HttpClient) { }
-  url = 'http://127.0.0.1:8000/api/formulario';
+  url = 'https://cub-balanced-slowly.ngrok-free.app/api/formulario';
+  //url = 'http://127.0.0.1:8000/api/formulario';
   getAll(): Observable<any> {
     return this.http.get(this.url+'/getall');
   }

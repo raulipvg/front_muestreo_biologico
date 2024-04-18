@@ -1,4 +1,6 @@
 
+<app-page-loading [isLoading]="this.isLoading"></app-page-loading>
+
 <div class="d-flex flex-column flex-column-fluid">
     
 
@@ -75,11 +77,10 @@
                 </tbody>
               </table>
             <!--end::Tabla Usuario-->
-            
         </div>
     </div>
         
 </div>
 <!--end::Content-->
 
-<modal-acciones #modal (cambiosAllUsuariosEvent)="cambiosAllUsuarios($event)"></modal-acciones>
+<modal-acciones #modal (cambiosAllUsuariosEvent)="cambiosAllUsuarios($event)" [isLoading]="this.isLoading"></modal-acciones>

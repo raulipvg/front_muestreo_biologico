@@ -1,0 +1,12 @@
+<div [ngSwitch]="this.isLoading">
+    <ng-container *ngSwitchCase="true">
+        <div class="flex-column text-center loading">
+            <div class="spinner-border text-warning border-2" role="status"></div>
+            <div class="text-gray-800 fs-6 fw-semibold">Cargando</div>
+        </div>
+        CHAMO ESTOY CARGANDO
+    </ng-container>
+    <ng-container *ngSwitchCase="false">
+        
+    </ng-container>
+</div>
