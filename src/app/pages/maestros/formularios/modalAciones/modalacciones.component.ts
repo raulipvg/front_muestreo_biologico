@@ -4,6 +4,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormulariosService } from '../../../../services/formularios/formularios.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 
@@ -40,7 +42,9 @@ export class ModalAccionesComponent implements OnInit {
     
 
   };
-  constructor( 
+
+  constructor(
+    private formulariosService: FormulariosService, 
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
   )
@@ -65,12 +69,29 @@ export class ModalAccionesComponent implements OnInit {
                 ])]
     });
   }
-  registerFormSubmit() {
+  Submit() {
     this.formulario.markAllAsTouched();
     if (this.formulario.valid) {
       // Enviar el formulario aquí (por ejemplo, usando un servicio o llamada a la API)
       console.log('¡Formulario enviado!');
-     this.caca = JSON.stringify(this.formulario.getRawValue());
+      this.caca = JSON.stringify(this.formulario.getRawValue());
+ 
+      this.formulariosService.update(this.formulario.getRawValue()).subscribe({
+        next: (data: any) => {
+
+          console.log('se cambio');
+          //this.modal.AbrirModal(action, id,data);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log('error: '+error.status);
+          //MANEJAR ERROR
+        },
+        complete: () => {
+         // btn.removeAttribute('data-kt-indicator');
+        }
+      });
+
+
     }
   }
   get f() { return this.formulario.controls; }

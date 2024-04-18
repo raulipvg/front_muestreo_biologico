@@ -1,5 +1,7 @@
 <!--begin::Content-->
+
 <div class="d-flex flex-column flex-column-fluid">
+    
 
     <div class="card mx-5">
         <div class="card-header bg-dark">
@@ -21,11 +23,10 @@
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px"
-                                                [attr.data-action]="formulario.enabled"
+                                                data-action="cambiar-estado"
+                                                data-kt-indicator="off"
+                                                data-kt-app-page-loading="on"
                                                 [attr.data-id]="formulario.id" 
-                                                data-bs-toggle="tooltip" 
-                                                data-bs-custom-class="tooltip-inverse" 
-                                                data-bs-placement="top"
                                                 [class.btn-light-success]="formulario.enabled"  [class.btn-light-warning]="!formulario.enabled">
                                             <span class="indicator-label">{{ formulario.enabled ? 'HABILITADO' : 'DESHABILITADO'}}</span>
                                             <span class="indicator-progress">
@@ -37,13 +38,23 @@
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button class="btn btn-icon btn-success w-30px h-30px btn-action" data-action="ver"  [attr.data-id]="formulario.id" ngbTooltip="Ver" placement="top">
-                                            <i class="ki-duotone ki-eye fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                                            <span class="indicator-label">
+                                                <i class="ki-duotone ki-eye fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                                            </span>                                            
+                                            <span class="indicator-progress">
+                                                <span class="spinner-border spinner-border-sm align-middle"></span>
+                                            </span>
                                         </button>
                                         <button class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" [attr.data-id]="formulario.id" ngbTooltip="Editar" placement="top" tooltipClass="black">
-                                            <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
+                                            <span class="indicator-label">
+                                                <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
+                                            </span>
+                                            <span class="indicator-progress">
+                                                <span class="spinner-border spinner-border-sm align-middle"></span>
+                                            </span>
                                         </button>
                                     </div>
-                                </td> <!-- Usar innerHTML para insertar el botón HTML generado dinámicamente -->
+                                </td> 
                           </tr>
                         }
                         @empty {
@@ -58,13 +69,14 @@
                                     <div class="spinner-border text-warning border-2" role="status"></div>
                                     <div class="text-gray-800 fs-6 fw-semibold">Cargando</div>
                                 </div>
-                                |
+                                
                             </td>
                         </tr>
                     }
                 </tbody>
               </table>
             <!--end::Tabla Usuario-->
+            
         </div>
     </div>
         

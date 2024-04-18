@@ -8,20 +8,20 @@ import { Observable } from 'rxjs';
 export class FormulariosService {
 
   constructor(private http: HttpClient) { }
-  url = 'https://cub-balanced-slowly.ngrok-free.app/api/formulario';
+  url = 'http://127.0.0.1:8000/api/formulario';
   getAll(): Observable<any> {
     return this.http.get(this.url+'/getall');
   }
 
-  getOne(id: number): Observable<any> {
+  get(id: number): Observable<any> {
     return this.http.get(this.url+'/get/'+id);
   }
 
-  editOne(id: number, data: any): Observable<any> {
-    return this.http.put(this.url+'/edit/'+id, data);
+  update( data: any): Observable<any> {
+    return this.http.post(this.url+'/update/', data);
   }
 
-  changeState(id: number): Observable<any> {
+  cambiarestado(id: number): Observable<any> {
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
 

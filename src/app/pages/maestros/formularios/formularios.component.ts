@@ -3,8 +3,10 @@ import { DataTablesModule } from 'angular-datatables';
 import { languageConfig } from '../../../../assets/sass/core/base/datatables/language_es';
 import { FormulariosService } from '../../../services/formularios/formularios.service';
 import { ModalAccionesComponent } from './modalAciones/modalacciones.component'
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { KTHelpers, KTUtil } from 'src/app/_metronic/kt';
+
 
 @Component({
   selector: 'app-formularios',
@@ -26,6 +28,7 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
   allFormularios: any[];
   estadoBoton : any[];
   private getFormulariosCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
+  isLoading: boolean;
 
 
    constructor(
@@ -35,8 +38,10 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
+    this.isLoading = false;
     this.inicializarTabla();
     this.getFormularios();
+    //this.isLoading = false;
   }
 
   // Inicializar datatable
@@ -122,30 +127,53 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
         this.renderer.listen(containerElement, 'click', (event) => {
           const btn = event.target.closest('.btn-action');
           if (btn) {
+            btn.setAttribute('data-kt-indicator','on');
+
+            //ACCIONES
+            
             const { action, id } = btn.dataset;
             if(action === 'edit' || action === 'ver'){
-                this.formulariosService.getOne(id).subscribe((data: any) => {
-                this.modal.AbrirModal(action, id,data);
-              });
+                this.formulariosService.get(id).subscribe({
+                  next: (data: any) => {
+                    this.modal.AbrirModal(action, id,data);
+                  },
+                  error: (error: HttpErrorResponse) => {
+                    console.log('error: '+error.status);
+                    //MANEJAR ERROR
+                  },
+                  complete: () => {
+                    btn.removeAttribute('data-kt-indicator');
+                  }
+                });
             }
-            else{
-              this.formulariosService.changeState(id).subscribe((data)=>{
-                if(btn.classList.contains('btn-light-success')){
-                  btn.classList.remove('btn-light-success');
-                  btn.classList.add('btn-light-warning');
-                  btn.querySelector('.indicator-label').textContent = 'DESHABILITADO';
+            else if(action === 'cambiar-estado'){
+
+              this.formulariosService.cambiarestado(id).subscribe({
+                next: (data: any) => {
+                  if(btn.classList.contains('btn-light-success')){
+                    btn.classList.remove('btn-light-success');
+                    btn.classList.add('btn-light-warning');
+                    btn.querySelector('.indicator-label').textContent = 'DESHABILITADO';
+                  }
+                  else if(btn.classList.contains('btn-light-warning')){
+                    btn.classList.remove('btn-light-warning');
+                    btn.classList.add('btn-light-success');
+                    btn.querySelector('.indicator-label').textContent = 'HABILITADO';
+                  }
+                },
+                error: (error: HttpErrorResponse) => {
+                  console.log('error: '+error.status);
+                  //MANEJAR ERROR
+                },
+                complete: () => {
+                  btn.removeAttribute('data-kt-indicator');
                 }
-                else if(btn.classList.contains('btn-light-warning')){
-                  btn.classList.remove('btn-light-warning');
-                  btn.classList.add('btn-light-success');
-                  btn.querySelector('.indicator-label').textContent = 'HABILITADO';
-                }
-              }, (error: HttpErrorResponse) => {
-                console.log('error: '+error.status);
-                //MANEJAR ERROR
               });
-              
+    
             }
+            //END ACCIONES
+            
+
           }
           
         });
