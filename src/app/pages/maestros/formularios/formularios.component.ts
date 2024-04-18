@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { DataTablesModule } from 'angular-datatables';
+import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { languageConfig } from '../../../../assets/sass/core/base/datatables/language_es';
-import { FormulariosService } from '../../../services/formularios/formularios.service';
+import { FormulariosService, IFormularioModel } from '../../../services/formularios/formularios.service';
 import { ModalAccionesComponent } from './modalAciones/modalacciones.component'
 import { Observable, Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -20,12 +20,15 @@ import { KTHelpers, KTUtil } from 'src/app/_metronic/kt';
 })
 
 export class FormulariosComponent implements OnInit, AfterViewInit {
+
   @Input() dtOptions: any = {};
   @Input() dtTrigger: Subject<any> = new Subject<any>();
+  @ViewChild(DataTableDirective, { static: false })
+  private dtElement: DataTableDirective;
 
   @ViewChild('modal') modal: ModalAccionesComponent;
 
-  allFormularios: any[];
+  allFormularios: IFormularioModel[];
   estadoBoton : any[];
   private getFormulariosCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
   isLoading: boolean;
@@ -86,10 +89,10 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
       language: languageConfig,
       responsive:true,
       columns:[
-        { title:'Id', data: 'Id' },
-        { title:'Titulo', data: 'Titulo' },
-        { title:'Descripción', data: 'Descripcion' },
-        { title: 'Estado', data: 'Enabled' },
+        { title:'Id', data: 'id' },
+        { title:'Titulo', data: 'titulo' },
+        { title:'Descripción', data: 'descripcion' },
+        { title: 'Estado', data: 'enabled' },
         { title: 'Accion', data: 'actions'}
       ],
       initComplete: () => {
@@ -110,7 +113,7 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
     this.formulariosService
     .getAll()
     .subscribe(
-      (data: any) => {
+      (data: IFormularioModel[]) => {
               this.getFormulariosCompleted.next();
               this.getFormulariosCompleted.complete();
               this.allFormularios = data;    
@@ -119,6 +122,52 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
       });
   }
 
+  cambiosAllUsuarios(data: any) {
+    const index = this.allFormularios.findIndex(item => item.id === data.id);
+    this.allFormularios[index] = data;
+    
+    
+    data.enabled = `<div class="btn-group btn-group-sm" role="group">
+                        <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px
+                                      ${data.enabled ? 'btn-light-success' : 'btn-light-warning'}"
+                                      data-action="cambiar-estado"
+                                      data-kt-indicator="off"
+                                      data-id="${data.id}" >
+                            <span class="indicator-label"> ${data.enabled ? 'HABILITADO' : 'DESHABILITADO'}</span>
+                            <span class="indicator-progress">
+                                <span class="spinner-border spinner-border-sm align-middle"></span>
+                            </span>
+                        </button>
+                    </div>`;
+    // Destruir la tabla
+    /*
+    if (this.dtElement && this.dtElement.dtInstance) {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.clear();
+      dtInstance.rows.add(this.allFormularios);
+      dtInstance.draw();
+      this.cdRef.detectChanges();
+      //this.dtTrigger.next(null);
+    });
+    
+  }*/
+  
+    // Destruir la tabla
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      //dtInstance.clear();
+      const updatedRow = { ...dtInstance.row(index).data(), ...data };
+      dtInstance.row(index).data(updatedRow).draw();
+      this.cdRef.detectChanges();
+      //dtInstance.destroy();
+      //this.cdRef.detectChanges();
+    });
+  
+    
+
+
+    
+    
+  }
   ngAfterViewInit(): void {  
     this.getFormulariosCompleted.subscribe(() => {
       const containerElement = document.querySelector('.tabla-body');
@@ -134,7 +183,7 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
             const { action, id } = btn.dataset;
             if(action === 'edit' || action === 'ver'){
                 this.formulariosService.get(id).subscribe({
-                  next: (data: any) => {
+                  next: (data: IFormularioModel) => {
                     this.modal.AbrirModal(action, id,data);
                   },
                   error: (error: HttpErrorResponse) => {
@@ -149,7 +198,7 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
             else if(action === 'cambiar-estado'){
 
               this.formulariosService.cambiarestado(id).subscribe({
-                next: (data: any) => {
+                next: (data: IFormularioModel) => {
                   if(btn.classList.contains('btn-light-success')){
                     btn.classList.remove('btn-light-success');
                     btn.classList.add('btn-light-warning');

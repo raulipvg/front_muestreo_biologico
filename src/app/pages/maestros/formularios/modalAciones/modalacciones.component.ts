@@ -4,8 +4,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormulariosService } from '../../../../services/formularios/formularios.service';
+import { FormulariosService, IFormularioModel } from '../../../../services/formularios/formularios.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { SweetAlertOptions } from 'sweetalert2';
 
 
 
@@ -17,7 +19,8 @@ import { HttpErrorResponse } from '@angular/common/http';
     FormsModule,
     ModalsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    SweetAlert2Module
   ],
   templateUrl: './modalacciones.component.html',
   styleUrl: './modalacciones.component.scss'
@@ -26,7 +29,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ModalAccionesComponent implements OnInit {
   
   @ViewChild('modal') private modalComponent: ModalComponent;
-  nombre ?: string = 'Oye que gran formulario';
+  nombre ?: string = 'Editar';
   selectedCars: number[] = [];
   items = [
     { id: true, name: 'Habilitado' },
@@ -43,6 +46,12 @@ export class ModalAccionesComponent implements OnInit {
 
   };
 
+  @ViewChild('noticeSwal')
+  noticeSwal!: SwalComponent;
+  swalOptions: SweetAlertOptions = {};
+  @Output() cambiosAllUsuariosEvent = new EventEmitter<IFormularioModel>();
+
+  isLoading = false;
   constructor(
     private formulariosService: FormulariosService, 
     private fb: FormBuilder,
@@ -70,23 +79,38 @@ export class ModalAccionesComponent implements OnInit {
     });
   }
   Submit() {
+    this.isLoading = true;
+    const successAlert: SweetAlertOptions = {
+      icon: 'success',
+      title: 'Exito',
+      text: 'Formulario actualizado!',
+    };
+    const errorAlert: SweetAlertOptions = {
+      icon: 'error',
+      title: 'Error!',
+      text: '',
+    };
+
     this.formulario.markAllAsTouched();
     if (this.formulario.valid) {
       // Enviar el formulario aquí (por ejemplo, usando un servicio o llamada a la API)
-      console.log('¡Formulario enviado!');
-      this.caca = JSON.stringify(this.formulario.getRawValue());
- 
       this.formulariosService.update(this.formulario.getRawValue()).subscribe({
-        next: (data: any) => {
-
-          console.log('se cambio');
+        next: (data: IFormularioModel) => {
+          
+         
+          this.cambiosAllUsuariosEvent.emit(data);
+          this.showAlert(successAlert);
+          this.CerrarModal();
+          //console.log('se cambio');
           //this.modal.AbrirModal(action, id,data);
         },
         error: (error: HttpErrorResponse) => {
-          console.log('error: '+error.status);
+          this.showAlert(errorAlert);
+          //console.log('error: '+error.status);
           //MANEJAR ERROR
         },
         complete: () => {
+          this.isLoading = false;
          // btn.removeAttribute('data-kt-indicator');
         }
       });
@@ -94,6 +118,7 @@ export class ModalAccionesComponent implements OnInit {
 
     }
   }
+
   get f() { return this.formulario.controls; }
 
   async AbrirModal(action?: string, id?:number, data?:any){
@@ -104,10 +129,8 @@ export class ModalAccionesComponent implements OnInit {
         this.cdRef.detectChanges();
         break;
       case 'edit':
-        console.log(data);
-        //this.formulario.get('nombre')?.setValue(data.Titulo);
-        //this.formulario.get('descripcion')?.setValue(data.Descripcion);
-        //this.formulario.get('enabled')?.setValue(data.Enabled);
+        //console.log(data);
+        //this.formulario.get('nombre')?.setValue(data.Titulo);;
         this.formulario.setValue(data);
 
         //this.cdRef.detectChanges();
@@ -117,6 +140,24 @@ export class ModalAccionesComponent implements OnInit {
         break;
     }
     return await this.modalComponent.open();
+  }
+
+  
+
+  showAlert(swalOptions: SweetAlertOptions) {
+    let style = swalOptions.icon?.toString() || 'success';
+    if (swalOptions.icon === 'error') {
+      style = 'danger';
+    }
+    this.swalOptions = Object.assign({
+      buttonsStyling: false,
+      confirmButtonText: "OK",
+      customClass: {
+        confirmButton: "btn btn-" + style
+      }
+    }, swalOptions);
+    this.cdRef.detectChanges();
+    this.noticeSwal.fire();
   }
 
   async CerrarModal(){
