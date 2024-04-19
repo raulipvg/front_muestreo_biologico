@@ -10,7 +10,6 @@ import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 
 
-
 @Component({
   selector: 'modal-acciones',
   standalone: true,
@@ -29,6 +28,7 @@ import { SweetAlertOptions } from 'sweetalert2';
 export class ModalAccionesComponent implements OnInit {
   
   @ViewChild('modal') private modalComponent: ModalComponent;
+
   nombre ?: string = 'Editar';
   selectedCars: number[] = [];
   items = [
@@ -49,9 +49,10 @@ export class ModalAccionesComponent implements OnInit {
   @ViewChild('noticeSwal')
   noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
-  @Output() cambiosAllUsuariosEvent = new EventEmitter<IFormularioModel>();
+  @Output() cambioRowEvent = new EventEmitter<IFormularioModel>();
+  @Output() loadingEvent = new EventEmitter<boolean>();
 
-  @Input() isLoading : boolean;
+
   constructor(
     private formulariosService: FormulariosService, 
     private fb: FormBuilder,
@@ -79,7 +80,7 @@ export class ModalAccionesComponent implements OnInit {
     });
   }
   Submit() {
-    this.isLoading = true;
+    this.loadingEvent.emit();
     const successAlert: SweetAlertOptions = {
       icon: 'success',
       title: 'Exito',
@@ -95,14 +96,10 @@ export class ModalAccionesComponent implements OnInit {
     if (this.formulario.valid) {
       // Enviar el formulario aquí (por ejemplo, usando un servicio o llamada a la API)
       this.formulariosService.update(this.formulario.getRawValue()).subscribe({
-        next: (data: IFormularioModel) => {
-          
-         
-          this.cambiosAllUsuariosEvent.emit(data);
+        next: (data: IFormularioModel) => {        
+          this.cambioRowEvent.emit(data);
           this.showAlert(successAlert);
           this.CerrarModal();
-          //console.log('se cambio');
-          //this.modal.AbrirModal(action, id,data);
         },
         error: (error: HttpErrorResponse) => {
           this.showAlert(errorAlert);
@@ -110,7 +107,7 @@ export class ModalAccionesComponent implements OnInit {
           //MANEJAR ERROR
         },
         complete: () => {
-          this.isLoading = false;
+          this.loadingEvent.emit();
          // btn.removeAttribute('data-kt-indicator');
         }
       });

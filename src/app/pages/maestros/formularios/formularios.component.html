@@ -1,9 +1,6 @@
 
-<app-page-loading [isLoading]="this.isLoading"></app-page-loading>
 
 <div class="d-flex flex-column flex-column-fluid">
-    
-
     <div class="card mx-5">
         <div class="card-header bg-dark">
             <h3 class="card-title text-uppercase text-white">Formularios</h3>
@@ -83,4 +80,6 @@
 </div>
 <!--end::Content-->
 
-<modal-acciones #modal (cambiosAllUsuariosEvent)="cambiosAllUsuarios($event)" [isLoading]="this.isLoading"></modal-acciones>
+<modal-acciones #modal (cambioRowEvent)="cambioRow($event)" (loadingEvent)="loadingEvent()"></modal-acciones>
+
+<app-page-loading #loading></app-page-loading>

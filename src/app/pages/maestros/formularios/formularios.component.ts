@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, Output, Renderer2, ViewChild, EventEmitter } from '@angular/core';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { languageConfig } from '../../../../assets/sass/core/base/datatables/language_es';
 import { FormulariosService, IFormularioModel } from '../../../services/formularios/formularios.service';
@@ -30,11 +30,13 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
   private dtElement: DataTableDirective;
 
   @ViewChild('modal') modal: ModalAccionesComponent;
+  @ViewChild('loading') loading: PageLoadingComponent;
 
   allFormularios: IFormularioModel[];
   estadoBoton : any[];
   private getFormulariosCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
-  isLoading: boolean;
+  //isLoading: boolean =false;
+  //@Output() loadingEvent = new EventEmitter<boolean>();
 
 
    constructor(
@@ -44,16 +46,12 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    this.isLoading = false;
     this.inicializarTabla();
     this.getFormularios();
     //this.isLoading = false;
   }
 
-  cambiaLoading(){
-    this.isLoading = !this.isLoading;
-    this.cdRef.detectChanges();
-  }
+  
 
   // Inicializar datatable
   inicializarTabla(): void {
@@ -130,10 +128,10 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
       });
   }
 
-  cambiosAllUsuarios(data: any) {
+  cambioRow(data: any) {
+
     const index = this.allFormularios.findIndex(item => item.id === data.id);
     this.allFormularios[index] = data;
-    
     
     data.enabled = `<div class="btn-group btn-group-sm" role="group">
                         <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px
@@ -147,26 +145,12 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
                             </span>
                         </button>
                     </div>`;
-    // Destruir la tabla
-    /*
-    if (this.dtElement && this.dtElement.dtInstance) {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.clear();
-      dtInstance.rows.add(this.allFormularios);
-      dtInstance.draw();
-      this.cdRef.detectChanges();
-      //this.dtTrigger.next(null);
-    });
-    
-  }*/
-  
-    // Destruir la tabla
+
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       //dtInstance.clear();
-      const updatedRow = { ...dtInstance.row(index).data(), ...data };
-      dtInstance.row(index).data(updatedRow).draw();
-      this.cdRef.detectChanges();
-      //dtInstance.destroy();
+      const dataRow = { ...dtInstance.row(index).data(), ...data };
+      dtInstance.row(index).data(dataRow).draw();
+      //this.cdRef.detectChanges();
       //this.cdRef.detectChanges();
     });
   
@@ -176,6 +160,10 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
     
     
   }
+  loadingEvent(){
+    this.loading.cambiaLoading();
+  }
+  
   ngAfterViewInit(): void {  
     this.getFormulariosCompleted.subscribe(() => {
       const containerElement = document.querySelector('.tabla-body');
@@ -185,11 +173,10 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
           const btn = event.target.closest('.btn-action');
           if (btn) {
             btn.setAttribute('data-kt-indicator','on');
-            
-            this.cambiaLoading();
-            //ACCIONES
-            
+            this.loading.cambiaLoading();
+
             const { action, id } = btn.dataset;
+            //ACCIONES
             if(action === 'edit' || action === 'ver'){
                 this.formulariosService.get(id).subscribe({
                   next: (data: IFormularioModel) => {
@@ -201,7 +188,7 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
                   },
                   complete: () => {
                     btn.removeAttribute('data-kt-indicator');
-                    this.cambiaLoading();
+                    this.loading.cambiaLoading();
                   }
                 });
             }
@@ -225,7 +212,7 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
                 },
                 complete: () => {
                   btn.removeAttribute('data-kt-indicator');
-                  this.cambiaLoading();
+                  this.loading.cambiaLoading();
                 }
               });
     

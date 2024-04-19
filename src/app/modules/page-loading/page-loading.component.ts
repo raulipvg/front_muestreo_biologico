@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-page-loading',
@@ -10,7 +10,12 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class PageLoadingComponent {
-  @Input() isLoading : boolean;
+  isLoading : boolean = false;
 
-
+  constructor(private cdRef: ChangeDetectorRef) { }
+  
+  cambiaLoading(){
+    this.isLoading = !this.isLoading;
+    this.cdRef.detectChanges();
+  }
 }
