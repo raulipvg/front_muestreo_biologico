@@ -4,7 +4,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormulariosService, IFormularioModel } from '../../../../services/formularios/formularios.service';
+import { PersonasService, IPersonaModel } from '../../../../services/personas/personas.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
@@ -12,7 +12,7 @@ import { booleanValidator } from 'src/app/modules/booleanValidator';
 
 
 @Component({
-  selector: 'modal-acciones',
+  selector: 'modal-acciones-especies',
   standalone: true,
   imports: [
     NgSelectModule,
@@ -29,6 +29,7 @@ import { booleanValidator } from 'src/app/modules/booleanValidator';
 export class ModalAccionesComponent implements OnInit {
   
   @ViewChild('modal') private modalComponent: ModalComponent;
+  @ViewChild('boton') boton : HTMLElement;
 
   nombre ?: string = 'Editar';
   selectedCars: number[] = [];
@@ -37,9 +38,8 @@ export class ModalAccionesComponent implements OnInit {
     { id: false, name: 'Deshabilitado' }
 ];
   formulario: FormGroup;
-  caca='';
   modalConfig: ModalConfig = {
-    modalTitle: `Formulario: ${this.nombre}`,
+    modalTitle: `Persona: ${this.nombre}`,
     dismissButtonLabel: 'Enviar',
     closeButtonLabel: 'Cerrar',
     onClose(): boolean{ return false;}
@@ -48,12 +48,12 @@ export class ModalAccionesComponent implements OnInit {
   @ViewChild('noticeSwal')
   noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
-  @Output() cambioRowEvent = new EventEmitter<IFormularioModel>();
+  @Output() cambioRowEvent = new EventEmitter<IPersonaModel>();
   @Output() loadingEvent = new EventEmitter<boolean>();
 
 
   constructor(
-    private formulariosService: FormulariosService, 
+    private servicio: PersonasService, 
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
   )
@@ -66,14 +66,12 @@ export class ModalAccionesComponent implements OnInit {
     
     this.formulario = this.fb.group({
       id: [''],
-      titulo: ['',Validators.compose([
-                Validators.required,
-                Validators.minLength(4),
-                Validators.maxLength(100)  ])],
-      descripcion: ['',Validators.compose([
-                Validators.required,
-                Validators.maxLength(200)
-                  ])],
+      nombre: ['',Validators.compose([
+                    Validators.required,
+                    Validators.minLength(4),
+                    Validators.maxLength(100) 
+                  ])
+                ],
       enabled: ['',Validators.compose([
                     Validators.required,
                     booleanValidator
@@ -97,20 +95,17 @@ export class ModalAccionesComponent implements OnInit {
     this.formulario.markAllAsTouched();
     if (this.formulario.valid) {
       // Enviar el formulario aquí (por ejemplo, usando un servicio o llamada a la API)
-      this.formulariosService.update(this.formulario.getRawValue()).subscribe({
-        next: (data: IFormularioModel) => {        
+      this.servicio.update(this.formulario.getRawValue()).subscribe({
+        next: (data: IPersonaModel) => {        
           this.cambioRowEvent.emit(data);
           this.showAlert(successAlert);
           this.CerrarModal();
         },
         error: (error: HttpErrorResponse) => {
           this.showAlert(errorAlert);
-          //console.log('error: '+error.status);
-          //MANEJAR ERROR
         },
         complete: () => {
           this.loadingEvent.emit();
-         // btn.removeAttribute('data-kt-indicator');
         }
       });
 
@@ -124,15 +119,20 @@ export class ModalAccionesComponent implements OnInit {
     this.formulario.reset();
     
     switch (action) {
-      case 'ver':
+      /*case 'ver':
+        console.log(this.boton)
+        this.boton.textContent = 'Actualizar';
+        this.cdRef.detectChanges();
+        break;*/
+      case 'edit':
+        this.boton.textContent = 'Actualizar';
+        this.formulario.setValue(data);
         this.cdRef.detectChanges();
         break;
-      case 'edit':
-        //console.log(data);
-        //this.formulario.get('nombre')?.setValue(data.Titulo);;
-        this.formulario.setValue(data);
-
-        //this.cdRef.detectChanges();
+      case 'create':
+        this.boton.textContent = 'Registrar';
+        this.formulario.reset();
+        this.cdRef.detectChanges();
         break;
       default:
         this.cdRef.detectChanges();

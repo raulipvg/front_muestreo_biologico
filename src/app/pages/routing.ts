@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { PruebasComponent } from './pruebas/pruebas.component'
-import { Pruebas2Component } from './pruebas2/pruebas2.component'
+import { Pruebas3Component } from './pruebas3/pruebas3.component'
 import { RespuestaComponent } from './maestros/respuesta/respuesta.component';
 import { FormulariosComponent } from './maestros/formularios/formularios.component';
 
@@ -19,8 +19,8 @@ const Routing: Routes = [
     component:PruebasComponent
   },
   {
-    path: 'pruebas2',
-    component:Pruebas2Component
+    path: 'pruebas3',
+    component:Pruebas3Component
   },
   {
     path: 'maestros/respuestas',

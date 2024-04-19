@@ -5,37 +5,19 @@
         <input type="hidden" formControlName="id" class="form-control form-control-solid" />
     <div class="row">
         <div class="form-group">
-            <label for="nombre" class="form-label">Titulo:</label>
-            <input type="text" formControlName="titulo" class="form-control form-control-solid text-capitalize" placeholder="Nombre del formulario" required 
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" formControlName="nombre" class="form-control form-control-solid text-capitalize" placeholder="Nombre del formulario" required 
                 [ngClass]="{
-                            'is-invalid': f.titulo.invalid && (f.titulo.dirty || f.titulo.touched), 
-                            'is-valid': f.titulo.valid 
+                            'is-invalid': f.nombre.invalid && (f.nombre.dirty || f.nombre.touched), 
+                            'is-valid': f.nombre.valid 
                             }"
                 >
-            <div *ngIf="f.titulo.errors" class="invalid-feedback">
-                <div *ngIf="f.titulo.errors?.['required']">El campo no puede estar vacío</div>
-                <div *ngIf="f.titulo.errors?.['minlength']">Minimo 4 caracteres</div>
-                <div *ngIf="f.titulo.errors?.['maxlength']">Máximo 100 caracteres</div>
+            <div *ngIf="f.nombre.errors" class="invalid-feedback">
+                <div *ngIf="f.nombre.errors?.['required']">El campo no puede estar vacío</div>
+                <div *ngIf="f.nombre.errors?.['minlength']">Minimo 4 caracteres</div>
+                <div *ngIf="f.nombre.errors?.['maxlength']">Máximo 100 caracteres</div>
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col mb-2">
-            <div class="fv-row">
-                <label  class="form-label">Descripción</label>
-                <input type="text" formControlName="descripcion" class="form-control form-control-solid h-input text-capitalize" placeholder="Descripción del formulario" 
-                    [ngClass]="{
-                        'is-invalid': f.descripcion.invalid && (f.descripcion.dirty || f.descripcion.touched), 
-                        'is-valid': f.descripcion.valid 
-                        }"
-                />
-                <div *ngIf="f.descripcion.errors" class="invalid-feedback">
-                    <div *ngIf="f.descripcion.errors?.['required']">Name is required!</div>
-                    <div *ngIf="f.descripcion.errors?.['maxlength']">Max 4 po!</div>
-                </div>
-            </div>
-        </div>       
     </div>
     <div class="row">
         <div class="col-md-6 mb-2">
@@ -64,9 +46,7 @@
     *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()">
       {{ modalConfig.closeButtonLabel }}
     </button>
-    <button  type="submit" [disabled]="formulario.invalid" class="btn btn-success">Actualizar
-
-    </button>
+    <button #boton type="submit" [disabled]="formulario.invalid" class="btn btn-success">Actualizar</button>
     
   </div>
 </form>

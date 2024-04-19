@@ -4,38 +4,37 @@ import { Observable } from 'rxjs';
 import { env } from 'src/environments/env';
 
 
-export interface IFormularioModel {
+export interface IPersonaModel {
   id: number;
-  titulo?: null | string;
-  descripcion?: null |string;
+  nombre?: null | string;
   enabled?: boolean;
   created_at?: string;
+  updated_at?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class FormulariosService {
+export class PersonasService {
 
   constructor(private http: HttpClient) { }
-  url = env.API_URL + 'formulario';
+  url = env.API_URL + 'persona'
   
   getAll(): Observable<any> {
     return this.http.get(this.url+'/getall');
   }
 
-  get(id: number): Observable<IFormularioModel> {
+  get(id: number): Observable<IPersonaModel> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IFormularioModel>((url));
+    return this.http.get<IPersonaModel>((url));
   }
 
-  update( data: any): Observable<IFormularioModel> {
+  update( data: any): Observable<IPersonaModel> {
     const url = `${this.url}/update`;
-    return this.http.post<IFormularioModel>(url, data);
+    return this.http.post<IPersonaModel>(url, data);
   }
 
   cambiarestado(id: number): Observable<any> {
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
-
 }
