@@ -37,4 +37,8 @@ export class PlantasService {
   cambiarestado(id: number): Observable<any> {
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
+
+  crear(data: any): Observable<IPlantaModel> {
+    return this.http.post<IPlantaModel>(this.url+'/create/', data);
+  }
 }

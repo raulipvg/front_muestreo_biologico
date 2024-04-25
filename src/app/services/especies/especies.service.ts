@@ -37,4 +37,8 @@ export class EspeciesService {
   cambiarestado(id: number): Observable<any> {
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
+
+  crear(data: any): Observable<IEspecieModel> {
+    return this.http.post<IEspecieModel>(this.url+'/create/', data);
+  }
 }

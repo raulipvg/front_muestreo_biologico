@@ -6,7 +6,7 @@
     <div class="row">
         <div class="form-group">
             <label for="nombre" class="form-label">Nombre:</label>
-            <input type="text" formControlName="nombre" class="form-control form-control-solid text-capitalize" placeholder="Nombre del formulario" required 
+            <input type="text" formControlName="nombre" class="form-control form-control-solid text-capitalize" placeholder="Nombre de la planta" required 
                 [ngClass]="{
                             'is-invalid': f.nombre.invalid && (f.nombre.dirty || f.nombre.touched), 
                             'is-valid': f.nombre.valid 
@@ -46,8 +46,14 @@
     *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()">
       {{ modalConfig.closeButtonLabel }}
     </button>
-    <button #boton type="submit" [disabled]="formulario.invalid" class="btn btn-success">Actualizar</button>
-    
+    <button #boton type="submit" [disabled]="formulario.invalid" class="btn btn-success">
+        @if(editar){
+            Actualizar
+        }
+        @else {
+            Registrar
+        }
+    </button>
   </div>
 </form>
 </app-modal>

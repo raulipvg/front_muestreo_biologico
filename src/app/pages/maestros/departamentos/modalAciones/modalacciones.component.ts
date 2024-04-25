@@ -8,7 +8,7 @@ import { DepartamentosService, IDepartamentoModel } from '../../../../services/d
 import { HttpErrorResponse } from '@angular/common/http';
 import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
-import { booleanValidator } from 'src/app/modules/booleanValidator';
+import { booleanValidator } from 'src/app/modules/customValidators';
 
 
 @Component({
@@ -45,10 +45,14 @@ export class ModalAccionesComponent implements OnInit {
     onClose(): boolean{ return false;}
   };
 
+  editar : boolean = false;
+
   @ViewChild('noticeSwal')
   noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
   @Output() cambioRowEvent = new EventEmitter<IDepartamentoModel>();
+  @Output() agregaRowEvent = new EventEmitter<IDepartamentoModel>();
+
   @Output() loadingEvent = new EventEmitter<boolean>();
 
 
@@ -84,7 +88,7 @@ export class ModalAccionesComponent implements OnInit {
     const successAlert: SweetAlertOptions = {
       icon: 'success',
       title: 'Exito',
-      text: 'Formulario actualizado!',
+      text: this.editar ? 'Departamento actualizado' : 'Departamento registrado'
     };
     const errorAlert: SweetAlertOptions = {
       icon: 'error',
@@ -93,23 +97,38 @@ export class ModalAccionesComponent implements OnInit {
     };
 
     this.formulario.markAllAsTouched();
+    this.formulario.markAllAsTouched();
     if (this.formulario.valid) {
+      if(this.editar){
+        this.servicio.update(this.formulario.getRawValue()).subscribe({
+          next: (data: IDepartamentoModel) => {        
+            this.cambioRowEvent.emit(data);
+            this.showAlert(successAlert);
+            this.CerrarModal();
+            this.loadingEvent.emit();
+          },
+          error: (error: HttpErrorResponse) => {
+            this.showAlert(errorAlert);
+            this.loadingEvent.emit();
+          }
+        });
+      }
+      else{
+        this.servicio.crear(this.formulario.getRawValue()).subscribe({
+          next: (data:IDepartamentoModel) => {
+            this.agregaRowEvent.emit(data);
+            this.showAlert(successAlert);
+            this.CerrarModal();
+            this.loadingEvent.emit();
+          },
+          error: (error: HttpErrorResponse) => {
+            this.showAlert(errorAlert);
+            this.loadingEvent.emit();
+          }
+            
+        })
+      }
       // Enviar el formulario aquí (por ejemplo, usando un servicio o llamada a la API)
-      this.servicio.update(this.formulario.getRawValue()).subscribe({
-        next: (data: IDepartamentoModel) => {        
-          this.cambioRowEvent.emit(data);
-          this.showAlert(successAlert);
-          this.CerrarModal();
-        },
-        error: (error: HttpErrorResponse) => {
-          this.showAlert(errorAlert);
-        },
-        complete: () => {
-          this.loadingEvent.emit();
-        }
-      });
-
-
     }
   }
 
@@ -125,12 +144,14 @@ export class ModalAccionesComponent implements OnInit {
         this.cdRef.detectChanges();
         break;*/
       case 'edit':
-        this.boton.textContent = 'Actualizar';
+        this.modalConfig.modalTitle = 'Editar'
+        this.editar = true;
         this.formulario.setValue(data);
         this.cdRef.detectChanges();
         break;
       case 'create':
-        this.boton.textContent = 'Registrar';
+        this.modalConfig.modalTitle = 'Registrar'
+        this.editar = false;
         this.formulario.reset();
         this.cdRef.detectChanges();
         break;

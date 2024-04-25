@@ -4,7 +4,6 @@
     <div class="card mx-5">
         <div class="card-header bg-dark">
             <h3 class="card-title text-uppercase text-white">Formularios</h3>
-
         </div>
         <div class="card-body pt-2">
             <!--begin::Tabla Formularios-->
@@ -12,55 +11,7 @@
                 <thead>
                 </thead>
                 <tbody class="tabla-body fw-semibold text-gray-600">
-                    @if(allFormularios && allFormularios.length >0){
-                        @for ( formulario of allFormularios; track formulario.id ){
-                            <tr>
-                                <td>{{ formulario.id }}</td>
-                                <td>{{ formulario.titulo }}</td>
-                                <td>{{ formulario.descripcion }}</td>
-                                <td>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px"
-                                                data-action="cambiar-estado"
-                                                data-kt-indicator="off"
-                                                data-kt-app-page-loading="on"
-                                                [attr.data-id]="formulario.id" 
-                                                [class.btn-light-success]="formulario.enabled"  [class.btn-light-warning]="!formulario.enabled">
-                                            <span class="indicator-label">{{ formulario.enabled ? 'HABILITADO' : 'DESHABILITADO'}}</span>
-                                            <span class="indicator-progress">
-                                                <span class="spinner-border spinner-border-sm align-middle"></span>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button class="btn btn-icon btn-success w-30px h-30px btn-action" data-action="ver"  [attr.data-id]="formulario.id" ngbTooltip="Ver" placement="top">
-                                            <span class="indicator-label">
-                                                <i class="ki-duotone ki-eye fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
-                                            </span>                                            
-                                            <span class="indicator-progress">
-                                                <span class="spinner-border spinner-border-sm align-middle"></span>
-                                            </span>
-                                        </button>
-                                        <button class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" [attr.data-id]="formulario.id" ngbTooltip="Editar" placement="top" tooltipClass="black">
-                                            <span class="indicator-label">
-                                                <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
-                                            </span>
-                                            <span class="indicator-progress">
-                                                <span class="spinner-border spinner-border-sm align-middle"></span>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </td> 
-                          </tr>
-                        }
-                        @empty {
-                            <tr>
-                                <td colspan="5">No hay formularios para mostrar.</td>
-                            </tr>
-                        }
-                    }@else {
+                    @if(cargando){
                         <tr>
                             <td colspan="5" class="">
                                 <div class="flex-column text-center">
@@ -70,6 +21,12 @@
                                 
                             </td>
                         </tr>
+                    }@else if(allData.length === 0){
+                        <tr>
+                            <td colspan="5">No hay información para mostrar.</td>
+                        </tr>
+                    }@else {
+
                     }
                 </tbody>
               </table>

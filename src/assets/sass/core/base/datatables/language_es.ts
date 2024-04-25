@@ -1,5 +1,5 @@
 export const languageConfig = {
-                "processing": "Procesando...",
+                "processing": "Cargando...",
                 "lengthMenu": "Mostrar _MENU_ registros",
                 "zeroRecords": "No se encontraron resultados",
                 "emptyTable": "Ningún dato disponible en esta tabla",

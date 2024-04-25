@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 
 
 @Component({
-  selector: 'app-formularios',
+  selector: 'maestro-formularios',
   standalone: true,
   imports: [
     DataTablesModule,
@@ -32,29 +32,20 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
   @ViewChild('modal') modal: ModalAccionesComponent;
   @ViewChild('loading') loading: PageLoadingComponent;
 
-  allFormularios: IFormularioModel[];
+  allData: IFormularioModel[];
   estadoBoton : any[];
-  private getFormulariosCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
-  //isLoading: boolean =false;
-  //@Output() loadingEvent = new EventEmitter<boolean>();
+  private getDataCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
 
+  cargando : boolean = false;
 
    constructor(
-    private formulariosService: FormulariosService, 
+    private servicio: FormulariosService, 
     private renderer: Renderer2,
     private cdRef: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    this.inicializarTabla();
-    this.getFormularios();
-    //this.isLoading = false;
-  }
-
-  
-
-  // Inicializar datatable
-  inicializarTabla(): void {
+    this.cargando = true;
     this.dtOptions = {
       dom: `<'d-flex flex-md-row flex-column justify-content-md-between justify-content-start align-items-center'"
             <'filtro'B>"
@@ -97,9 +88,13 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
       columns:[
         { title:'Id', data: 'id' },
         { title:'Titulo', data: 'titulo' },
-        { title:'Descripción', data: 'descripcion' },
-        { title: 'Estado', data: 'enabled' },
-        { title: 'Accion', data: 'actions'}
+        { title: 'Fecha de Creación', data: 'created_at', render: function(data : any, type : string, row : any) {
+          if (type === 'display' || type === 'filter') {
+            // Formato de fecha 'dd-mm-yyyy'
+            return data ? new Date(data).toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
+          }
+          return data;
+        } },
       ],
       initComplete: () => {
         $('.filtro').children().addClass('btn-group btn-group-sm btn-secondary')
@@ -115,57 +110,97 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
     };
   }
 
-  getFormularios():void {
-    this.formulariosService
-    .getAll()
-    .subscribe(
-      (data: IFormularioModel[]) => {
-              this.getFormulariosCompleted.next();
-              this.getFormulariosCompleted.complete();
-              this.allFormularios = data;    
-              this.dtTrigger.next(null);
-              this.cdRef.detectChanges();
-      });
-  }
-
   cambioRow(data: any) {
-
-    const index = this.allFormularios.findIndex(item => item.id === data.id);
-    this.allFormularios[index] = data;
-    
-    data.enabled = `<div class="btn-group btn-group-sm" role="group">
-                        <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px
-                                      ${data.enabled ? 'btn-light-success' : 'btn-light-warning'}"
-                                      data-action="cambiar-estado"
-                                      data-kt-indicator="off"
-                                      data-id="${data.id}" >
-                            <span class="indicator-label"> ${data.enabled ? 'HABILITADO' : 'DESHABILITADO'}</span>
-                            <span class="indicator-progress">
-                                <span class="spinner-border spinner-border-sm align-middle"></span>
-                            </span>
-                        </button>
-                    </div>`;
+    const index = this.allData.findIndex(item => item.id === data.id);
+    this.allData[index] = data;
 
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      //dtInstance.clear();
       const dataRow = { ...dtInstance.row(index).data(), ...data };
       dtInstance.row(index).data(dataRow).draw();
-      //this.cdRef.detectChanges();
-      //this.cdRef.detectChanges();
     });
-  
-    
+  }
 
-
+  agregaRow(data: any) {
+    this.allData.push(data);
     
+    this.dtElement.dtInstance.then((table) => {
+      table.row.add(data).draw();
+    });
     
   }
+
+  columnaAcciones():void{
+    const actionColumn = {
+      sortable: false,
+      title: 'Acciones',
+      data: 'actions',
+      render: (data: any, type: any, full: any) => {
+        const editButton = `
+                          <button class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" data-id="${full.id}">
+                              <span class="indicator-label">
+                                  <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
+                              </span>
+                              <span class="indicator-progress">
+                                  <span class="spinner-border spinner-border-sm align-middle"></span>
+                              </span>
+                          </button>`;
+
+        const buttons = [];
+
+        buttons.push(editButton);
+
+        return buttons.join('');
+      },
+    };
+
+    const estadoColumn = {
+      sortable: false,
+      title: 'Estado',
+      render: (data: any, type: any, full: any) => {
+        const estadoButton = `<div class="btn-group btn-group-sm" role="group">
+                              <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px
+                                            ${full.enabled ? 'btn-light-success' : 'btn-light-warning'}"
+                                            data-action="cambiar-estado"
+                                            data-kt-indicator="off"
+                                            data-id="${full.id}" >
+                                  <span class="indicator-label"> ${full.enabled ? 'HABILITADO' : 'DESHABILITADO'}</span>
+                                  <span class="indicator-progress">
+                                      <span class="spinner-border spinner-border-sm align-middle"></span>
+                                  </span>
+                              </button>
+                          </div>`;
+
+        const buttons = [];
+
+        buttons.push(estadoButton);
+        
+        return buttons.join('');
+      },
+    };
+
+    if (this.dtOptions.columns) {
+      this.dtOptions.columns.push(estadoColumn);
+      this.dtOptions.columns.push(actionColumn);
+    }
+  }
+
   loadingEvent(){
     this.loading.cambiaLoading();
   }
   
-  ngAfterViewInit(): void {  
-    this.getFormulariosCompleted.subscribe(() => {
+  ngAfterViewInit(): void {
+    this.servicio.getAll().subscribe((data: IFormularioModel[]) => {
+                    this.getDataCompleted.next();
+                    this.getDataCompleted.complete();
+                    this.allData = data;
+                    this.dtElement.dtOptions.data = this.allData;
+                    this.columnaAcciones();
+                    this.dtTrigger.next(null);
+                    this.cargando = false;
+                    this.cdRef.detectChanges();
+                  });
+
+    this.getDataCompleted.subscribe(() => {
       const containerElement = document.querySelector('.tabla-body');
       if(containerElement){
         // Este código se ejecutará cuando getUsers() haya completado su ejecución
@@ -178,7 +213,7 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
             const { action, id } = btn.dataset;
             //ACCIONES
             if(action === 'edit' || action === 'ver'){
-                this.formulariosService.get(id).subscribe({
+                this.servicio.get(id).subscribe({
                   next: (data: IFormularioModel) => {
                     this.modal.AbrirModal(action, id,data);
                   },
@@ -193,7 +228,7 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
                 });
             }
             else if(action === 'cambiar-estado'){
-              this.formulariosService.cambiarestado(id).subscribe({
+              this.servicio.cambiarestado(id).subscribe({
                 next: (data: IFormularioModel) => {
                   if(btn.classList.contains('btn-light-success')){
                     btn.classList.remove('btn-light-success');
@@ -217,7 +252,6 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
               });
     
             }
-            //END ACCIONES
           }
           
         });

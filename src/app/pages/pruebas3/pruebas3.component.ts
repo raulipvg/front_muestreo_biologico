@@ -17,6 +17,7 @@ import { FlotasComponent } from '../maestros/flotas/flotas.component';
 import { PuertosComponent } from '../maestros/puertos/puertos.component';
 import { DepartamentosComponent } from '../maestros/departamentos/departamentos.component';
 import { PersonasComponent } from '../maestros/personas/personas.component';
+import { FormulariosComponent } from '../maestros/formularios/formularios.component';
 
 
 
@@ -37,7 +38,8 @@ import { PersonasComponent } from '../maestros/personas/personas.component';
     FlotasComponent,
     PuertosComponent,
     DepartamentosComponent,
-    PersonasComponent
+    PersonasComponent,
+    FormulariosComponent
   ],
   templateUrl: './pruebas3.component.html',
   styleUrl: './pruebas3.component.scss'

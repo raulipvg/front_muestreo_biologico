@@ -8,7 +8,7 @@ import { FormulariosService, IFormularioModel } from '../../../../services/formu
 import { HttpErrorResponse } from '@angular/common/http';
 import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
-import { booleanValidator } from 'src/app/modules/booleanValidator';
+import { booleanValidator } from 'src/app/modules/customValidators';
 
 
 @Component({

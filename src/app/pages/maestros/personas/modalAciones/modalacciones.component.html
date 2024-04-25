@@ -4,19 +4,24 @@
     <div class="modal-body">
         <input type="hidden" formControlName="id" class="form-control form-control-solid" />
     <div class="row">
-        <div class="form-group">
-            <label for="nombre" class="form-label">Nombre:</label>
-            <input type="text" formControlName="nombre" class="form-control form-control-solid text-capitalize" placeholder="Nombre del formulario" required 
-                [ngClass]="{
-                            'is-invalid': f.nombre.invalid && (f.nombre.dirty || f.nombre.touched), 
-                            'is-valid': f.nombre.valid 
-                            }"
-                >
-            <div *ngIf="f.nombre.errors" class="invalid-feedback">
-                <div *ngIf="f.nombre.errors?.['required']">El campo no puede estar vacío</div>
-                <div *ngIf="f.nombre.errors?.['minlength']">Minimo 4 caracteres</div>
-                <div *ngIf="f.nombre.errors?.['maxlength']">Máximo 100 caracteres</div>
+        <div class="col-md-6 mb-2">
+            <div class="form-group">
+                <label for="nombre" class="form-label">Nombre:</label>
+                <input type="text" formControlName="nombre" class="form-control form-control-solid text-capitalize" placeholder="Nombre de la persona" required 
+                    [ngClass]="{
+                                'is-invalid': f.nombre.invalid && (f.nombre.dirty || f.nombre.touched), 
+                                'is-valid': f.nombre.valid 
+                                }"
+                    >
+                <div *ngIf="f.nombre.errors" class="invalid-feedback">
+                    <div *ngIf="f.nombre.errors?.['required']">El campo no puede estar vacío</div>
+                    <div *ngIf="f.nombre.errors?.['minlength']">Minimo 4 caracteres</div>
+                    <div *ngIf="f.nombre.errors?.['maxlength']">Máximo 100 caracteres</div>
+                </div>
             </div>
+        </div>
+        <div class="col-md-6 mb-2">
+
         </div>
     </div>
     <div class="row">
@@ -46,8 +51,14 @@
     *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()">
       {{ modalConfig.closeButtonLabel }}
     </button>
-    <button #boton type="submit" [disabled]="formulario.invalid" class="btn btn-success">Actualizar</button>
-    
+    <button #boton type="submit" [disabled]="formulario.invalid" class="btn btn-success">
+        @if(editar){
+            Actualizar
+        }
+        @else {
+            Registrar
+        }
+    </button>
   </div>
 </form>
 </app-modal>

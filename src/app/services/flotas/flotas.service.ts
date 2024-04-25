@@ -37,4 +37,8 @@ export class FlotasService {
   cambiarestado(id: number): Observable<any> {
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
+
+  crear(data: any): Observable<IFlotaModel> {
+    return this.http.post<IFlotaModel>(this.url+'/create/', data);
+  }
 }

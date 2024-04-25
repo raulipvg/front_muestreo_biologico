@@ -2,56 +2,17 @@
     <div class="card mx-5">
         <div class="card-header bg-dark">
             <h3 class="card-title text-uppercase text-white">Clasificaciones</h3>
-
+            <div class="m-1">
+                <button type="button" class="btn btn-sm btn-success text-uppercase btn-action justify-content-center" (click)="this.modal.AbrirModal('create')">Registrar</button>
+            </div>
         </div>
         <div class="card-body pt-2">
-            <button type="button" class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px" (click)="this.modal.AbrirModal('create')">Registrar</button>
             <!--begin::Tabla Especies-->
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-row-dashed table-hover rounded gy-2 gs-md-3 nowrap">
                 <thead>
                 </thead>
                 <tbody class="tabla-body fw-semibold text-gray-600">
-                    @if(allData && allData.length >0){
-                        @for ( data of allData; track data.id ){
-                            <tr>
-                                <td>{{ data.id }}</td>
-                                <td>{{ data.nombre }}</td>
-                                <td>{{ data.updated_at }}</td>
-                                <td>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px"
-                                                data-action="cambiar-estado"
-                                                data-kt-indicator="off"
-                                                data-kt-app-page-loading="on"
-                                                [attr.data-id]="data.id" 
-                                                [class.btn-light-success]="data.enabled"  [class.btn-light-warning]="!data.enabled">
-                                            <span class="indicator-label">{{ data.enabled ? 'HABILITADO' : 'DESHABILITADO'}}</span>
-                                            <span class="indicator-progress">
-                                                <span class="spinner-border spinner-border-sm align-middle"></span>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" [attr.data-id]="data.id" ngbTooltip="Editar" placement="top" tooltipClass="black">
-                                            <span class="indicator-label">
-                                                <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
-                                            </span>
-                                            <span class="indicator-progress">
-                                                <span class="spinner-border spinner-border-sm align-middle"></span>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </td> 
-                          </tr>
-                        }
-                        @empty {
-                            <tr>
-                                <td colspan="5">No hay información para mostrar.</td>
-                            </tr>
-                        }
-                    }@else {
+                    @if(cargando){
                         <tr>
                             <td colspan="5" class="">
                                 <div class="flex-column text-center">
@@ -61,6 +22,12 @@
                                 
                             </td>
                         </tr>
+                    }@else if(allData.length === 0){
+                        <tr>
+                            <td colspan="5">No hay información para mostrar.</td>
+                        </tr>
+                    }@else {
+
                     }
                 </tbody>
               </table>
@@ -71,6 +38,6 @@
 </div>
 <!--end::Content-->
 
-<modal-acciones-especies #modal (cambioRowEvent)="cambioRow($event)" (loadingEvent)="loadingEvent()"></modal-acciones-especies>
+<modal-acciones-especies #modal (cambioRowEvent)="cambioRow($event)" (loadingEvent)="loadingEvent()" (agregaRowEvent)="agregaRow($event)"></modal-acciones-especies>
 
 <app-page-loading #loading></app-page-loading>

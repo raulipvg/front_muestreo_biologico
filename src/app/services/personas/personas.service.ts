@@ -37,4 +37,8 @@ export class PersonasService {
   cambiarestado(id: number): Observable<any> {
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
+
+  crear(data: any): Observable<IPersonaModel> {
+    return this.http.post<IPersonaModel>(this.url+'/create/', data);
+  }
 }

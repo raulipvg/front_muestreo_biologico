@@ -33,6 +33,7 @@ export class PlantasComponent implements OnInit {
   estadoBoton : any[];
   private getDataCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
 
+  cargando : boolean = false;
 
    constructor(
     private servicio: PlantasService, 
@@ -41,14 +42,7 @@ export class PlantasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.inicializarTabla();
-    this.getData();
-  }
-
-  
-
-  // Inicializar datatable
-  inicializarTabla(): void {
+    this.cargando = true;
     this.dtOptions = {
       dom: `<'d-flex flex-md-row flex-column justify-content-md-between justify-content-start align-items-center'"
             <'filtro'B>"
@@ -91,10 +85,13 @@ export class PlantasComponent implements OnInit {
       columns:[
         { title:'Id', data: 'id' },
         { title:'Nombre', data: 'nombre' },
-        
-        { title: 'Última modificación', data: 'updated_at' },
-        { title: 'Estado', data: 'enabled' },
-        { title: 'Accion', data: 'actions'}
+        { title: 'Última modificación', data: 'updated_at', render: function(data : any, type : string, row : any) {
+          if (type === 'display' || type === 'filter') {
+            // Formato de fecha 'dd-mm-yyyy'
+            return data ? new Date(data).toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
+          }
+          return data;
+        } },
       ],
       initComplete: () => {
         $('.filtro').children().addClass('btn-group btn-group-sm btn-secondary')
@@ -110,35 +107,9 @@ export class PlantasComponent implements OnInit {
     };
   }
 
-  getData():void {
-    this.servicio
-    .getAll()
-    .subscribe(
-      (data: IPlantaModel[]) => {
-              this.getDataCompleted.next();
-              this.getDataCompleted.complete();
-              this.allData = data;    
-              this.dtTrigger.next(null);
-              this.cdRef.detectChanges();
-      });
-  }
-
   cambioRow(data: any) {
     const index = this.allData.findIndex(item => item.id === data.id);
     this.allData[index] = data;
-    
-    data.enabled = `<div class="btn-group btn-group-sm" role="group">
-                        <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px
-                                      ${data.enabled ? 'btn-light-success' : 'btn-light-warning'}"
-                                      data-action="cambiar-estado"
-                                      data-kt-indicator="off"
-                                      data-id="${data.id}" >
-                            <span class="indicator-label"> ${data.enabled ? 'HABILITADO' : 'DESHABILITADO'}</span>
-                            <span class="indicator-progress">
-                                <span class="spinner-border spinner-border-sm align-middle"></span>
-                            </span>
-                        </button>
-                    </div>`;
 
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       const dataRow = { ...dtInstance.row(index).data(), ...data };
@@ -146,11 +117,86 @@ export class PlantasComponent implements OnInit {
     });
   }
 
+  agregaRow(data: any) {
+    this.allData.push(data);
+    
+    this.dtElement.dtInstance.then((table) => {
+      table.row.add(data).draw();
+    });
+    
+  }
+
+  columnaAcciones():void{
+    const actionColumn = {
+      sortable: false,
+      title: 'Acciones',
+      data: 'actions',
+      render: (data: any, type: any, full: any) => {
+        const editButton = `
+                          <button class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" data-id="${full.id}">
+                              <span class="indicator-label">
+                                  <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
+                              </span>
+                              <span class="indicator-progress">
+                                  <span class="spinner-border spinner-border-sm align-middle"></span>
+                              </span>
+                          </button>`;
+
+        const buttons = [];
+
+        buttons.push(editButton);
+
+        return buttons.join('');
+      },
+    };
+
+    const estadoColumn = {
+      sortable: false,
+      title: 'Estado',
+      render: (data: any, type: any, full: any) => {
+        const estadoButton = `<div class="btn-group btn-group-sm" role="group">
+                              <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px
+                                            ${full.enabled ? 'btn-light-success' : 'btn-light-warning'}"
+                                            data-action="cambiar-estado"
+                                            data-kt-indicator="off"
+                                            data-id="${full.id}" >
+                                  <span class="indicator-label"> ${full.enabled ? 'HABILITADO' : 'DESHABILITADO'}</span>
+                                  <span class="indicator-progress">
+                                      <span class="spinner-border spinner-border-sm align-middle"></span>
+                                  </span>
+                              </button>
+                          </div>`;
+
+        const buttons = [];
+
+        buttons.push(estadoButton);
+        
+        return buttons.join('');
+      },
+    };
+
+    if (this.dtOptions.columns) {
+      this.dtOptions.columns.push(estadoColumn);
+      this.dtOptions.columns.push(actionColumn);
+    }
+  }
+
   loadingEvent(){
     this.loading.cambiaLoading();
   }
   
-  ngAfterViewInit(): void {  
+  ngAfterViewInit(): void {
+    this.servicio.getAll().subscribe((data: IPlantaModel[]) => {
+                    this.getDataCompleted.next();
+                    this.getDataCompleted.complete();
+                    this.allData = data;
+                    this.dtElement.dtOptions.data = this.allData;
+                    this.columnaAcciones();
+                    this.dtTrigger.next(null);
+                    this.cargando = false;
+                    this.cdRef.detectChanges();
+                  });
+
     this.getDataCompleted.subscribe(() => {
       const containerElement = document.querySelector('.tabla-body');
       if(containerElement){

@@ -37,4 +37,8 @@ export class ClasificacionesService {
   cambiarestado(id: number): Observable<any> {
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
+
+  crear(data: any): Observable<IClasificacionModel> {
+    return this.http.post<IClasificacionModel>(this.url+'/create/', data);
+  }
 }

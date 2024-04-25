@@ -36,4 +36,8 @@ export class NavesService {
   cambiarestado(id: number): Observable<any> {
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
+
+  crear(data: any): Observable<INaveModel> {
+    return this.http.post<INaveModel>(this.url+'/create/', data);
+  }
 }

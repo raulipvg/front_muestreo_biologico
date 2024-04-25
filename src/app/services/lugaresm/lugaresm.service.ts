@@ -37,4 +37,8 @@ export class LugaresmService {
   cambiarestado(id: number): Observable<any> {
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
+
+  crear(data: any): Observable<ILugarmModel> {
+    return this.http.post<ILugarmModel>(this.url+'/create/', data);
+  }
 }
