@@ -1,1 +1,517 @@
-<p>biologico works!</p>
+<div class="d-flex flex-column flex-column-fluid">
+    <div class="card mx-5">
+        <div class="card-header bg-dark">
+            <h3 class="card-title text-uppercase text-white">Ingresar Muestreo Biologico</h3>
+
+        </div>
+        <form class="form-horizontal" [formGroup]="formulario" (ngSubmit)="guardar()" >
+
+            <div class="card-body py-2">
+                <div class="row py-2 my-2 border-2 border-dashed rounded">
+                    <div class="row">
+                        <div class="col-md-3">
+                        
+                            <label for="especie" class="form-label mb-0">Especie:</label>
+                            <ng-select id="especie" formControlName="especie" class="form-control form-control-solid"
+                                notFoundText="No hay resultados"
+                                [clearable]="true"	 
+                                [ngClass]="{
+                                    'is-invalid': f.especie.invalid && (f.especie.dirty || f.especie.touched),
+                                    'is-valid': f.especie.valid
+                                }">
+                                @for ( item of especies; track item.id ){
+                                    <ng-option [value]="item.id" [disabled]="">{{item.name}}</ng-option>
+                                }
+                            </ng-select>
+                            <div *ngIf="f.especie.errors" class="invalid-feedback">
+                                <div *ngIf="f.especie.errors?.['required']">El campo no puede estar vacío</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="nave" class="form-label mb-0">Nave:</label>
+                            <ng-select id="nave" formControlName="nave" class="form-control form-control-solid" 
+                                [ngClass]="{
+                                    'is-invalid': f.nave.invalid && (f.nave.dirty || f.nave.touched),
+                                    'is-valid': f.nave.valid
+                                }">
+                                @for ( item of naves; track item.id ){
+                                    <ng-option [value]="item.id" [disabled]="">{{item.name}}</ng-option>
+                                }
+                            </ng-select>
+                            <div *ngIf="f.nave.errors" class="invalid-feedback">
+                                <div *ngIf="f.nave.errors?.['required']">El campo no puede estar vacío</div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="fecharecepcion" class="form-label mb-0">Recepcion:</label>
+                            <input id="fecharecepcion" type="date" formControlName="fecharecepcion" class="form-control form-control-solid" 
+                                [min]="minDate" [max]="maxDate"
+                                [ngClass]="{
+                                    'is-invalid': f.fecharecepcion.invalid && (f.fecharecepcion.dirty || f.fecharecepcion.touched),
+                                    'is-valid': f.fecharecepcion.valid
+                                }">
+                            <div *ngIf="f.fecharecepcion.errors" class="invalid-feedback">
+                                <div *ngIf="f.fecharecepcion.errors?.['required']">El campo no puede estar vacío</div>
+                                <div *ngIf="f.fecharecepcion.errors?.['min']">Fecha no menor a 2 dias</div>
+                                <div *ngIf="f.fecharecepcion.errors?.['max']">Fecha maxima la actual</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="planta" class="form-label mb-0">Planta:</label>
+                            <ng-select id="planta" formControlName="planta" class="form-control form-control-solid" 
+                                [ngClass]="{
+                                    'is-invalid': f.planta.invalid && (f.planta.dirty || f.planta.touched),
+                                    'is-valid': f.planta.valid
+                                }">
+                                @for ( item of plantas; track item.id ){
+                                    <ng-option [value]="item.id" [disabled]="">{{item.name}}</ng-option>
+                                }
+                            </ng-select>
+                            <div *ngIf="f.planta.errors" class="invalid-feedback">
+                                <div *ngIf="f.planta.errors?.['required']">El campo no puede estar vacío</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">                       
+                        <div class="col-md-3">
+                            <label for="lugar" class="form-label mb-0">Lugar:</label>
+                            <ng-select id="lugar" formControlName="lugar" class="form-control form-control-solid" 
+                                [ngClass]="{
+                                    'is-invalid': f.lugar.invalid && (f.lugar.dirty || f.lugar.touched),
+                                    'is-valid': f.lugar.valid
+                                }">
+                                @for ( item of lugarms; track item.id ){
+                                    <ng-option [value]="item.id" [disabled]="">{{item.name}}</ng-option>
+                                }
+                            </ng-select>
+                            <div *ngIf="f.lugar.errors" class="invalid-feedback">
+                                <div *ngIf="f.lugar.errors?.['required']">El campo no puede estar vacío</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="clasificacion" class="form-label mb-0">Clasificacion:</label>
+                            <ng-select id="clasificacion" formControlName="clasificacion" class="form-control form-control-solid"
+                                [clearable]="false" 
+                                [ngClass]="{
+                                    'is-invalid': f.clasificacion.invalid && (f.clasificacion.dirty || f.clasificacion.touched),
+                                    'is-valid': f.clasificacion.valid
+                                }">
+                                @for ( item of clasificaciones; track item.id ){
+                                    <ng-option [value]="item.id" [disabled]="">{{item.name}}</ng-option>
+                                }
+                            </ng-select>
+                            <div *ngIf="f.clasificacion.errors" class="invalid-feedback">
+                                <div *ngIf="f.clasificacion.errors?.['required']">El campo no puede estar vacío</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="hrspesca" class="form-label mb-0">Data Pesca,HH:MM:</label>
+                            <input id="hrspesca" type="string" formControlName="hrspesca" class="form-control form-control-solid" 
+                                [ngClass]="{
+                                    'is-invalid': f.hrspesca.invalid && (f.hrspesca.dirty || f.hrspesca.touched),
+                                    'is-valid': f.hrspesca.valid
+                                }">
+                            <div *ngIf="f.hrspesca.errors" class="invalid-feedback">
+                                <div *ngIf="f.hrspesca.errors?.['required']">El campo no puede estar vacío</div>
+                                <div *ngIf="f.hrspesca.errors?.['formato']">Formato HH:MM</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="flota" class="form-label mb-0">Flota:</label>
+                            <ng-select id="flota" formControlName="flota" class="form-control form-control-solid" 
+                                [ngClass]="{
+                                    'is-invalid': f.flota.invalid && (f.flota.dirty || f.flota.touched),
+                                    'is-valid': f.flota.valid
+                                }">
+                                @for ( item of flotas; track item.id ){
+                                    <ng-option [value]="item.id" [disabled]="">{{item.name}}</ng-option>
+                                }
+                            </ng-select>
+                            <div *ngIf="f.flota.errors" class="invalid-feedback">
+                                <div *ngIf="f.flota.errors?.['required']">El campo no puede estar vacío</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="puerto" class="form-label mb-0">Puerto</label>
+                            <ng-select id="puerto" formControlName="puerto" class="form-control form-control-solid"
+                                [clearable]="false"
+                                [searchable]="false" 
+                                [ngClass]="{
+                                    'is-invalid': f.puerto.invalid && (f.puerto.dirty || f.puerto.touched),
+                                    'is-valid': f.puerto.valid
+                                }">
+                                @for ( item of puertos; track item.id ){
+                                    <ng-option [value]="item.id" [disabled]="">{{item.name}}</ng-option>
+                                }
+                            </ng-select>
+                            <div *ngIf="f.puerto.errors" class="invalid-feedback">
+                                <div *ngIf="f.puerto.errors?.['required']">El campo no puede estar vacío</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row py-2 my-2 bg-gray-200 rounded">
+                    <div class="col-md-3">
+                        <label for="departamento" class="form-label mb-0">Departamento:</label>
+                        <ng-select id="departamento" formControlName="departamento" class="form-control form-control-solid"
+                            [clearable]="false" 
+                            [ngClass]="{
+                                'is-invalid': f.departamento.invalid && (f.departamento.dirty || f.departamento.touched),
+                                'is-valid': f.departamento.valid
+                            }">
+                            @for ( item of departamentos; track item.id ){
+                                <ng-option [value]="item.id" [disabled]="">{{item.name}}</ng-option>
+                            } 
+                        </ng-select>
+                        <div *ngIf="f.departamento.errors" class="invalid-feedback">
+                            <div *ngIf="f.departamento.errors?.['required']">El campo no puede estar vacío</div>
+                        </div> 
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="persona" class="form-label mb-0">Persona:</label>
+                        <ng-select id="persona" formControlName="persona" class="form-control form-control-solid" 
+                            [ngClass]="{
+                                'is-invalid': f.persona.invalid && (f.persona.dirty || f.persona.touched),
+                                'is-valid': f.persona.valid
+                            }">
+                            @for ( item of personas; track item.id ){
+                                <ng-option [value]="item.id" [disabled]="">{{item.name}}</ng-option>
+                            }
+                        </ng-select>
+                        <div *ngIf="f.persona.errors" class="invalid-feedback">
+                            <div *ngIf="f.persona.errors?.['required']">El campo no puede estar vacío</div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col">
+                                <label for="fechaanalisis" class="form-label mb-0">Fecha Análisis:</label>
+                                <input id="fechaanalisis" type="date" formControlName="fechaanalisis" class="form-control form-control-solid" 
+                                    [max]="maxDate" [min]="minDate2"
+                                    [ngClass]="{
+                                        'is-invalid': f.fechaanalisis.invalid && (f.fechaanalisis.dirty || f.fechaanalisis.touched),
+                                        'is-valid': f.fechaanalisis.valid
+                                    }">
+                                <div *ngIf="f.fechaanalisis.errors" class="invalid-feedback">
+                                    <div *ngIf="f.fechaanalisis.errors?.['required']">El campo no puede estar vacío</div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="horaanalisis" class="form-label mb-0">Hora Análisis:</label>
+                                <input id="horaanalisis" type="time" formControlName="horaanalisis" class="form-control form-control-solid" 
+                                    [ngClass]="{
+                                        'is-invalid': f.horaanalisis.invalid && (f.horaanalisis.dirty || f.horaanalisis.touched),
+                                        'is-valid': f.horaanalisis.valid
+                                    }">
+                                <div *ngIf="f.horaanalisis.errors" class="invalid-feedback">
+                                    <div *ngIf="f.horaanalisis.errors?.['required']">El campo no puede estar vacío</div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="pozoalmacenamiento" class="form-label mb-0">Pozo Alm. N°</label>
+                                <ng-select id="pozoalmacenamiento" formControlName="pozoalmacenamiento" 	
+                                    [multiple]="true" [closeOnSelect]="false" class="form-control form-control-solid" 
+                                    [ngClass]="{
+                                        'is-invalid': f.pozoalmacenamiento.invalid && (f.pozoalmacenamiento.dirty || f.pozoalmacenamiento.touched),
+                                        'is-valid': f.pozoalmacenamiento.valid
+                                    }">
+                                    <ng-option [value]="1" [disabled]="">1</ng-option>
+                                    <ng-option [value]="2" [disabled]="">2</ng-option>
+                                    <ng-option [value]="3" [disabled]="">3</ng-option>
+                                    <ng-option [value]="4" [disabled]="">4</ng-option>
+                                    <ng-option [value]="5" [disabled]="">5</ng-option>
+                                    <ng-option [value]="6" [disabled]="">6</ng-option>
+                                </ng-select>
+                                <div *ngIf="f.pozoalmacenamiento.errors" class="invalid-feedback">
+                                    <div *ngIf="f.pozoalmacenamiento.errors?.['required']">El campo no puede estar vacío</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+
+
+                <div class="row py-2 mb-2 border-2 border-dashed rounded">
+                    <div class="row">
+                        <div class="col">
+                            <label for="zona" class="form-label mb-0">Zona:</label>
+                            <input id="zona" type="number" formControlName="zona" class="form-control form-control-solid"
+                                step="1"
+                                [ngClass]="{
+                                    'is-invalid': f.zona.invalid && (f.zona.dirty || f.zona.touched),
+                                    'is-valid': f.zona.valid
+                                }">
+                            <div *ngIf="f.zona.errors" class="invalid-feedback">
+                                <div *ngIf="f.zona.errors?.['required']">El campo no puede estar vacío</div>
+                                <div *ngIf="f.zona.errors?.['min']">Valor mínimo 1</div>
+                                <div *ngIf="f.zona.errors?.['max']">Valor máximo 200</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="capturaanunciada" class="form-label mb-0">Captura Anunciada:</label>
+                            <input id="capturaanunciada" type="number" formControlName="capturaanunciada" class="form-control form-control-solid" 
+                                step="10"
+                                [ngClass]="{
+                                    'is-invalid': f.capturaanunciada.invalid && (f.capturaanunciada.dirty || f.capturaanunciada.touched),
+                                    'is-valid': f.capturaanunciada.valid
+                                }">
+                            <div *ngIf="f.capturaanunciada.errors" class="invalid-feedback">
+                                <div *ngIf="f.capturaanunciada.errors?.['required']">El campo no puede estar vacío</div>
+                                <div *ngIf="f.capturaanunciada.errors?.['min']">Valor mínimo 1</div>
+                                <div *ngIf="f.capturaanunciada.errors?.['max']">Valor máximo 1000</div>
+                            </div> 
+                        </div>
+                        
+                        <div class="col">
+                            <label for="tratamientorsw" class="form-label mb-0">Tratamiento RSW:</label>
+                                <ng-select id="tratamientorsw" formControlName="tratamientorsw" class="form-control form-control-solid"
+                                    [clearable]=false
+                                    [searchable]="false" 
+                                    [ngClass]="{
+                                        'is-invalid': f.tratamientorsw.invalid && (f.tratamientorsw.dirty || f.tratamientorsw.touched),
+                                        'is-valid': f.tratamientorsw.valid
+                                    }">
+                                    <ng-option [value]="1">Si</ng-option>
+                                    <ng-option [value]="0">No</ng-option>
+                                </ng-select>
+                                <div *ngIf="f.tratamientorsw.errors" class="invalid-feedback">
+                                    <div *ngIf="f.tratamientorsw.errors?.['required']">El campo no puede estar vacío</div>
+                                </div>                                
+                        </div>
+                        
+                        <div class="col">
+                            <label for="aguadescargada" class="form-label mb-0">Agua Descargada (mL):</label>
+                                <input id="aguadescargada" type="number" formControlName="aguadescargada" class="form-control form-control-solid" 
+                                    step="50"
+                                [ngClass]="{
+                                        'is-invalid': f.aguadescargada.invalid && (f.aguadescargada.dirty || f.aguadescargada.touched),
+                                        'is-valid': f.aguadescargada.valid
+                                }">
+                            <div *ngIf="f.aguadescargada.errors" class="invalid-feedback">
+                                <div *ngIf="f.aguadescargada.errors?.['required']">El campo no puede estar vacío</div>
+                                <div *ngIf="f.aguadescargada.errors?.['min']">Valor mínimo 1</div>
+                                <div *ngIf="f.aguadescargada.errors?.['max']">Valor máximo 20000</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="cuenta" class="form-label mb-0">Cuenta (N°/Lt)%:</label>
+                            <input id="cuenta" type="number" formControlName="cuenta" class="form-control form-control-solid" 
+                                step="5"
+                                [ngClass]="{
+                                        'is-invalid': f.cuenta.invalid && (f.cuenta.dirty || f.cuenta.touched),
+                                        'is-valid': f.cuenta.valid
+                                }">
+                            <div *ngIf="f.cuenta.errors" class="invalid-feedback">
+                                <div *ngIf="f.cuenta.errors?.['required']">El campo no puede estar vacío</div>
+                                <div *ngIf="f.cuenta.errors?.['min']">Valor mínimo 0</div>
+                                <div *ngIf="f.cuenta.errors?.['max']">Valor máximo 100</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="integridad" class="form-label mb-0">% Integridad:</label>
+                                <input id="integridad" type="number" formControlName="porcintegridad" class="form-control form-control-solid" 
+                                    step="10"
+                                    [ngClass]="{
+                                            'is-invalid': f.porcintegridad.invalid && (f.porcintegridad.dirty || f.porcintegridad.touched),
+                                            'is-valid': f.porcintegridad.valid
+                                    }">
+                            <div *ngIf="f.porcintegridad.errors" class="invalid-feedback">
+                                <div *ngIf="f.porcintegridad.errors?.['required']">El campo no puede estar vacío</div>
+                                <div *ngIf="f.porcintegridad.errors?.['min']">Valor mínimo 0</div>
+                                <div *ngIf="f.porcintegridad.errors?.['max']">Valor máximo 100</div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <label for="tvn" class="form-label mb-0">TVN:</label>
+                                <input id="tvn" type="number" formControlName="tvn" class="form-control form-control-solid" 
+                                    step="10"
+                                    [ngClass]="{
+                                        'is-invalid': f.tvn.invalid && (f.tvn.dirty || f.tvn.touched),
+                                        'is-valid': f.tvn.valid
+                                    }">
+                            <div *ngIf="f.tvn.errors" class="invalid-feedback">
+                                <div *ngIf="f.tvn.errors?.['required']">El campo no puede estar vacío</div>
+                                <div *ngIf="f.tvn.errors?.['min']">Valor mínimo 1</div>
+                                <div *ngIf="f.tvn.errors?.['max']">Valor máximo 100</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="temperatura" class="form-label mb-0">Temperatura C°:</label>
+                                <input id="temperatura" type="number" formControlName="temperatura" class="form-control form-control-solid" 
+                                    step="0.5"
+                                    [ngClass]="{
+                                            'is-invalid': f.temperatura.invalid && (f.temperatura.dirty || f.temperatura.touched),
+                                            'is-valid': f.temperatura.valid
+                                    }">
+                            <div *ngIf="f.temperatura.errors" class="invalid-feedback">
+                                <div *ngIf="f.temperatura.errors?.['required']">El campo no puede estar vacío</div>
+                                <div *ngIf="f.temperatura.errors?.['min']">Valor mínimo -10</div>
+                                <div *ngIf="f.temperatura.errors?.['max']">Valor máximo 25</div>
+                            </div> 
+                        </div>
+                        <div class="col">
+                            <label for="ph" class="form-label mb-0">pH:</label>
+                                <input id="ph" type="number" formControlName="ph" class="form-control form-control-solid"
+                                    step="0.1" 
+                                    [ngClass]="{
+                                            'is-invalid': f.ph.invalid && (f.ph.dirty || f.ph.touched),
+                                            'is-valid': f.ph.valid
+                                    }"
+                                    pattern="^\d+(\.\d{1})?$">
+                            <div *ngIf="f.ph.errors" class="invalid-feedback">
+                                <div *ngIf="f.ph.errors?.['required']">El campo no puede estar vacío</div>
+                                <div *ngIf="f.ph.errors?.['min']">Valor mínimo 5</div>
+                                <div *ngIf="f.ph.errors?.['max']">Valor máximo 10</div>
+                            </div>  
+                        </div>
+                        <div class="col">
+                            <label for="grasa" class="form-label mb-0">Grasa:</label>
+                                <input id="grasa" type="number" formControlName="grasa" class="form-control form-control-solid" 
+                                    [ngClass]="{
+                                            'is-invalid': f.grasa.invalid && (f.grasa.dirty || f.grasa.touched),
+                                            'is-valid': f.grasa.valid
+                                    }">
+                            <div *ngIf="f.grasa.errors" class="invalid-feedback">
+                                <div *ngIf="f.grasa.errors?.['required']">El campo no puede estar vacío</div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="py-2 my-2 bg-gray-200 rounded">
+                            <div class="d-flex justify-items-center">
+                                <div class="ps-5 fs-5 fw-bolder">Ingresar Análisis
+                                    <button type="button" class="btn btn-success btn-sm w-30px h-30px p-0" (click)="addAnalisis()" >
+                                        <i class="bi bi-plus fs-2x p-0"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div formArrayName="analisis">
+                                    <div *ngFor="let tallaControl of analisis.controls; let i = index">                            
+                                        <div [formGroupName]="i">
+                                            <div class="d-flex flex-row align-items-start">
+                                                <div class="ms-2 fs-4 mt-9">{{ i + 1 }}:</div>
+                                                <div class="mx-2">
+                                                    <label for="talla1" class="form-label mb-0">Talla:</label>
+                                                    <input id="talla1" type="number" formControlName="talla" class="form-control form-control-solid" 
+                                                        [ngClass]="{
+                                                            'is-invalid': getFormControl(analisis, i,'talla').invalid  && (getFormControl(analisis, i,'talla').dirty || getFormControl(analisis, i,'talla').touched),
+                                                            'is-valid': getFormControl(analisis, i,'talla').valid
+                                                        }">
+                                                    <div *ngIf="getFormControl(analisis, i,'talla').errors" class="invalid-feedback">
+                                                        <div *ngIf="getFormControl(analisis, i,'talla').errors?.['required']">El campo no puede estar vacío</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mx-2">
+                                                    <label for="peso1" class="form-label mb-0">Peso:</label>
+                                                    <input id="peso1" type="number" formControlName="peso" class="form-control form-control-solid" 
+                                                        [ngClass]="{
+                                                            'is-invalid': getFormControl(analisis, i,'peso').invalid  && (getFormControl(analisis, i,'peso').dirty || getFormControl(analisis, i,'peso').touched),
+                                                            'is-valid': getFormControl(analisis, i,'peso').valid
+                                                        }">
+                                                    <div *ngIf="getFormControl(analisis, i,'peso').errors" class="invalid-feedback">
+                                                        <div *ngIf="getFormControl(analisis, i,'peso').errors?.['required']">El campo no puede estar vacío</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mx-2 mt-7">
+                                                    <button class="btn btn-icon btn-danger w-35px h-35px" (click)="deleteAnalisis(i)">
+                                                        <i class="ki-duotone ki-trash fs-3">
+                                                          <span class="path1"></span><span class="path2"></span>
+                                                          <span class="path3"></span><span class="path4"></span><span class="path5"></span>
+                                                        </i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                            </div>          
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="py-2 my-2 bg-gray-200 rounded">
+                            <div class="d-flex justify-items-center">
+                                <div class="ps-5 fs-5 fw-bolder">Ingresar Fauna Acompañante
+                                    <button type="button" class="btn btn-success btn-sm w-30px h-30px p-0" (click)="addFauna()" >
+                                        <i class="bi bi-plus fs-2x p-0"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div formArrayName="faunaacompanante">
+                                <div *ngFor="let faunaControl of faunaacompanante.controls; let i = index">                            
+                                    <div [formGroupName]="i">
+                                        <div class="d-flex flex-row align-items-start">
+                                            <div class="ms-2 fs-4 mt-9">{{ i + 1 }}:</div>
+                                            <div class="mx-2">
+                                                <label for="talla1" class="form-label mb-0">Fauna:</label>
+                                                <input id="talla1" type="number" formControlName="especie" class="form-control form-control-solid" 
+                                                    [ngClass]="{
+                                                        'is-invalid': getFormControl(faunaacompanante, i,'especie').invalid  && (getFormControl(faunaacompanante, i,'especie').dirty || getFormControl(faunaacompanante, i,'especie').touched),
+                                                        'is-valid': getFormControl(faunaacompanante, i,'especie').valid
+                                                    }">
+                                                <div *ngIf="getFormControl(faunaacompanante, i,'especie').errors" class="invalid-feedback">
+                                                    <div *ngIf="getFormControl(faunaacompanante, i,'especie').errors?.['required']">El campo no puede estar vacío</div>
+                                                </div>
+                                            </div>
+                                            <div class="mx-2">
+                                                <label for="peso1" class="form-label mb-0">Fauna %:</label>
+                                                <input id="peso1" type="number" formControlName="porcentaje" class="form-control form-control-solid" 
+                                                    [ngClass]="{
+                                                        'is-invalid': getFormControl(faunaacompanante, i,'porcentaje').invalid  && (getFormControl(faunaacompanante, i,'porcentaje').dirty || getFormControl(faunaacompanante, i,'porcentaje').touched),
+                                                        'is-valid': getFormControl(faunaacompanante, i,'porcentaje').valid
+                                                    }">
+                                                <div *ngIf="getFormControl(faunaacompanante, i,'porcentaje').errors" class="invalid-feedback">
+                                                    <div *ngIf="getFormControl(faunaacompanante, i,'porcentaje').errors?.['required']">El campo no puede estar vacío</div>
+                                                    <div *ngIf="getFormControl(faunaacompanante, i,'porcentaje').errors?.['min']">Valor mínimo 0</div>
+                                                    <div *ngIf="getFormControl(faunaacompanante, i,'porcentaje').errors?.['max']">Valor máximo 50</div>
+                                                </div>
+                                            </div>
+                                            <div class="mx-2 mt-7">
+                                                <button class="btn btn-icon btn-danger w-35px h-35px" (click)="deleteFauna(i)">
+                                                    <i class="ki-duotone ki-trash fs-3">
+                                                      <span class="path1"></span><span class="path2"></span>
+                                                      <span class="path3"></span><span class="path4"></span><span class="path5"></span>
+                                                    </i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div> 
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer py-2">
+                <div class="d-flex justify-content-end">
+                    <button type="submit" [disabled]="formulario.invalid" class="btn btn-success">Guardar</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

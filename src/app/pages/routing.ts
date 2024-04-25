@@ -3,6 +3,7 @@ import { PruebasComponent } from './pruebas/pruebas.component'
 import { Pruebas3Component } from './pruebas3/pruebas3.component'
 import { RespuestaComponent } from './maestros/respuesta/respuesta.component';
 import { FormulariosComponent } from './maestros/formularios/formularios.component';
+import { BiologicoComponent } from './biologico/biologico.component';
 
 const Routing: Routes = [
   {
@@ -11,8 +12,7 @@ const Routing: Routes = [
   },
   {
     path: 'biologico',
-    loadChildren: () => import('./biologico/biologico.module').then((m) => m.BiologicoModule),
-    
+    component: BiologicoComponent    
   },
   {
     path: 'pruebas',
