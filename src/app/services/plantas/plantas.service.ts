@@ -24,6 +24,10 @@ export class PlantasService {
     return this.http.get(this.url+'/getall');
   }
 
+  getAllActivos(): Observable<any> {
+    return this.http.get(this.url+'/getall/1');
+  }
+
   get(id: number): Observable<IPlantaModel> {
     const url = `${this.url}/get/${id}`;
     return this.http.get<IPlantaModel>((url));

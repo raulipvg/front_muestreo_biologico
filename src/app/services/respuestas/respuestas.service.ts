@@ -3,6 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { env } from 'src/environments/env';
 
+export  interface IRespuestaModel {
+  id?: number;
+  formulario_id: number;
+  json: any;
+  enabled?: boolean;
+  usuario_id?: number;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -23,6 +30,11 @@ export class RespuestasService {
   editOne(): Observable<any> {  
     return this.http.get(this.url + '/edit');
   }
+
+  create(data : IRespuestaModel): Observable<any> {
+    return this.http.post<IRespuestaModel>(this.url + '/create', data);
+  }
+
 
 
   

@@ -96,16 +96,16 @@ $ng-select-bg: #ffffff !default;
     &.ng-invalid.ng-touched .ng-select-container:active{
         //border-color: #dc3545;
         border-radius: 0.475rem;
-        padding-left: 0em !important;
-        padding-right: 0em !important;
+        //padding-left: 0em !important; //para que no se mueve el select multiple
+       // padding-right: 0em !important;//para que no se mueve el select multiple
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px #fde6e8;
     }
     //BORDE VALIDO ACTIVE
     &.ng-valid.ng-touched .ng-select-container:active{
         //border-color: #28a745;
         border-radius: 0.475rem;
-        padding-left: 0em !important;
-        padding-right: 0em !important;
+        //padding-left: 0em !important;
+        //padding-right: 0em !important;
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px #d4edda;
     }
     .ng-select-container {

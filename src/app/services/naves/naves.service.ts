@@ -19,8 +19,13 @@ export class NavesService {
 
   constructor(private http: HttpClient) { }
   url = env.API_URL + 'nave';
+
   getAll(): Observable<any> {
     return this.http.get(this.url+'/getall');
+  }
+  
+  getAllActivos(): Observable<any> {
+    return this.http.get(this.url+'/getall/1');
   }
 
   get(id: number): Observable<INaveModel> {

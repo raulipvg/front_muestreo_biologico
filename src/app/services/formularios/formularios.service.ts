@@ -38,4 +38,7 @@ export class FormulariosService {
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
 
+  getselects(): Observable<any> {
+    return this.http.get(this.url+'/getselects');
+  }
 }

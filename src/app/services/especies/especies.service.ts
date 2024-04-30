@@ -10,6 +10,12 @@ export interface IEspecieModel {
   enabled?: boolean;
   created_at?: string;
   updated_at?: string;
+  talla_min? : number;
+  talla_max? : number;
+  peso_min? : number;
+  peso_max? : number;
+  flag?:boolean;
+
 }
 
 @Injectable({
@@ -22,6 +28,10 @@ export class EspeciesService {
   
   getAll(): Observable<any> {
     return this.http.get(this.url+'/getall');
+  }
+
+  getAllActivos(): Observable<any> {
+    return this.http.get(this.url+'/getall/1');
   }
 
   get(id: number): Observable<IEspecieModel> {

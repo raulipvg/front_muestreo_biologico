@@ -1,0 +1,12 @@
+input::-webkit-input-placeholder {
+    display: none; /* Oculta el placeholder */
+  }
+  
+input:-webkit-autofill {
+    pointer-events: none; /* Deshabilita la interacción */
+    background-color: transparent; /* Oculta el relleno automático */
+  }
+.btn-delete{
+  width: 38px;
+  height: 38px;
+}
