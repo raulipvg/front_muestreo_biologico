@@ -491,6 +491,9 @@ export class BiologicoComponent implements OnInit{
     if(this.flag) {
       this.formulario.reset();
       this.initValidacion();
+      this.formulario.get('clasificacion_id')?.setValue(1);
+      this.formulario.get('puerto_id')?.setValue(1);
+      this.formulario.get('departamento_id')?.setValue(1);
       this.flag = false;
     }
   }
