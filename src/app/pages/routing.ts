@@ -12,8 +12,12 @@ const Routing: Routes = [
     loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
   {
-    path: 'biologico',
+    path: 'adm',
     children:biologicosRoutes
+  },
+  {
+    path: 'biologico', // Ruta vacía para BiologicoComponent
+    component: BiologicoComponent,
   },
   {
     path: 'pruebas',

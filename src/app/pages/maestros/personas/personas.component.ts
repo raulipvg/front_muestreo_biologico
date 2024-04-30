@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
 import { ModalAccionesComponent } from './modalAciones/modalacciones.component';
+import { NgxMaskDirective, NgxMaskService, provideNgxMask } from 'ngx-mask';
 
 
 @Component({
@@ -14,8 +15,10 @@ import { ModalAccionesComponent } from './modalAciones/modalacciones.component';
   imports: [
     DataTablesModule,
     ModalAccionesComponent,
-    PageLoadingComponent
+    PageLoadingComponent,
+    NgxMaskDirective
   ],
+  providers: [provideNgxMask()],
   templateUrl: './personas.component.html',
   styleUrl: './personas.component.scss'
 })
@@ -38,7 +41,8 @@ export class PersonasComponent implements OnInit {
    constructor(
     private servicio: PersonasService, 
     private renderer: Renderer2,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private maskService: NgxMaskService
   ) { }
 
   ngOnInit(): void {
@@ -84,10 +88,14 @@ export class PersonasComponent implements OnInit {
       responsive:true,
       columns:[
         { title:'Id', data: 'id' },
-        { title:'Nombre', data: 'nombre', render: function(data:any, type:string, row: any){
+        { title:'Nombre', data: 'nombre', render: function(data : any, type : string, row : any){
           return (row.nombre + ' ' + row.apellido).toUpperCase();
         } },
-        { title: 'RUT', data:'rut'},
+        { title: 'RUT', data:'rut', render: (data : any, type : string, row : any) => {
+          let mask;
+          row.rut.match(/[a-zA-Z0-9]/g).length === 8 ? mask = "0.000.000-A ": mask = "00.000.000-A" ;
+          return this.maskService.applyMask(row.rut, mask);
+        }},
         { title: 'Última modificación', data: 'updated_at', render: function(data : any, type : string, row : any) {
           if (type === 'display' || type === 'filter') {
             // Formato de fecha 'dd-mm-yyyy'

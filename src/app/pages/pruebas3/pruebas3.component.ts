@@ -20,6 +20,7 @@ import { PersonasComponent } from '../maestros/personas/personas.component';
 import { FormulariosComponent } from '../maestros/formularios/formularios.component';
 import { LoginService } from 'src/app/services/login/login.service';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { env } from 'src/environments/env';
 
 
 @Component({
@@ -79,7 +80,7 @@ export class Pruebas3Component implements OnInit{
   }
 
   loginGoogle(){
-
+    window.open(env.GOOGLE_REDIRECT_URL, 'googleLogin', 'width=600,height=400');
   }
 
 }

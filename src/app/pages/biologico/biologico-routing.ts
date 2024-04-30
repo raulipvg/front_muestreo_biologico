@@ -13,56 +13,58 @@ import { BiologicoComponent } from "./biologico.component";
 
 
 export const biologicosRoutes: Routes = [
-    {
-      path: '', // Ruta vacía para BiologicoComponent
-      component: BiologicoComponent,
-    },
-    {
-      path: 'adm',
-      component: AdmMaestrosComponent,
-      children: [
-        {
-          path: 'clasificaciones',
-          component: ClasificacionesComponent,
+  {
+    path: 'biologico',
+    component: AdmMaestrosComponent,
+    children: [
+      {
+        path: 'clasificaciones',
+        component: ClasificacionesComponent,
+      },
+      {
+          path: 'departamentos',
+          component: DepartamentosComponent,
         },
-        {
-            path: 'departamentos',
-            component: DepartamentosComponent,
-          },
-        {
-          path: 'especies',
-          component: EspeciesComponent,
-        },
-        {
-          path: 'flotas',
-          component: FlotasComponent,
-        },
-        {
-          path: 'lugaresm',
-          component: LugaresmComponent,
-        },
-        {
-          path: 'naves',
-          component: NavesComponent,
-        },
-        {
-          path: 'personas',
-          component: PersonasComponent,
-        },
-        {
-          path: 'plantas',
-          component: PlantasComponent,
-        },
-        {
-          path: 'puertos',
-          component: PuertosComponent,
-        },
-        {
-          path:'', redirectTo:'clasificaciones', pathMatch: 'full'
-        },
-        {
-          path:'**', redirectTo:'clasificaciones', pathMatch: 'full'
-        },
-      ]
-    }
-  ];
+      {
+        path: 'especies',
+        component: EspeciesComponent,
+      },
+      {
+        path: 'flotas',
+        component: FlotasComponent,
+      },
+      {
+        path: 'lugaresm',
+        component: LugaresmComponent,
+      },
+      {
+        path: 'naves',
+        component: NavesComponent,
+      },
+      {
+        path: 'personas',
+        component: PersonasComponent,
+      },
+      {
+        path: 'plantas',
+        component: PlantasComponent,
+      },
+      {
+        path: 'puertos',
+        component: PuertosComponent,
+      },
+      {
+        path:'', redirectTo:'clasificaciones', pathMatch: 'full'
+      },
+      {
+        path:'**', redirectTo:'clasificaciones', pathMatch: 'full'
+      },
+    ]
+  },
+  {
+    path:'', redirectTo:'biologico', pathMatch: 'full'
+  },
+  {
+    path:'**', redirectTo:'biologico', pathMatch: 'full'
+  },
+];
