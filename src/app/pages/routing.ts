@@ -4,6 +4,7 @@ import { Pruebas3Component } from './pruebas3/pruebas3.component'
 import { RespuestaComponent } from './maestros/respuesta/respuesta.component';
 import { FormulariosComponent } from './maestros/formularios/formularios.component';
 import { BiologicoComponent } from './biologico/biologico.component';
+import { biologicosRoutes } from './biologico/biologico-routing';
 
 const Routing: Routes = [
   {
@@ -12,7 +13,7 @@ const Routing: Routes = [
   },
   {
     path: 'biologico',
-    component: BiologicoComponent    
+    children:biologicosRoutes
   },
   {
     path: 'pruebas',

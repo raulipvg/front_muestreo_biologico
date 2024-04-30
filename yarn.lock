@@ -227,7 +227,7 @@
     symbol-observable "4.0.0"
     yargs "17.7.2"
 
-"@angular/common@^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0", "@angular/common@^16.0.0", "@angular/common@^17.0.0", "@angular/common@^17.0.0 || ^18.0.0", "@angular/common@^17.0.0-rc.0", "@angular/common@^17.0.2", "@angular/common@^17.3.3", "@angular/common@>=13.0.0", "@angular/common@>=14.0.2", "@angular/common@>=16.0.0", "@angular/common@17.3.3":
+"@angular/common@^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0", "@angular/common@^16.0.0", "@angular/common@^17.0.0", "@angular/common@^17.0.0 || ^18.0.0", "@angular/common@^17.0.0-rc.0", "@angular/common@^17.0.2", "@angular/common@^17.3.3", "@angular/common@>=13.0.0", "@angular/common@>=14.0.0", "@angular/common@>=14.0.2", "@angular/common@>=16.0.0", "@angular/common@17.3.3":
   version "17.3.3"
   resolved "https://registry.npmjs.org/@angular/common/-/common-17.3.3.tgz"
   integrity sha512-GwlKetNpfWKiG2j4S6bYTi6PA2iT4+eln7o8owo44xZWdQnWQjfxnH39vQuCyhi6OOQL1dozmae+fVXgQsV6jQ==
@@ -255,14 +255,14 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/core@^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0", "@angular/core@^16.0.0", "@angular/core@^17.0.0", "@angular/core@^17.0.0 || ^18.0.0", "@angular/core@^17.0.0-rc.0", "@angular/core@^17.0.2", "@angular/core@^17.3.3", "@angular/core@>=13.0.0", "@angular/core@>=14.0.2", "@angular/core@>=16.0.0", "@angular/core@17.3.3":
+"@angular/core@^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0", "@angular/core@^16.0.0", "@angular/core@^17.0.0", "@angular/core@^17.0.0 || ^18.0.0", "@angular/core@^17.0.0-rc.0", "@angular/core@^17.0.2", "@angular/core@^17.3.3", "@angular/core@>=13.0.0", "@angular/core@>=14.0.0", "@angular/core@>=14.0.2", "@angular/core@>=16.0.0", "@angular/core@17.3.3":
   version "17.3.3"
   resolved "https://registry.npmjs.org/@angular/core/-/core-17.3.3.tgz"
   integrity sha512-O/jr3aFJMCxF6Jmymjx4jIigRHJfqM/ALIi60y2LVznBVFkk9xyMTsAjgWQIEHX+2muEIzgfKuXzpL0y30y+wA==
   dependencies:
     tslib "^2.3.0"
 
-"@angular/forms@^17.0.0", "@angular/forms@^17.0.0 || ^18.0.0", "@angular/forms@^17.0.0-rc.0", "@angular/forms@^17.3.3":
+"@angular/forms@^17.0.0", "@angular/forms@^17.0.0 || ^18.0.0", "@angular/forms@^17.0.0-rc.0", "@angular/forms@^17.3.3", "@angular/forms@>=14.0.0":
   version "17.3.3"
   resolved "https://registry.npmjs.org/@angular/forms/-/forms-17.3.3.tgz"
   integrity sha512-wqn+eAggbOZY91hr7oDjv5qdflszVOC9SZMcWJUoZTGn+8eoV6v6728GDFuDDwYkKQ9G9eQbX4IZmYoVw3TVjQ==
@@ -6319,6 +6319,13 @@ ngx-clipboard@16.0.0:
   dependencies:
     ngx-window-token ">=7.0.0"
     tslib "^2.0.0"
+
+ngx-mask@^17.0.7:
+  version "17.0.7"
+  resolved "https://registry.npmjs.org/ngx-mask/-/ngx-mask-17.0.7.tgz"
+  integrity sha512-pmiCkAIDi5HqWwicHsOThPsJALF3fdMR21aoDJd/boJoEo1HoS34NJNUkqJ11qB2ZBVu5PX8R9KB617OCMkXXQ==
+  dependencies:
+    tslib "^2.3.0"
 
 ngx-window-token@>=7.0.0:
   version "7.0.0"

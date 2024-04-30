@@ -21,13 +21,46 @@
             </div>
         </div>
         <div class="col-md-6 mb-2">
+            <div class="form-group">
+                <label for="apellido" class="form-label">Apellido:</label>
+                <input type="text" formControlName="apellido" class="form-control form-control-solid text-capitalize" placeholder="Apellido de la persona" required 
+                    [ngClass]="{
+                                'is-invalid': f.apellido.invalid && (f.apellido.dirty || f.apellido.touched), 
+                                'is-valid': f.apellido.valid 
+                                }"
+                    >
+                <div *ngIf="f.apellido.errors" class="invalid-feedback">
+                    <div *ngIf="f.apellido.errors?.['required']">El campo no puede estar vacío</div>
+                    <div *ngIf="f.apellido.errors?.['minlength']">Minimo 4 caracteres</div>
+                    <div *ngIf="f.apellido.errors?.['maxlength']">Máximo 100 caracteres</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-2">
+            <div class="form-group">
+                <label for="rut" class="form-label">Rut:</label>
+                <input type="text" mask="0.000.000-A || 00.000.000-A" formControlName="rut" class="form-control form-control-solid text-capitalize" placeholder="Rut de la persona" required 
+                    [ngClass]="{
+                                'is-invalid': f.rut.invalid && (f.rut.dirty || f.rut.touched), 
+                                'is-valid': f.rut.valid 
+                                }"
+                    >
+                <div *ngIf="f.rut.errors" class="invalid-feedback">
+                    <div *ngIf="f.rut.errors?.['required']">El campo no puede estar vacío</div>
+                    <div *ngIf="f.rut.errors?.['minlength']">Minimo 11 caracteres</div>
+                    <div *ngIf="f.rut.errors?.['maxlength']">Máximo 13 caracteres</div>
+                    <div *ngIf="f.rut.errors?.['rutValidator']">Rut inválido</div>
 
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6 mb-2">
             <div class="fv-row">                
-                <label for="ApellidoInput" class="form-label">Estado</label>
+                <label for="enabled" class="form-label">Estado</label>
                 <ng-select formControlName="enabled" class="form-control form-control-solid"
                     [ngClass]="{
                         'is-invalid': (f.enabled.invalid && (f.enabled.dirty || f.enabled.touched)),

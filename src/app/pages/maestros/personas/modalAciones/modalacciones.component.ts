@@ -9,6 +9,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { booleanValidator, rutValidator } from 'src/app/modules/customValidators';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+
 
 
 @Component({
@@ -20,8 +22,10 @@ import { booleanValidator, rutValidator } from 'src/app/modules/customValidators
     ModalsModule,
     ReactiveFormsModule,
     CommonModule,
-    SweetAlert2Module
+    SweetAlert2Module,
+    NgxMaskDirective
   ],
+  providers: [provideNgxMask()],
   templateUrl: './modalacciones.component.html',
   styleUrl: './modalacciones.component.scss'
 })
@@ -83,8 +87,9 @@ export class ModalAccionesComponent implements OnInit {
                 ],
       rut: ['',Validators.compose([
                     Validators.required,
-                    Validators.minLength(4),
-                    Validators.maxLength(100) 
+                    Validators.minLength(8),
+                    Validators.maxLength(9),
+                    rutValidator
                   ])
                 ],
       enabled: ['',Validators.compose([
@@ -148,13 +153,13 @@ export class ModalAccionesComponent implements OnInit {
     this.formulario.reset();
     
     switch (action) {
-      case 'ver':
+      /*case 'ver':
         this.modalConfig.modalTitle = 'Ver'
         this.editar = false;
         this.formulario.setValue(data);
         this.formulario.disable();
         this.cdRef.detectChanges();
-        break;
+        break;*/
       case 'edit':
         this.modalConfig.modalTitle = 'Editar'
         this.editar = true;

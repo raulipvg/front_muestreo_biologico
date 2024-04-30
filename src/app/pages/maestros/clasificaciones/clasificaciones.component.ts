@@ -39,7 +39,7 @@ export class ClasificacionesComponent implements OnInit {
     private servicio: ClasificacionesService, 
     private renderer: Renderer2,
     private cdRef: ChangeDetectorRef
-  ) { }
+  ) {  }
 
   ngOnInit(): void {
     this.cargando = true;

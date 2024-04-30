@@ -1,1 +1,19 @@
-<maestro-persona></maestro-persona>
+<form id="login" [formGroup]="formulario">
+    <input 
+        id="username"
+        name="username"
+        autocomplete="username"
+        formControlName="username" 
+        type="text" 
+        placeholder="Usuario">
+    <input 
+        id="password"
+        name="password"
+        autocomplete="current-password"
+        formControlName="password" 
+        type="password" 
+        placeholder="Contraseña">
+
+    <button type="button" [disabled]="formulario.invalid" (click)="submit()">iniciar sesion</button>
+</form>
+<button type="button" (click)="loginGoogle()">google</button>

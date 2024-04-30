@@ -7,6 +7,8 @@ import { env } from 'src/environments/env';
 export interface IPersonaModel {
   id: number;
   nombre?: null | string;
+  apellido?: null | string;
+  rut?: null | string;
   enabled?: boolean;
   created_at?: string;
   updated_at?: string;

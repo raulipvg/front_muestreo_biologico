@@ -8,47 +8,21 @@ export function booleanValidator(control: AbstractControl): ValidatorFn | Valida
 }
 
 export function rutValidator(control: AbstractControl): ValidationErrors | null {
-  const rut = control.value;
+  if(!control.value) return null;
 
-  // Check if RUT is empty
-  if (!rut) {
-    return null; // Return null if empty (doesn't trigger validation error)
-  }
+  var digv = control.value.slice(-1);
+  var rut = control.value.slice(0, control.value.length - 1);
+  if (digv == 'K') digv = 'k';
 
-  // Remove spaces and dashes from RUT
-  const cleanRut = rut.replace(/[^0-9-]+/g, '');
-
-  // Validate RUT format (length and structure)
-  if (cleanRut.length !== 10 || !/^[0-9\-]+$/.test(cleanRut)) {
-    return { invalidRutFormat: true };
-  }
-
-  // Extract RUT components
-  const rutNumber = parseInt(cleanRut.slice(0, -1));
-  const verifierDigit = cleanRut.charAt(cleanRut.length - 1);
-
-  // Calculate verification digit
-  const calculatedDV = calculateDV(rutNumber);
-
-  // Check if verification digit matches calculated digit
-  if (verifierDigit.toLowerCase() !== calculatedDV.toString()) {
-    return { invalidRutVerification: true };
-  }
+  if(dv(rut) != digv)
+    return { rutValidator :{ value: true}};
 
   return null; // RUT is valid
 }
 
-// Function to calculate the verification digit
-function calculateDV(rutNumber: number): number {
-  let multiplier = 2;
-    let sum = 0;
-
-    for (let i = rutNumber.toString().length - 1; i >= 0; i--) {
-      const digit = parseInt(rutNumber.toString().charAt(i));
-      sum += digit * multiplier;
-      multiplier = multiplier % 11 === 0 ? 1 : multiplier + 1;
-    }
-
-    const residual = sum % 11;
-    return residual === 1 ? 0 : 11 - residual;
+function dv(T:any) {
+  var M = 0, S = 1;
+  for (; T; T = Math.floor(T / 10))
+      S = (S + T % 10 * (9 - M++ % 6)) % 11;
+  return S ? S - 1 : 'k';
 }

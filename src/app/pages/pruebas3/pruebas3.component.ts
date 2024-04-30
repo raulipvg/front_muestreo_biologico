@@ -18,7 +18,8 @@ import { PuertosComponent } from '../maestros/puertos/puertos.component';
 import { DepartamentosComponent } from '../maestros/departamentos/departamentos.component';
 import { PersonasComponent } from '../maestros/personas/personas.component';
 import { FormulariosComponent } from '../maestros/formularios/formularios.component';
-
+import { LoginService } from 'src/app/services/login/login.service';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 
 @Component({
@@ -39,12 +40,46 @@ import { FormulariosComponent } from '../maestros/formularios/formularios.compon
     PuertosComponent,
     DepartamentosComponent,
     PersonasComponent,
-    FormulariosComponent
+    FormulariosComponent,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './pruebas3.component.html',
   styleUrl: './pruebas3.component.scss'
 })
-export class Pruebas3Component{
+export class Pruebas3Component implements OnInit{
   
+  formulario : FormGroup;
+  constructor( 
+    private servicio : LoginService,
+    private fb : FormBuilder
+  ){}
+
+  ngOnInit(){
+    this.creaFormBuilder();  
+  }
+
+  creaFormBuilder(){
+    this.formulario = this.fb.group({
+      username : [, Validators.required],
+      password: [, Validators.required]
+    })
+  }
+
+  submit(){
+    this.servicio.normal(this.formulario.value).subscribe({
+      next: (data : any) => {
+        console.log(data);
+      },
+      error: (data: any) => {
+        console.log(data);
+      }
+    });
+  }
+
+  loginGoogle(){
+
+  }
 
 }
