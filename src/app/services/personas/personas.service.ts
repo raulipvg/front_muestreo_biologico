@@ -1,8 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { env } from 'src/environments/env';
 
+const headers = new HttpHeaders({
+  'ngrok-skip-browser-warning': 'any-value',
+  'Accept':'*/*'
+});
 
 export interface IPersonaModel {
   id: number;
@@ -23,12 +27,12 @@ export class PersonasService {
   url = env.API_URL + 'persona'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall');
+    return this.http.get(this.url+'/getall', {headers} );
   }
 
   get(id: number): Observable<IPersonaModel> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IPersonaModel>((url));
+    return this.http.get<IPersonaModel>(url, {headers} );
   }
 
   update( data: any): Observable<IPersonaModel> {

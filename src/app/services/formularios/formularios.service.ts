@@ -1,8 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { env } from 'src/environments/env';
 
+const headers = new HttpHeaders({
+  'ngrok-skip-browser-warning': 'any-value',
+  'Accept':'*/*'
+});
 
 export interface IFormularioModel {
   id: number;
@@ -21,12 +25,12 @@ export class FormulariosService {
   url = env.API_URL + 'formulario';
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall');
+    return this.http.get(this.url+'/getall', {headers} );
   }
 
   get(id: number): Observable<IFormularioModel> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IFormularioModel>((url));
+    return this.http.get<IFormularioModel>(url, {headers} );
   }
 
   update( data: any): Observable<IFormularioModel> {
@@ -39,6 +43,6 @@ export class FormulariosService {
   }
 
   getselects(): Observable<any> {
-    return this.http.get(this.url+'/getselects');
+    return this.http.get(this.url+'/getselects', {headers} );
   }
 }

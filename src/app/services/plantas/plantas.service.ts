@@ -1,8 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { env } from 'src/environments/env';
 
+const headers = new HttpHeaders({
+  'ngrok-skip-browser-warning': 'any-value',
+  'Accept':'*/*'
+});
 
 export interface IPlantaModel {
   id: number;
@@ -21,16 +25,16 @@ export class PlantasService {
   url = env.API_URL + 'planta'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall');
+    return this.http.get(this.url+'/getall', {headers} );
   }
 
   getAllActivos(): Observable<any> {
-    return this.http.get(this.url+'/getall/1');
+    return this.http.get(this.url+'/getall/1', {headers} );
   }
 
   get(id: number): Observable<IPlantaModel> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IPlantaModel>((url));
+    return this.http.get<IPlantaModel>(url, {headers} );
   }
 
   update( data: any): Observable<IPlantaModel> {

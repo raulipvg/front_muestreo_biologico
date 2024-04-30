@@ -1,8 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { env } from 'src/environments/env';
 
+const headers = new HttpHeaders({
+  'ngrok-skip-browser-warning': 'any-value',
+  'Accept':'*/*'
+});
 
 export interface IDepartamentoModel {
   id: number;
@@ -21,12 +25,12 @@ export class DepartamentosService {
   url = env.API_URL + 'departamento'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall');
+    return this.http.get(this.url+'/getall', {headers} );
   }
 
   get(id: number): Observable<IDepartamentoModel> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IDepartamentoModel>((url));
+    return this.http.get<IDepartamentoModel>(url, {headers} );
   }
 
   update( data: any): Observable<IDepartamentoModel> {

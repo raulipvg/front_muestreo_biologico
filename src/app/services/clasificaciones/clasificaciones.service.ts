@@ -1,8 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { env } from 'src/environments/env';
 
+const headers = new HttpHeaders({
+  'ngrok-skip-browser-warning': 'any-value',
+  'Accept':'*/*'
+});
 
 export interface IClasificacionModel {
   id: number;
@@ -21,12 +25,12 @@ export class ClasificacionesService {
   url = env.API_URL + 'clasificacion'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall');
+    return this.http.get(this.url+'/getall', {headers} );
   }
 
   get(id: number): Observable<IClasificacionModel> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IClasificacionModel>((url));
+    return this.http.get<IClasificacionModel>(url, {headers} );
   }
 
   update( data: any): Observable<IClasificacionModel> {

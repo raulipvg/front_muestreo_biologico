@@ -1,8 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { env } from 'src/environments/env';
 
+const headers = new HttpHeaders({
+  'ngrok-skip-browser-warning': 'any-value',
+  'Accept':'*/*'
+});
 
 export interface ILugarmModel {
   id: number;
@@ -21,12 +25,12 @@ export class LugaresmService {
   url = env.API_URL + 'lugarm'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall');
+    return this.http.get(this.url+'/getall', {headers} );
   }
 
   get(id: number): Observable<ILugarmModel> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<ILugarmModel>((url));
+    return this.http.get<ILugarmModel>(url, {headers} );
   }
 
   update( data: any): Observable<ILugarmModel> {

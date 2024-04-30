@@ -6,7 +6,7 @@
     <div class="row">
         <div class="form-group">
             <label for="nombre" class="form-label">Nombre:</label>
-            <input type="text" formControlName="nombre" class="form-control form-control-solid text-capitalize" placeholder="Nombre de la especie" required 
+            <input id="nombre" type="text" formControlName="nombre" class="form-control form-control-solid text-capitalize" placeholder="Nombre de la especie" required 
                 [ngClass]="{
                             'is-invalid': f.nombre.invalid && (f.nombre.dirty || f.nombre.touched), 
                             'is-valid': f.nombre.valid 
@@ -21,9 +21,85 @@
     </div>
     <div class="row">
         <div class="col-md-6 mb-2">
+            <div class="form-group">
+                <label for="talla_min" class="form-label">Talla min(cm):</label>
+                <input id="talla_min" type="text" formControlName="talla_min" class="form-control form-control-solid text-capitalize" placeholder="Talla min" required 
+                    [ngClass]="{
+                                'is-invalid': f.talla_min.invalid && (f.talla_min.dirty || f.talla_min.touched), 
+                                'is-valid': f.talla_min.valid 
+                                }"
+                    >
+                <div *ngIf="f.talla_min.errors" class="invalid-feedback">
+                    <div *ngIf="f.talla_min.errors?.['required']">El campo no puede estar vacío</div>
+                    <div *ngIf="f.peso_min.errors?.['min']">El campo debe ser mayor a 0</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-2">
+            <div class="form-group">
+                <label for="talla_max" class="form-label">Talla max(cm):</label>
+                <input id="talla_max" type="text" formControlName="talla_max" class="form-control form-control-solid text-capitalize" placeholder="Talla max" required 
+                    [ngClass]="{
+                                'is-invalid': f.talla_max.invalid && (f.talla_max.dirty || f.talla_max.touched), 
+                                'is-valid': f.talla_max.valid 
+                                }"
+                    >
+                <div *ngIf="f.talla_max.errors" class="invalid-feedback">
+                    <div *ngIf="f.talla_max.errors?.['required']">El campo no puede estar vacío</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-2">
+            <div class="form-group">
+                <label for="peso_min" class="form-label">Peso min(gr):</label>
+                <input id="peso_min" type="text" formControlName="peso_min" class="form-control form-control-solid text-capitalize" placeholder="Peso min" required 
+                    [ngClass]="{
+                                'is-invalid': f.peso_min.invalid && (f.peso_min.dirty || f.peso_min.touched), 
+                                'is-valid': f.peso_min.valid 
+                                }"
+                    >
+                <div *ngIf="f.talla_min.errors" class="invalid-feedback">
+                    <div *ngIf="f.peso_min.errors?.['required']">El campo no puede estar vacío</div>
+                    <div *ngIf="f.peso_min.errors?.['min']">El campo debe ser mayor a 0</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-2">
+            <div class="form-group">
+                <label for="peso_max" class="form-label">Peso max(gr):</label>
+                <input id="peso_max" type="text" formControlName="peso_max" class="form-control form-control-solid text-capitalize" placeholder="Peso max" required 
+                    [ngClass]="{
+                                'is-invalid': f.peso_max.invalid && (f.peso_max.dirty || f.peso_max.touched), 
+                                'is-valid': f.peso_max.valid 
+                                }"
+                    >
+                <div *ngIf="f.peso_max.errors" class="invalid-feedback">
+                    <div *ngIf="f.peso_max.errors?.['required']">El campo no puede estar vacío</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-2">
+            <div class="form-group">
+                <label for="talla_menor_a" class="form-label">Talla menor a(cm):</label>
+                <input id="talla_menor_a" type="text" formControlName="talla_menor_a" class="form-control form-control-solid text-capitalize" placeholder="Peso max" required 
+                    [ngClass]="{
+                                'is-invalid': f.talla_menor_a.invalid && (f.talla_menor_a.dirty || f.talla_menor_a.touched), 
+                                'is-valid': f.talla_menor_a.valid 
+                                }"
+                    >
+                <div *ngIf="f.talla_menor_a.errors" class="invalid-feedback">
+                    <div *ngIf="f.talla_menor_a.errors?.['required']">El campo no puede estar vacío</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-2">
             <div class="fv-row">                
-                <label for="ApellidoInput" class="form-label">Estado</label>
-                <ng-select formControlName="enabled" class="form-control form-control-solid"
+                <label for="enabled" class="form-label">Estado</label>
+                <ng-select id="enabled" formControlName="enabled" class="form-control form-control-solid"
                     [ngClass]="{
                         'is-invalid': (f.enabled.invalid && (f.enabled.dirty || f.enabled.touched)),
                         'is-valid': f.enabled.valid

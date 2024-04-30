@@ -80,7 +80,7 @@ export class Pruebas3Component implements OnInit{
   }
 
   loginGoogle(){
-    window.open(env.GOOGLE_REDIRECT_URL, 'googleLogin', 'width=600,height=400');
+    window.open(env.GOOGLE_REDIRECT_URL, 'googleLogin', 'width=800,height=600');
   }
 
 }

@@ -1,8 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { env } from 'src/environments/env';
 
+const headers = new HttpHeaders({
+  'ngrok-skip-browser-warning': 'any-value',
+  'Accept':'*/*'
+});
 export  interface IRespuestaModel {
   id?: number;
   formulario_id: number;
@@ -20,15 +24,15 @@ export class RespuestasService {
   url = env.API_URL + 'respuesta';
 
   getAll(): Observable<any> {
-    return this.http.get(this.url + '/getall');
+    return this.http.get(this.url + '/getall', {headers} );
   }
 
   getOne(): Observable<any> {
-    return this.http.get(this.url + '/getone');
+    return this.http.get(this.url + '/getone', {headers} );
   }
 
   editOne(): Observable<any> {  
-    return this.http.get(this.url + '/edit');
+    return this.http.get(this.url + '/edit', {headers} );
   }
 
   create(data : IRespuestaModel): Observable<any> {

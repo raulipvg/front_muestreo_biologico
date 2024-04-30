@@ -75,6 +75,26 @@ export class ModalAccionesComponent implements OnInit {
                     Validators.maxLength(100) 
                   ])
                 ],
+      talla_max: ['',Validators.compose([
+                      Validators.required,
+                      
+                    ])],
+      talla_min: ['',Validators.compose([
+                      Validators.required,
+                      Validators.min(0)
+                    ])],
+      peso_max: ['',Validators.compose([
+                      Validators.required,
+                      
+                    ])],
+      peso_min: ['',Validators.compose([
+                      Validators.required,
+                      Validators.min(0)
+                    ])],
+      talla_menor_a: ['',Validators.compose([
+                          Validators.required,
+                          Validators.min(0)
+                        ])],
       enabled: ['',Validators.compose([
                     Validators.required,
                     booleanValidator

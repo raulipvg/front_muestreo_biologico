@@ -15,7 +15,7 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   normal( data: any){
-    this.http.get('http://localhost:8000/sanctum/csrf-cookie');
+    this.http.get(env.CSRF_COOKIE_URL);
     return this.http.post<ICredencialesModel>(this.url, data);
   }
 
