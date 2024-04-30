@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormBuilder } from '@angular/forms';
@@ -13,6 +13,8 @@ import{ IPuertoModel } from 'src/app/services/puertos/puertos.service';
 import { IDepartamentoModel } from 'src/app/services/departamentos/departamentos.service';
 import { IPersonaModel } from 'src/app/services/personas/personas.service';
 import { RespuestasService } from 'src/app/services/respuestas/respuestas.service';
+import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { SweetAlertOptions } from 'sweetalert2';
 
 @Component({
   selector: 'app-biologico',
@@ -21,7 +23,8 @@ import { RespuestasService } from 'src/app/services/respuestas/respuestas.servic
     NgSelectModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    SweetAlert2Module,
   ],
   templateUrl: './biologico.component.html',
   styleUrl: './biologico.component.scss'
@@ -57,10 +60,15 @@ export class BiologicoComponent implements OnInit{
   maxDate: string = this.todayDate;
   previousSelectedFaunaId: number[] = [];
 
+  @ViewChild('noticeSwal')
+  noticeSwal!: SwalComponent;
+  swalOptions: SweetAlertOptions = {};
+  flag: boolean = false;
   constructor(
     private fb: FormBuilder,
     private formularioService: FormulariosService,
-    private respuestasService: RespuestasService
+    private respuestasService: RespuestasService,
+    private cdRef: ChangeDetectorRef,
   ) { };
   ngOnInit(): void {
 
@@ -384,11 +392,30 @@ export class BiologicoComponent implements OnInit{
     this.formulario.markAllAsTouched();
     if(this.formulario.valid){
       console.log('Formulario Valido');
+
+      const successAlert: SweetAlertOptions = {
+        icon: 'success',
+        title: 'Exito',
+        text: 'Formulario Ingresado'
+      };
+      const errorAlert: SweetAlertOptions = {
+        icon: 'error',
+        title: 'Error!',
+        text: '',
+      };
+
       this.respuestasService
             .create(this.formulario.value)
-            .subscribe((data: any) => {
-              console.log(data);
-            });
+            .subscribe({
+              next: (data: any) => {
+                this.showAlert(successAlert);
+                this.flag =true;    
+              },
+              error: (error: any) => {
+                this.showAlert(errorAlert);
+                this.flag = false;
+              }
+              });
     }
   }
   //Validador de fecha mínima en Recepcion
@@ -441,5 +468,30 @@ export class BiologicoComponent implements OnInit{
       //console.log('Total Porcentaje: ' + totalPorcentaje);                            
       return (totalPorcentaje  > 50) ? { 'fauna': { value: control.value } } : null;
     };
+  }
+
+  showAlert(swalOptions: SweetAlertOptions) {
+    let style = swalOptions.icon?.toString() || 'success';
+    if (swalOptions.icon === 'error') {
+      style = 'danger';
+    }
+    this.swalOptions = Object.assign({
+      buttonsStyling: false,
+      confirmButtonText: "OK",
+      customClass: {
+        confirmButton: "btn btn-" + style
+      }
+    }, swalOptions);
+
+    this.cdRef.detectChanges();
+    this.noticeSwal.fire();
+  }
+
+  reload() {
+    if(this.flag) {
+      this.formulario.reset();
+      this.initValidacion();
+      this.flag = false;
+    }
   }
 }
