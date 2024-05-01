@@ -32,6 +32,7 @@ export class ModalAccionesComponent implements OnInit {
   @ViewChild('boton') boton : HTMLElement;
 
   nombre ?: string = 'Editar';
+  ver : boolean = false;
   selectedCars: number[] = [];
   items = [
     { id: true, name: 'Habilitado' },
@@ -160,21 +161,27 @@ export class ModalAccionesComponent implements OnInit {
     this.formulario.reset();
     
     switch (action) {
-      /*case 'ver':
-        console.log(this.boton)
-        this.boton.textContent = 'Actualizar';
+      case 'ver':
+        this.ver = true;
+        this.modalConfig.modalTitle = 'Ver';
+        this.formulario.setValue(data);
+        this.formulario.disable();
         this.cdRef.detectChanges();
-        break;*/
+        break;
       case 'edit':
+        this.ver = false;
         this.modalConfig.modalTitle = 'Editar'
         this.editar = true;
         this.formulario.setValue(data);
+        this.formulario.enable();
         this.cdRef.detectChanges();
         break;
       case 'create':
+        this.ver = false;
         this.modalConfig.modalTitle = 'Registrar'
         this.editar = false;
         this.formulario.reset();
+        this.formulario.enable();
         this.cdRef.detectChanges();
         break;
       default:

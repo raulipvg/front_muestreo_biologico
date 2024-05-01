@@ -122,6 +122,7 @@
     *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()">
       {{ modalConfig.closeButtonLabel }}
     </button>
+    @if(!ver){
     <button #boton type="submit" [disabled]="formulario.invalid" class="btn btn-success">
         @if(editar){
             Actualizar
@@ -130,6 +131,7 @@
             Registrar
         }
     </button>
+    }
     
   </div>
 </form>
