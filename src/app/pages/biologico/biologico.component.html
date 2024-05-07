@@ -10,28 +10,11 @@
                 <div class="p-2 my-2 border-2 border-dashed rounded">
                     <div class="">
                         <div class="row">
-                            <div class="col-md-3">                            
-                                <label for="especieobjetivo_id" class="form-label mb-0">Especie Objetivo:</label>
-                                <ng-select id="especieobjetivo_id"  formControlName="especieobjetivo_id" class="form-control form-control-solid"
-                                    [multiple]="true" [maxSelectedItems]=3
-                                    notFoundText="No hay resultados" autocomplete="nope" spellcheck="false"
-                                    [clearable]="true"	(change)="selectEspecieObjetivo($event)" 
-                                    [ngClass]="{
-                                        'is-invalid': f.especieobjetivo_id.invalid && (f.especieobjetivo_id.dirty || f.especieobjetivo_id.touched),
-                                        'is-valid': f.especieobjetivo_id.valid
-                                    }">
-                                    @for ( item of especies; track item.id ){
-                                        <ng-option [value]="item.id" [disabled]="">{{item.nombre}}</ng-option>
-                                    }
-                                </ng-select>
-                                <div *ngIf="f.especieobjetivo_id.errors" class="invalid-feedback">
-                                    <div *ngIf="f.especieobjetivo_id.errors?.['required']">Requerido</div>
-                                </div>
-                            </div>
-
+                        
                             <div class="col-md-3">
                                 <label for="nave_id" class="form-label mb-0">Nave:</label>
                                 <ng-select id="nave_id" formControlName="nave_id" class="form-control form-control-solid" 
+                                    (change)="selectNave($event)"
                                     [ngClass]="{
                                         'is-invalid': f.nave_id.invalid && (f.nave_id.dirty || f.nave_id.touched),
                                         'is-valid': f.nave_id.valid
@@ -44,88 +27,6 @@
                                     <div *ngIf="f.nave_id.errors?.['required']">Requerido</div>
                                 </div>
 
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="fecha_recepcion" class="form-label mb-0">Recepcion:</label>
-                                <input id="fecha_recepcion" type="date" formControlName="fecha_recepcion" class="form-control form-control-solid" 
-                                    autocomplete="off" [min]="minDate" [max]="maxDate" 
-                                    [ngClass]="{
-                                        'is-invalid': f.fecha_recepcion.invalid && (f.fecha_recepcion.dirty || f.fecha_recepcion.touched),
-                                        'is-valid': f.fecha_recepcion.valid
-                                    }">
-                                <div *ngIf="f.fecha_recepcion.errors" class="invalid-feedback">
-                                    <div *ngIf="f.fecha_recepcion.errors?.['required']">Requerido</div>
-                                    <div *ngIf="f.fecha_recepcion.errors?.['min']">Fecha no menor a 2 dias</div>
-                                    <div *ngIf="f.fecha_recepcion.errors?.['max']">Fecha maxima la actual</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="planta" class="form-label mb-0">Planta:</label>
-                                <ng-select id="planta" formControlName="planta_id" class="form-control form-control-solid" 
-                                    [ngClass]="{
-                                        'is-invalid': f.planta_id.invalid && (f.planta_id.dirty || f.planta_id.touched),
-                                        'is-valid': f.planta_id.valid
-                                    }">
-                                    @for ( item of plantas; track item.id ){
-                                        <ng-option [value]="item.id" [disabled]="">{{item.nombre}}</ng-option>
-                                    }
-                                </ng-select>
-                                <div *ngIf="f.planta_id.errors" class="invalid-feedback">
-                                    <div *ngIf="f.planta_id.errors?.['required']">Requerido</div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="row">                       
-                            <div class="col-md-3">
-                                <label for="lugar" class="form-label mb-0">Lugar:</label>
-                                <ng-select id="lugar" formControlName="lugar_id" class="form-control form-control-solid" 
-                                    [ngClass]="{
-                                        'is-invalid': f.lugar_id.invalid && (f.lugar_id.dirty || f.lugar_id.touched),
-                                        'is-valid': f.lugar_id.valid
-                                    }">
-                                    @for ( item of lugarms; track item.id ){
-                                        <ng-option [value]="item.id" [disabled]="">{{item.nombre}}</ng-option>
-                                    }
-                                </ng-select>
-                                <div *ngIf="f.lugar_id.errors" class="invalid-feedback">
-                                    <div *ngIf="f.lugar_id.errors?.['required']">Requerido</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="clasificacion" class="form-label mb-0">Clasificacion:</label>
-                                <ng-select id="clasificacion" formControlName="clasificacion_id" class="form-control form-control-solid text-dark"
-                                    [clearable]="false" [searchable]="false"  [readonly]="true"
-                                    [ngClass]="{
-                                        'readonly-select': true,
-                                        'is-invalid': f.clasificacion_id.invalid && (f.clasificacion_id.dirty || f.clasificacion_id.touched),
-                                        'is-valid': f.clasificacion_id.valid
-                                    }">
-                                    @for ( item of clasificaciones; track item.id ){
-                                        <ng-option [value]="item.id" [disabled]="true">{{item.nombre}}</ng-option>
-                                    }
-                                </ng-select>
-                                <div *ngIf="f.clasificacion_id.errors" class="invalid-feedback">
-                                    <div *ngIf="f.clasificacion_id.errors?.['required']">Requerido</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="hrspesca" class="form-label mb-0">Data Pesca (HH:MM):</label>
-                                <input id="hrspesca" type="string" formControlName="hrs_pesca" class="form-control form-control-solid" 
-                                    autocomplete="new-hrspesca" spellcheck="false"
-                                    [ngClass]="{
-                                        'is-invalid': f.hrs_pesca.invalid && (f.hrs_pesca.dirty || f.hrs_pesca.touched),
-                                        'is-valid': f.hrs_pesca.valid
-                                    }">
-                                <div *ngIf="f.hrs_pesca.errors" class="invalid-feedback">
-                                    <div *ngIf="f.hrs_pesca.errors?.['required']">Requerido</div>
-                                    <div *ngIf="f.hrs_pesca.errors?.['formato']">Formato HH:MM</div>
-                                </div>
                             </div>
 
                             <div class="col-md-3">
@@ -147,21 +48,150 @@
                             <div class="col-md-3">
                                 <label for="puerto" class="form-label mb-0">Puerto</label>
                                 <ng-select id="puerto" formControlName="puerto_id" class="form-control form-control-solid"
-                                    [clearable]="false" [searchable]="false"  [readonly]="true"
-                                    [searchable]="false" 
+                                    [clearable]="false" 
                                     [ngClass]="{
                                         'is-invalid': f.puerto_id.invalid && (f.puerto_id.dirty || f.puerto_id.touched),
                                         'is-valid': f.puerto_id.valid
                                     }">
                                     @for ( item of puertos; track item.id ){
-                                        <ng-option [value]="item.id" [disabled]="">{{item.nombre}}</ng-option>
+                                        <ng-option [value]="item.id" >{{item.nombre}}</ng-option>
                                     }
                                 </ng-select>
                                 <div *ngIf="f.puerto_id.errors" class="invalid-feedback">
                                     <div *ngIf="f.puerto_id.errors?.['required']">Requerido</div>
                                 </div>
                             </div>
+
+                            <div class="col-md-3">
+                                <label for="lugar" class="form-label mb-0">Lugar:</label>
+                                <ng-select id="lugar" formControlName="lugar_id" class="form-control form-control-solid" 
+                                    [ngClass]="{
+                                        'is-invalid': f.lugar_id.invalid && (f.lugar_id.dirty || f.lugar_id.touched),
+                                        'is-valid': f.lugar_id.valid
+                                    }">
+                                    @for ( item of lugarms; track item.id ){
+                                        <ng-option [value]="item.id" [disabled]="">{{item.nombre}}</ng-option>
+                                    }
+                                </ng-select>
+                                <div *ngIf="f.lugar_id.errors" class="invalid-feedback">
+                                    <div *ngIf="f.lugar_id.errors?.['required']">Requerido</div>
+                                </div>
+                            </div>
+                            
                         </div>
+
+                        <div class="row">                              
+                            <div class="col-md-3">
+                                <label for="fecha_recepcion" class="form-label mb-0">Recepcion:</label>
+                                <input id="fecha_recepcion" type="date" formControlName="fecha_recepcion" class="form-control form-control-solid" 
+                                    autocomplete="off" [min]="minDate" [max]="maxDate" 
+                                    [ngClass]="{
+                                        'is-invalid': f.fecha_recepcion.invalid && (f.fecha_recepcion.dirty || f.fecha_recepcion.touched),
+                                        'is-valid': f.fecha_recepcion.valid
+                                    }">
+                                <div *ngIf="f.fecha_recepcion.errors" class="invalid-feedback">
+                                    <div *ngIf="f.fecha_recepcion.errors?.['required']">Requerido</div>
+                                    <div *ngIf="f.fecha_recepcion.errors?.['min']">Fecha no menor a 2 dias</div>
+                                    <div *ngIf="f.fecha_recepcion.errors?.['max']">Fecha maxima la actual</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="hrspesca" class="form-label mb-0">Data Pesca (HH:MM):</label>
+                                <input id="hrspesca" type="string" formControlName="hrs_pesca" class="form-control form-control-solid" 
+                                    autocomplete="new-hrspesca" spellcheck="false"
+                                    [ngClass]="{
+                                        'is-invalid': f.hrs_pesca.invalid && (f.hrs_pesca.dirty || f.hrs_pesca.touched),
+                                        'is-valid': f.hrs_pesca.valid
+                                    }">
+                                <div *ngIf="f.hrs_pesca.errors" class="invalid-feedback">
+                                    <div *ngIf="f.hrs_pesca.errors?.['required']">Requerido</div>
+                                    <div *ngIf="f.hrs_pesca.errors?.['formato']">Formato HH:MM, máx 168:59</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="planta" class="form-label mb-0">Planta:</label>
+                                <ng-select id="planta" formControlName="planta_id" class="form-control form-control-solid" 
+                                    [ngClass]="{
+                                        'is-invalid': f.planta_id.invalid && (f.planta_id.dirty || f.planta_id.touched),
+                                        'is-valid': f.planta_id.valid
+                                    }">
+                                    @for ( item of plantas; track item.id ){
+                                        <ng-option [value]="item.id" [disabled]="">{{item.nombre}}</ng-option>
+                                    }
+                                </ng-select>
+                                <div *ngIf="f.planta_id.errors" class="invalid-feedback">
+                                    <div *ngIf="f.planta_id.errors?.['required']">Requerido</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="clasificacion" class="form-label mb-0">Clasificacion:</label>
+                                <ng-select id="clasificacion" formControlName="clasificacion_id" class="form-control form-control-solid text-dark"
+                                    [clearable]="false"   
+                                    [ngClass]="{
+                                        'readonly-select': true,
+                                        'is-invalid': f.clasificacion_id.invalid && (f.clasificacion_id.dirty || f.clasificacion_id.touched),
+                                        'is-valid': f.clasificacion_id.valid
+                                    }">
+                                    @for ( item of clasificaciones; track item.id ){
+                                        <ng-option [value]="item.id">{{item.nombre}}</ng-option>
+                                    }
+                                </ng-select>
+                                <div *ngIf="f.clasificacion_id.errors" class="invalid-feedback">
+                                    <div *ngIf="f.clasificacion_id.errors?.['required']">Requerido</div>
+                                </div>
+                            </div>                                         
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-6 col-md d-flex flex-column justify-content-start">
+                                    <label for="capturaanunciada" class="form-label mb-0 no-wrap">Captura Anunciada (Ton):</label>
+                                    <input id="capturaanunciada" type="number" formControlName="captura_anunciada" class="form-control form-control-solid" 
+                                        step="10" autocomplete="off"
+                                        [ngClass]="{
+                                            'is-invalid': f.captura_anunciada.invalid && (f.captura_anunciada.dirty || f.captura_anunciada.touched),
+                                            'is-valid': f.captura_anunciada.valid
+                                        }">
+                                    <div *ngIf="f.captura_anunciada.errors" class="invalid-feedback">
+                                        <div *ngIf="f.captura_anunciada.errors?.['required']">Requerido</div>
+                                        <div *ngIf="f.captura_anunciada.errors?.['min']">Valor mínimo 1</div>
+                                        <div *ngIf="f.captura_anunciada.errors?.['max']">Valor máximo 1000</div>
+                                    </div> 
+                                </div>
+                                <div class="col-6 col-md d-flex flex-column justify-content-start">
+                                    <label for="zona" class="form-label mb-0">Zona:</label>
+                                    <input id="zona" type="number" formControlName="zona" class="form-control form-control-solid"
+                                        step="1" autocomplete="off"
+                                        [ngClass]="{
+                                            'is-invalid': f.zona.invalid && (f.zona.dirty || f.zona.touched),
+                                            'is-valid': f.zona.valid
+                                        }">
+                                    <div *ngIf="f.zona.errors" class="invalid-feedback">
+                                        <div *ngIf="f.zona.errors?.['required']">Requerido</div>
+                                        <div *ngIf="f.zona.errors?.['min']">Valor mínimo 101</div>
+                                        <div *ngIf="f.zona.errors?.['max']">Valor máximo 159</div>
+                                    </div>
+                                </div>
+                                
+
+                                <div class="col-6 col-md d-flex flex-column justify-content-start">
+                                    <label for="tratamientorsw" class="form-label mb-0">RSW:</label>
+                                        <ng-select id="tratamientorsw" formControlName="tratamientorsw" class="form-control form-control-solid"
+                                            [clearable]=false
+                                            [searchable]="false" 
+                                            [ngClass]="{
+                                                'is-invalid': f.tratamientorsw.invalid && (f.tratamientorsw.dirty || f.tratamientorsw.touched),
+                                                'is-valid': f.tratamientorsw.valid
+                                            }">
+                                            <ng-option [value]="1">Si</ng-option>
+                                            <ng-option [value]="0">No</ng-option>
+                                        </ng-select>
+                                        <div *ngIf="f.tratamientorsw.errors" class="invalid-feedback">
+                                            <div *ngIf="f.tratamientorsw.errors?.['required']">Requerido</div>
+                                        </div>                                
+                                </div>
+                                
+                            </div>
+                    </div>
                     </div>
                 </div>
 
@@ -185,7 +215,7 @@
                         </div>
 
                         <div class="col-12 col-md-3 d-flex flex-column justify-content-between justify-content-md-start">
-                            <label for="persona" class="form-label mb-0">Persona:</label>
+                            <label for="persona" class="form-label mb-0">Analista:</label>
                             <ng-select id="persona" formControlName="persona_id" class="form-control form-control-solid" 
                                 [ngClass]="{
                                     'is-invalid': f.persona_id.invalid && (f.persona_id.dirty || f.persona_id.touched),
@@ -203,16 +233,18 @@
 
                         <div class="col-md-6">
                             <div class="row">
+                                <!--
                                 <div class="col-6 col-md d-flex flex-column justify-content-start">
                                     <label for="fechaanalisis" class="form-label mb-0">Fecha Análisis:</label>
                                     <input id="fechaanalisis" type="date" formControlName="fecha_analisis" class="form-control form-control-solid" 
-                                        autocomplete="off" [max]="maxDate" [min]="minDate2"
+                                        autocomplete="off" [max]="maxDateAnalisis" [min]="minDateAnalisis"
                                         [ngClass]="{
                                             'is-invalid': f.fecha_analisis.invalid && (f.fecha_analisis.dirty || f.fecha_analisis.touched),
                                             'is-valid': f.fecha_analisis.valid
                                         }">
                                     <div *ngIf="f.fecha_analisis.errors" class="invalid-feedback">
                                         <div *ngIf="f.fecha_analisis.errors?.['required']">Requerido</div>
+                                        <div *ngIf="f.fecha_analisis.errors?.['mayor_a']">Fecha superior a recepcion</div>
                                     </div>
                                 </div>
                                 <div class="col-6 col-md d-flex flex-column justify-content-start">
@@ -227,6 +259,7 @@
                                         <div *ngIf="f.hora_analisis.errors?.['required']">Requerido</div>
                                     </div>
                                 </div>
+                                -->
                                 <div class="col d-flex flex-column justify-content-between justify-content-md-start">
                                     <label for="pozoalmacenamiento" class="form-label mb-0">N° Pozo Alm.</label>
                                     <ng-select id="pozoalmacenamiento" formControlName="pozo_almacenamiento" 	
@@ -246,60 +279,34 @@
                                         <div *ngIf="f.pozo_almacenamiento.errors?.['required']">Requerido</div>
                                     </div>
                                 </div>
+                                <div class="col-md-6">                            
+                                    <label for="especieobjetivo_id" class="form-label mb-0">Especie Objetivo:</label>
+                                    <ng-select id="especieobjetivo_id"  formControlName="especieobjetivo_id" class="form-control form-control-solid"
+                                        [multiple]="true" [maxSelectedItems]=3
+                                        notFoundText="No hay resultados" autocomplete="nope" spellcheck="false"
+                                        [clearable]="true"	(change)="selectEspecieObjetivo($event)" (remove)="selectEspecieAnalasisRemove($event)" (clear)="selectEspecieAnalisisClear()"
+                                        [ngClass]="{
+                                            'is-invalid': f.especieobjetivo_id.invalid && (f.especieobjetivo_id.dirty || f.especieobjetivo_id.touched),
+                                            'is-valid': f.especieobjetivo_id.valid
+                                        }">
+                                        @for ( item of especies; track item.id ){
+                                            <ng-option [value]="item.id" [disabled]="">{{item.nombre}}</ng-option>
+                                        }
+                                    </ng-select>
+                                    <div *ngIf="f.especieobjetivo_id.errors" class="invalid-feedback">
+                                        <div *ngIf="f.especieobjetivo_id.errors?.['required']">Requerido</div>
+                                    </div>
+                                </div>
+
+                                
                             </div>
                         </div>                   
                     </div>
                 </div>
 
                 <div class="p-2 mb-2 border-2 border-dashed rounded">
-                    <div class="">
+                    <div class="">                        
                         <div class="row">
-                            <div class="col-6 col-md d-flex flex-column justify-content-start">
-                                <label for="zona" class="form-label mb-0">Zona:</label>
-                                <input id="zona" type="number" formControlName="zona" class="form-control form-control-solid"
-                                    step="1" autocomplete="off"
-                                    [ngClass]="{
-                                        'is-invalid': f.zona.invalid && (f.zona.dirty || f.zona.touched),
-                                        'is-valid': f.zona.valid
-                                    }">
-                                <div *ngIf="f.zona.errors" class="invalid-feedback">
-                                    <div *ngIf="f.zona.errors?.['required']">Requerido</div>
-                                    <div *ngIf="f.zona.errors?.['min']">Valor mínimo 1</div>
-                                    <div *ngIf="f.zona.errors?.['max']">Valor máximo 200</div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md d-flex flex-column justify-content-start">
-                                <label for="capturaanunciada" class="form-label mb-0">Captura Anunciada (Ton):</label>
-                                <input id="capturaanunciada" type="number" formControlName="captura_anunciada" class="form-control form-control-solid" 
-                                    step="10" autocomplete="off"
-                                    [ngClass]="{
-                                        'is-invalid': f.captura_anunciada.invalid && (f.captura_anunciada.dirty || f.captura_anunciada.touched),
-                                        'is-valid': f.captura_anunciada.valid
-                                    }">
-                                <div *ngIf="f.captura_anunciada.errors" class="invalid-feedback">
-                                    <div *ngIf="f.captura_anunciada.errors?.['required']">Requerido</div>
-                                    <div *ngIf="f.captura_anunciada.errors?.['min']">Valor mínimo 1</div>
-                                    <div *ngIf="f.captura_anunciada.errors?.['max']">Valor máximo 1000</div>
-                                </div> 
-                            </div>
-                            
-                            <div class="col-6 col-md d-flex flex-column justify-content-start">
-                                <label for="tratamientorsw" class="form-label mb-0">Tratamiento RSW:</label>
-                                    <ng-select id="tratamientorsw" formControlName="tratamientorsw" class="form-control form-control-solid"
-                                        [clearable]=false
-                                        [searchable]="false" 
-                                        [ngClass]="{
-                                            'is-invalid': f.tratamientorsw.invalid && (f.tratamientorsw.dirty || f.tratamientorsw.touched),
-                                            'is-valid': f.tratamientorsw.valid
-                                        }">
-                                        <ng-option [value]="1">Si</ng-option>
-                                        <ng-option [value]="0">No</ng-option>
-                                    </ng-select>
-                                    <div *ngIf="f.tratamientorsw.errors" class="invalid-feedback">
-                                        <div *ngIf="f.tratamientorsw.errors?.['required']">Requerido</div>
-                                    </div>                                
-                            </div>
-                            
                             <div class="col-6 col-md d-flex flex-column justify-content-start">
                                 <label for="aguadescargada" class="form-label mb-0">Agua Descargada (gr):</label>
                                     <input id="aguadescargada" type="number" formControlName="agua_descargada" class="form-control form-control-solid" 
@@ -310,12 +317,13 @@
                                         }">
                                 <div *ngIf="f.agua_descargada.errors" class="invalid-feedback">
                                     <div *ngIf="f.agua_descargada.errors?.['required']">Requerido</div>
-                                    <div *ngIf="f.agua_descargada.errors?.['min']">Valor mínimo 1</div>
-                                    <div *ngIf="f.agua_descargada.errors?.['max']">Valor máximo 20000</div>
+                                    <div *ngIf="f.agua_descargada.errors?.['min']">Valor mínimo 1gr</div>
+                                    <div *ngIf="f.agua_descargada.errors?.['max']">Valor máximo 2000gr</div>
                                 </div>
                             </div>
+                            
                             <div class="col-6 col-md d-flex flex-column justify-content-start">
-                                <label for="cuenta" class="form-label mb-0">Cuenta (N°/Lt)%:</label>
+                                <label for="cuenta" class="form-label mb-0">Cuenta (N°/Lt):</label>
                                 <input id="cuenta" type="number" formControlName="cuenta" class="form-control form-control-solid" 
                                     step="5" autocomplete="off"
                                     [ngClass]="{
@@ -324,13 +332,11 @@
                                     }">
                                 <div *ngIf="f.cuenta.errors" class="invalid-feedback">
                                     <div *ngIf="f.cuenta.errors?.['required']">Requerido</div>
-                                    <div *ngIf="f.cuenta.errors?.['min']">Valor mínimo 0</div>
-                                    <div *ngIf="f.cuenta.errors?.['max']">Valor máximo 100</div>
+                                    <div *ngIf="f.cuenta.errors?.['min']">Valor mínimo 1</div>
+                                    <div *ngIf="f.cuenta.errors?.['max']">Valor máximo 500</div>
                                 </div>
 
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-6 col-md d-flex flex-column justify-content-start">
                                 <label for="tvn" class="form-label mb-0">TVN (mgN/100gr):</label>
                                     <input id="tvn" type="number" formControlName="tvn" class="form-control form-control-solid" 
@@ -342,7 +348,7 @@
                                 <div *ngIf="f.tvn.errors" class="invalid-feedback">
                                     <div *ngIf="f.tvn.errors?.['required']">Requerido</div>
                                     <div *ngIf="f.tvn.errors?.['min']">Valor mínimo 1</div>
-                                    <div *ngIf="f.tvn.errors?.['max']">Valor máximo 100</div>
+                                    <div *ngIf="f.tvn.errors?.['max']">Valor máximo 300</div>
                                 </div>
                             </div>
                             <div class="col-6 col-md d-flex flex-column justify-content-start">
@@ -355,8 +361,8 @@
                                         }">
                                 <div *ngIf="f.temperatura.errors" class="invalid-feedback">
                                     <div *ngIf="f.temperatura.errors?.['required']">Requerido</div>
-                                    <div *ngIf="f.temperatura.errors?.['min']">Valor mínimo 4</div>
-                                    <div *ngIf="f.temperatura.errors?.['max']">Valor máximo 20</div>
+                                    <div *ngIf="f.temperatura.errors?.['min']">Valor mínimo 0</div>
+                                    <div *ngIf="f.temperatura.errors?.['max']">Valor máximo 30</div>
                                 </div> 
                             </div>
                             <div class="col-6 col-md d-flex flex-column justify-content-start">
@@ -370,25 +376,29 @@
                                         pattern="^\d+(\.\d{1})?$">
                                 <div *ngIf="f.ph.errors" class="invalid-feedback">
                                     <div *ngIf="f.ph.errors?.['required']">Requerido</div>
-                                    <div *ngIf="f.ph.errors?.['min']">Valor mínimo 5</div>
-                                    <div *ngIf="f.ph.errors?.['max']">Valor máximo 10</div>
+                                    <div *ngIf="f.ph.errors?.['min']">Valor mínimo 0</div>
+                                    <div *ngIf="f.ph.errors?.['max']">Valor máximo 14</div>
                                 </div>  
                             </div>
-                            <div class="col-6 col-md d-flex flex-column justify-content-start">
-                                        <label for="calidadaceite" class="form-label mb-0">Calidad Aceite:</label>
-                                        <input id="calidadaceite" type="number" formControlName="calidad_aceite" class="form-control form-control-solid" 
-                                            step="1" autocomplete="off"
-                                            [ngClass]="{
-                                                    'is-invalid': f.calidad_aceite.invalid && (f.calidad_aceite.dirty || f.calidad_aceite.touched),
-                                                    'is-valid': f.calidad_aceite.valid
-                                            }">
-                                        <div *ngIf="f.calidad_aceite.errors" class="invalid-feedback">
-                                            <div *ngIf="f.calidad_aceite.errors?.['min']">Valor mínimo 0</div>
-                                            <div *ngIf="f.calidad_aceite.errors?.['max']">Valor máximo 100</div>
-                                        </div>
-                                    
+                            
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-3 d-flex flex-column justify-content-start">
+                                <label for="calidadaceite" class="form-label mb-0">Calidad Aceite:</label>
+                                <input id="calidadaceite" type="number" formControlName="calidad_aceite" class="form-control form-control-solid" 
+                                    step="1" autocomplete="off"
+                                    [ngClass]="{
+                                            'is-invalid': f.calidad_aceite.invalid && (f.calidad_aceite.dirty || f.calidad_aceite.touched),
+                                            'is-valid': f.calidad_aceite.valid
+                                    }">
+                                <div *ngIf="f.calidad_aceite.errors" class="invalid-feedback">
+                                    <div *ngIf="f.calidad_aceite.errors?.['min']">Valor mínimo 0</div>
+                                    <div *ngIf="f.calidad_aceite.errors?.['max']">Valor máximo 100</div>
+                                </div>
+                            
                             </div>
-                            <div class="col-6 col-md d-flex flex-column justify-content-start">
+                            <div class="col-6 col-md-3 d-flex flex-column justify-content-start">
                                 <label for="grasa" class="form-label mb-0">Grasa:</label>
                                     <input id="grasa" type="number" formControlName="grasa" class="form-control form-control-solid" 
                                         autocomplete="off"
@@ -401,25 +411,66 @@
                                     <div *ngIf="f.grasa.errors?.['max']">Valor máximo 100</div>
                                 </div>
                             </div>
-                            
+                            <div class="col-md-6 d-flex align-items-stretch">
+                                <div class="d-flex flex-row">
+                                    <div class="flex-column">
+                                    <label for="integridadTotal" class="form-label align-self-center pe-2 no-wrap">Integridad Total: </label>
+
+                                    
+                                      <div class="form-check form-check-solid form-switch fv-row ms-3 mt-0 mt-md-1">
+                                        <input
+                                          class="form-check-input w-45px h-30px"
+                                          type="checkbox"
+                                          id="integridadTotal"
+                                          [(ngModel)]="integridadTotalFlag" [ngModelOptions]="{standalone: true}"
+                                          (change)="onSwitchIntegridadTotal($event)"
+                                        /><label class="form-check-label pt-1">Si</label>
+                                      </div>
+                                    </div>
+                                    @if(integridadTotalFlag){
+                                        <div class="col-6 col-md-3 d-flex align-items-end flex-fill flex-column">
+                                            <label for="integridadtotal" class="form-label align-self-center pe-2 min-h-10px"></label>
+
+                                                <input id="integridadtotal" type="number" formControlName="integridadtotal" class="form-control form-control-solid" 
+                                                    autocomplete="off" [min]="0" [max]="100" step="1"
+                                                    (input)="onIntegridadTotal($event)"
+                                                    
+                                                    [ngClass]="{
+                                                            'is-invalid': f.integridadtotal.invalid && (f.integridadtotal.dirty || f.integridadtotal.touched),
+                                                            'is-valid': f.integridadtotal.valid
+                                                    }">
+                                            <div *ngIf="f.integridadtotal.errors" class="invalid-feedback">
+                                                <div *ngIf="f.integridadtotal.errors?.['required']">Requerido</div>
+                                                <div *ngIf="f.integridadtotal.errors?.['min']">Valor mínimo 1</div>
+                                                <div *ngIf="f.integridadtotal.errors?.['max']">Valor máximo 100</div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-2">
-                        <div class="py-2 bg-gray-200 rounded">
+                        <div class="py-2 bg-gray-200 rounded min-h-50px">
                             <div class="px-5 d-flex justify-items-center justify-content-between">
-                                <div class="fs-5 fw-bolder align-self-center">Ingresar Análisis:</div>                                
+                                <div class="fs-4 fw-bolder align-self-center">Ingresar Análisis:</div>
+                                @if(this.especiesObjetivos.length >0){
+                                <button type="button" class="btn btn-success btn-sm btn-delete p-0" (click)="addAnalisis()" >
+                                    <i class="bi bi-plus fs-2x p-0"></i>
+                                </button> 
+                                }                              
                             </div>
                             <div formArrayName="analisis">
                                     <div *ngFor="let tallaControl of analisis.controls; let i = index">                            
                                         <div [formGroupName]="i">
                                             <div class="py-1"> 
-                                                <div class="row mx-2">                                                        
-                                                        <div class="col-6 col-md-3 min-w-150px">
+                                                <div class="row mx-2 justify-content-between">                                                        
+                                                        <div class="col-6 col-md-3 min-w-150px flex-md-fill">
                                                                 <label for="especie{{i}}" class="form-label mb-0">Especie:</label>
                                                                 <ng-select id="especie{{i}}" formControlName="especie_id" class="form-control form-control-solid" 
-                                                                    (change)="selectEspecieAnalisis($event, i)" [clearable]="false"
+                                                                    (change)="selectEspecieAnalisis($event, i)"  [clearable]="false"
                                                                     [ngClass]="{
                                                                         'is-invalid': getFormControl(analisis, i,'especie_id').invalid  && (getFormControl(analisis, i,'especie_id').dirty || getFormControl(analisis, i,'especie_id').touched),
                                                                         'is-valid': getFormControl(analisis, i,'especie_id').valid
@@ -433,7 +484,7 @@
                                                                 </div>
                                                         </div>
 
-                                                        <div class="col-6 col-md-3 min-w-150px">
+                                                        <div class="col-6 col-md-3 min-w-150px flex-md-fill">
                                                                 <label for="talla{{i}}" class="form-label mb-0">Talla(cm):</label>
                                                                 <input id="talla{{i}}" type="number" formControlName="talla" class="form-control form-control-solid" 
                                                                     autocomplete="off"
@@ -448,7 +499,7 @@
                                                                 </div>
                                                         </div>
                                                                                                 
-                                                        <div class="col col-md-3 min-w-150px">
+                                                        <div class="col col-md-3 min-w-150px flex-md-fill">
                                                             <label for="peso{{i}}" class="form-label mb-0">Peso(gr):</label>
                                                             <input id="peso{{i}}" type="number" formControlName="peso" class="form-control form-control-solid" 
                                                                 autocomplete="off"
@@ -463,12 +514,12 @@
                                                             </div>
                                                         </div>
                                                         
-                                                        <div class="col col-md-3 min-w-150px">
+                                                        <div class="col col-md-3 min-w-150px flex-md-fill">
                                                             <div class="d-flex flex-row justify-content-between">
                                                                 <div>
                                                                     <label for="integridad{{i}}" class="form-label mb-0">Integ%:</label>
                                                                     <input id="integridad{{i}}" type="number" formControlName="integridad" class="form-control form-control-solid" 
-                                                                        step="10" autocomplete="off"
+                                                                        step="10" autocomplete="off" 
                                                                         [ngClass]="{
                                                                             'is-invalid': getFormControl(analisis, i,'integridad').invalid  && (getFormControl(analisis, i,'integridad').dirty || getFormControl(analisis, i,'integridad').touched),
                                                                             'is-valid': getFormControl(analisis, i,'integridad').valid
@@ -496,17 +547,24 @@
 
                                     </div>
                             </div>
+                            @if(this.especiesObjetivos.length >0 && flagAnalisisBtn){
                             <div class="px-5 d-flex justify-content-end">
                                 <button type="button" class="btn btn-success btn-sm btn-delete p-0" (click)="addAnalisis()" >
                                     <i class="bi bi-plus fs-2x p-0"></i>
-                                </button>
-                            </div>          
+                                </button> 
+                            </div>
+                            }          
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="py-2 bg-gray-200 rounded">
+                        <div class="py-2 bg-gray-200 rounded min-h-50px">
                             <div class="px-5 d-flex justify-items-center justify-content-between">
-                                <div class="fs-5 fw-bolder">Ingresar Fauna Acompañante:</div>
+                                <div class="fs-4 fw-bolder align-self-center">Ingresar Fauna Acompañante:</div>
+                                @if(this.especiesAcompanantes.length >0){
+                                <button type="button" class="btn btn-success btn-sm btn-delete p-0" (click)="addFauna()" ngbTooltip="Coming soon" >
+                                    <i class="bi bi-plus fs-2x p-0"></i>
+                                </button>
+                                }
                             </div>
                             <div formArrayName="fauna_acompanante">
                                 <div *ngFor="let faunaControl of fauna_acompanante.controls; let i = index">                            
@@ -542,8 +600,8 @@
                                                             <div *ngIf="getFormControl(fauna_acompanante, i,'porcentaje').errors" class="invalid-feedback">                                                                
                                                                 <div *ngIf="getFormControl(fauna_acompanante, i,'porcentaje').errors?.['required']">Requerido</div>
                                                                 <div *ngIf="getFormControl(fauna_acompanante, i,'porcentaje').errors?.['min']">Valor min 1</div>
-                                                                <div *ngIf="getFormControl(fauna_acompanante, i,'porcentaje').errors?.['max']">Valor max 50</div>
-                                                                <div *ngIf="getFormControl(fauna_acompanante, i,'porcentaje').errors?.['fauna']">Total max 50%</div>
+                                                                <div *ngIf="getFormControl(fauna_acompanante, i,'porcentaje').errors?.['max']">Valor max 99</div>
+                                                                <div *ngIf="getFormControl(fauna_acompanante, i,'porcentaje').errors?.['fauna']">Total max 99%</div>
                                                             </div>
                                                         </div>
                                                         <div class="ps-2 pb-1 pb-md-0 h-60px align-content-end">
@@ -564,12 +622,14 @@
                                     </div>
 
                                 </div>
-                            </div> 
+                            </div>
+                            @if(this.especiesAcompanantes.length >0 && flagFaunaBtn){
                             <div class="px-5 d-flex justify-content-end">                                                               
                                 <button type="button" class="btn btn-success btn-sm btn-delete p-0" (click)="addFauna()" ngbTooltip="Coming soon" >
                                     <i class="bi bi-plus fs-2x p-0"></i>
                                 </button>
                             </div>
+                            }
 
                         </div>
                     </div>
@@ -578,7 +638,7 @@
             </div>
             <div class="card-footer py-2 px-3">
                 <div class="d-flex justify-content-end">
-                    <button type="submit" [disabled]="formulario.invalid" class="btn btn-success">Guardar</button>
+                    <button type="submit" [disabled]="this.formulario.invalid" class="btn btn-success">Guardar</button>
                 </div>
             </div>
 
@@ -588,3 +648,5 @@
 
 <swal #noticeSwal [swalOptions]="swalOptions" (confirm)="reload()" >
 </swal>
+
+<app-page-loading #loading></app-page-loading>

@@ -19,6 +19,7 @@ export interface IEspecieModel {
   peso_min? : number;
   peso_max? : number;
   flag?:boolean;
+  tipo1: number;
 }
 
 @Injectable({

@@ -14,6 +14,7 @@ export interface INaveModel {
   enabled?: boolean;
   created_at?: string;
   updated_at?: string;
+  flota_id?: number;
 }
 
 @Injectable({

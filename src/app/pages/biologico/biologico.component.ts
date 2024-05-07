@@ -15,6 +15,7 @@ import { IPersonaModel } from 'src/app/services/personas/personas.service';
 import { RespuestasService } from 'src/app/services/respuestas/respuestas.service';
 import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
+import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
 
 @Component({
   selector: 'app-biologico',
@@ -25,6 +26,7 @@ import { SweetAlertOptions } from 'sweetalert2';
     ReactiveFormsModule,
     CommonModule,
     SweetAlert2Module,
+    PageLoadingComponent
   ],
   templateUrl: './biologico.component.html',
   styleUrl: './biologico.component.scss'
@@ -38,7 +40,7 @@ export class BiologicoComponent implements OnInit{
   ];
 
 
-  especies : IEspecieModel[] = [];
+  
   naves : INaveModel[] = [];
   plantas : IPlantaModel[] = [];
   lugarms: ILugarmModel[] = [];
@@ -48,36 +50,58 @@ export class BiologicoComponent implements OnInit{
   departamentos: IDepartamentoModel[] = [];
   personas: IPersonaModel[] = [];
 
+  especies : IEspecieModel[] = [];
+  especiesAcompanantesTotales: IEspecieModel[] = [];
   especiesObjetivos: IEspecieModel[] = [];
   especiesAcompanantes: IEspecieModel[] = [];
+  previousSelectedFaunaId: number[] = [];
+
   formulario: FormGroup;
 
   todayDate: string = new Date().toISOString().split('T')[0];
   // Calcular la fecha mínima (2 días atrás)
   minDate: string = new Date(new Date().setDate(new Date().getDate() - 2)).toISOString().split('T')[0];
-  minDate2: string = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0];
+  minDateAnalisis: string = new Date(new Date().setDate(new Date().getDate())).toISOString().split('T')[0];
   // Definir la fecha máxima (hoy)
   maxDate: string = this.todayDate;
-  previousSelectedFaunaId: number[] = [];
+  maxDateAnalisis: string = new Date(new Date().setDate(new Date().getDate() + 15)).toISOString().split('T')[0];
+ 
 
   @ViewChild('noticeSwal')
   noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
+  @ViewChild('loading') loading: PageLoadingComponent;
+
   flag: boolean = false;
+  integridadTotalFlag: boolean = false;
+  integridadTotalValue: any = null;
+
   constructor(
     private fb: FormBuilder,
     private formularioService: FormulariosService,
     private respuestasService: RespuestasService,
     private cdRef: ChangeDetectorRef,
   ) { };
+
   ngOnInit(): void {
 
     this.initValidacion();
-    
+   
+  }
+
+  ngAfterViewInit(): void {
+    this.loadingEvent();
     this.formularioService
           .getselects()
-          .subscribe((data: any) => {
-              this.especies = data.especies;
+          .subscribe({
+            next: (data: any) => {
+              this.especies = data.especies.filter(
+                                  (especie: { tipo1: number; }) => especie.tipo1 <3
+                                  );
+              this.especiesAcompanantesTotales = data.especies.filter(
+                                              (especie: { tipo1: number; }) => especie.tipo1 >1
+                                              );
+              //this.especiesAcompanantes = this.especiesAcompanantesTotales;
               this.naves = data.naves;
               this.plantas = data.plantas;
               this.lugarms = data.lugarms;
@@ -89,11 +113,20 @@ export class BiologicoComponent implements OnInit{
               this.departamentos = data.departamentos;
               this.formulario.get('departamento_id')?.setValue(1);
               this.personas = data.personas;
+            },
+            error: (error: any) => {
+              //console.log('Error al cargar los selectores');
+              const errorAlert: SweetAlertOptions = {
+                icon: 'error',
+                title: 'Error!',
+                text: '',
+              };
+              this.showAlert(errorAlert);
+            }
+          })
+          .add(() => {
+            this.loadingEvent();
           });
-  }
-
-  ngAfterViewInit(): void {
-    
   }
 
   ngOnDestroy(): void {
@@ -116,8 +149,8 @@ export class BiologicoComponent implements OnInit{
                 ],
       fecha_recepcion: [,Validators.compose([
                     Validators.required,
-                    this.fechaMin,
-                    this.fechaMax              
+                    this.fechaMinRecepcion,
+                    this.fechaMaxRecepcion              
                   ])
                 ],
       planta_id: [,Validators.compose([
@@ -153,22 +186,14 @@ export class BiologicoComponent implements OnInit{
                     Validators.required
                   ])
                 ],
-      fecha_analisis: [,Validators.compose([
-                    Validators.required
-                  ])
-                ],
-      hora_analisis: [,Validators.compose([
-                  Validators.required
-                ])
-              ],
       pozo_almacenamiento: [,Validators.compose([
                     Validators.required
                   ])
                 ],
       zona: [,Validators.compose([
                     Validators.required,
-                    Validators.min(1),
-                    Validators.max(200)
+                    Validators.min(101),
+                    Validators.max(159)
                   ])
                 ],
       captura_anunciada: [,Validators.compose([
@@ -184,31 +209,31 @@ export class BiologicoComponent implements OnInit{
        agua_descargada: [,Validators.compose([
                     Validators.required,
                     Validators.min(1),
-                    Validators.max(20000)
+                    Validators.max(2000)
                   ])
                 ],
       cuenta: [,Validators.compose([
                     Validators.required,
-                    Validators.min(0),
-                    Validators.max(100)
+                    Validators.min(1),
+                    Validators.max(500)
                   ])
                 ],
       tvn: [,Validators.compose([
                     Validators.required,
                     Validators.min(1),
-                    Validators.max(100)
+                    Validators.max(300)
                   ])
                 ],
       temperatura: [,Validators.compose([
                     Validators.required,
-                    Validators.min(4),
-                    Validators.max(20)
+                    Validators.min(0),
+                    Validators.max(30)
                   ])
                 ],
       ph: [,Validators.compose([
                     Validators.required,
-                    Validators.min(5),
-                    Validators.max(10)
+                    Validators.min(0),
+                    Validators.max(14)
                   ])
                 ],
       grasa: [,Validators.compose([
@@ -227,7 +252,7 @@ export class BiologicoComponent implements OnInit{
       fauna_acompanante: this.fb.array([])
        // Crear un formulario de tipo array para las tallas
       //pesos: this.fb.array([])   // Crear un formulario de tipo array para los pesos
-                
+              
     });
   }
   //GETTERS
@@ -262,28 +287,38 @@ export class BiologicoComponent implements OnInit{
   return maxValidator ? maxValidator.max : 100;
   }
 
-
+  flagAnalisisBtn: boolean = false;
   //BTN::ACCION DE AGREGAR FORMULARIO ANALISIS 
   addAnalisis() {
     
+      const especie_id = this.especiesObjetivos[0]?.id || null;
+      const talla_min = this.especiesObjetivos[0]?.talla_min || 1;
+      const talla_max = this.especiesObjetivos[0]?.talla_max || 200;
+      const peso_min = this.especiesObjetivos[0]?.peso_min || 1;
+      const peso_max = this.especiesObjetivos[0]?.peso_max || 700;
+      const prueba = this.integridadTotalValue;
+     
     const nuevoAnalisis = this.fb.group({
-      especie_id: [, Validators.compose([
+      especie_id: [especie_id, Validators.compose([
                     Validators.required
                   ])
                 ],
       talla: [, Validators.compose([
                   Validators.required,
-                  Validators.min(1),
-                  Validators.max(200)
+                  Validators.min(talla_min),
+                  Validators.max(talla_max)
                 ])
               ],
       peso: [, Validators.compose([
                   Validators.required,
-                  Validators.min(1),
-                  Validators.max(700)
+                  Validators.min(peso_min),
+                  Validators.max(peso_max)
                 ])
             ],
-      integridad: [, Validators.compose([
+      integridad: [{ 
+                    value: this.integridadTotalValue,
+                    disabled: this.integridadTotalFlag
+                  },Validators.compose([
                     Validators.required,
                     Validators.min(1),
                     Validators.max(100)
@@ -292,13 +327,21 @@ export class BiologicoComponent implements OnInit{
     });
 
     this.analisis.push(nuevoAnalisis);
+    //this.analisis.get('especie_id')?.setValue(3);
+    if(this.analisis.length > 0) {
+        this.flagAnalisisBtn = true;
+    }
   }
 
   //BTN::ACCION DE ELIMINAR FORMULARIO ANALISIS
   deleteAnalisis(i: number) {
     this.analisis.removeAt(i);
+    if(this.analisis.length === 0) {
+      this.flagAnalisisBtn = false;
+    }
   }
 
+  flagFaunaBtn: boolean = false;
   //BTN::ACCION DE AGREGAR FORMULARIO FAUNA
   addFauna() {
     const nuevaFauna = this.fb.group({
@@ -306,13 +349,16 @@ export class BiologicoComponent implements OnInit{
       porcentaje: ['', Validators.compose([
                     Validators.required,
                     Validators.min(1),
-                    Validators.max(50),
+                    Validators.max(99),
                     this.porcentajeValidador()
                 ])
             ]
     });
     //this.previousSelectedFaunaId = 0;
-    this.fauna_acompanante.push(nuevaFauna); 
+    this.fauna_acompanante.push(nuevaFauna);
+    if(this.fauna_acompanante.length > 0) {
+      this.flagFaunaBtn = true;
+    } 
   }
   //BTN::ACCION DE ELIMINAR FORMULARIO FAUNA
   deleteFauna(i: number) {
@@ -324,8 +370,16 @@ export class BiologicoComponent implements OnInit{
     }
     this.previousSelectedFaunaId.splice(i, 1);
     this.fauna_acompanante.removeAt(i);
+    if(this.fauna_acompanante.length === 0) {
+      this.flagFaunaBtn = false;
+    }
   }
-
+  selectNave( $event: any) {
+    console.log($event);
+    //SETEA LA FLOTA SEGUN LA NAVE SELECCIONADA
+    const naveEncontrada = this.naves.find(nave => nave.id === $event);
+    this.formulario.get('flota_id')?.setValue(naveEncontrada?.flota_id);
+  }
   selectEspecieObjetivo( $event: any) {
     //console.log($event);
     //SETEA LAS ESPECIES OBJETIVOS Y ACOMPAÑANTES SEGUN LA ESPECIE SELECCIONADA
@@ -334,11 +388,12 @@ export class BiologicoComponent implements OnInit{
                                   .filter(
                                     especie => $event.includes(especie.id)
                                   );
-    this.especiesAcompanantes = this.especies
-                                  .filter(
-                                    especie => !$event.includes(especie.id)
-                                  )
-                                  .map(especie => ({ ...especie, flag: false }));
+    //Todas las especies acompañantes a excepcion de las especies objetivos
+    this.especiesAcompanantes = this.especiesAcompanantesTotales
+                                    .filter(
+                                      especie => !$event.includes(especie.id)
+                                    );
+    
   }
 
   selectEspecieAnalisis( $event: any, i:any) {
@@ -364,12 +419,28 @@ export class BiologicoComponent implements OnInit{
         Validators.min(peso_min), 
         Validators.max(peso_max)
     ];
-  // Aplica los nuevos validadores al control 'talla'
-  tallaControl?.setValidators(nuevoValidadoresTall);
-  pesoControl?.setValidators(nuevoValidadoresTalla);
-  // Actualiza el estado de validación del control 'talla'
-  tallaControl?.updateValueAndValidity();
-  pesoControl?.updateValueAndValidity();
+    // Aplica los nuevos validadores al control 'talla'
+    tallaControl?.setValidators(nuevoValidadoresTall);
+    pesoControl?.setValidators(nuevoValidadoresTalla);
+    // Actualiza el estado de validación del control 'talla'
+    tallaControl?.updateValueAndValidity();
+    pesoControl?.updateValueAndValidity();
+  }
+
+  selectEspecieAnalasisRemove( $event: any) {
+    console.log($event);
+    const  $id = $event;
+    this.analisis.controls.forEach((fg: any, i: any) => { 
+      const especieId = fg.get('especie_id')?.value;
+      if(especieId === $id){
+        fg.get('especie_id')?.setValue(null);
+      }      
+    });
+  }
+  selectEspecieAnalisisClear(){
+    this.analisis.controls.forEach((fg: any, i: any) => { 
+      fg.get('especie_id')?.setValue(null);
+    });
   }
 
   selectEspecieFauna( $event: any, i:any) {
@@ -386,12 +457,56 @@ export class BiologicoComponent implements OnInit{
       this.previousSelectedFaunaId[i] = $event;
 
   }
+
+  //EVENTTO DEL SWITCH QUE DETERMINA LA INTEGRIDAD TOTAL O PARCIAL
+  onSwitchIntegridadTotal(event: any) {
+    const isChecked = event.target.checked;
+    if(isChecked){
+      this.integridadTotalFlag = true;
+
+      //Agregar un nuevo form control al formulario llamado intregridadTotal
+      this.formulario.addControl('integridadtotal', 
+                                    this.fb.control(null, 
+                                      Validators.compose([
+                                        Validators.required,
+                                        Validators.min(1),
+                                        Validators.max(100)
+                                      ])
+                                  ));
+      //console.log('Integridad Total');
+    }else{
+      this.integridadTotalFlag = false;
+      this.integridadTotalValue = null;
+      this.formulario.removeControl('integridadtotal');
+      this.analisis.controls.forEach((fg: any, i: any) => { 
+        fg.get('integridad')?.setValue(null);
+        fg.get('integridad')?.enable();
+      });
+      //console.log('Integridad Parcial');
+    }
+  }
+  //EVENTO QUE CAPTURA EL VALOR DE INTEGRIDAD TOTAL
+  onIntegridadTotal(event: any) {
+    //console.log(event.target.value);
+    this.integridadTotalValue = event.target.value;
+    this.analisis.controls.forEach((fg: any, i: any) => { 
+      fg.get('integridad')?.setValue(event.target.value);
+      fg.get('integridad')?.disable();
+    });
+  }
   //BTN::ACCION DE GUARDAR FORMULARIO
   guardar() {
-    console.log(this.formulario.value);
+    //console.log(this.formulario.value);
     this.formulario.markAllAsTouched();
     if(this.formulario.valid){
-      console.log('Formulario Valido');
+      //console.log('Formulario Valido');
+
+      if(this.integridadTotalFlag){
+        this.analisis.controls.forEach((fg: any, i: any) => { 
+          fg.get('integridad')?.enable();
+        });
+        this.formulario.get('integridadtotal')?.disable();
+      }
 
       const successAlert: SweetAlertOptions = {
         icon: 'success',
@@ -403,7 +518,7 @@ export class BiologicoComponent implements OnInit{
         title: 'Error!',
         text: '',
       };
-
+      this.loadingEvent();
       this.respuestasService
             .create(this.formulario.value)
             .subscribe({
@@ -415,11 +530,14 @@ export class BiologicoComponent implements OnInit{
                 this.showAlert(errorAlert);
                 this.flag = false;
               }
+              })
+              .add(() => {
+                this.loadingEvent();
               });
     }
   }
   //Validador de fecha mínima en Recepcion
-  fechaMin(control: { value: string; }) {
+  fechaMinRecepcion(control: { value: string; }) {
     if(!control.value) return null;
     const partesFecha = control.value.split('-'); // Divide la cadena en partes
     const ano = parseInt(partesFecha[0]);
@@ -436,26 +554,53 @@ export class BiologicoComponent implements OnInit{
   }
 
   //Validador de fecha máxima en Recepcion
-  fechaMax(control: { value: string; }) {
+  fechaMaxRecepcion(control: { value: string; }) {
     if(!control.value) return null;
     const partesFecha = control.value.split('-'); // Divide la cadena en partes
     const ano = parseInt(partesFecha[0]);
     const mes = parseInt(partesFecha[1]) - 1; // Restamos 1 porque los meses en JavaScript van de 0 a 11
     const dia = parseInt(partesFecha[2]);
-  
     const fechaSeleccionada = new Date(ano, mes, dia);
     const maxDate = new Date();
     maxDate.setHours(0, 0, 0, 0)
     return (fechaSeleccionada > maxDate) ? { 'max': true } : null;
   }
 
+ 
+
+ //Validador de fecha en Analisis mayor a Recepcion
+  fechaAnalisisMayoraRecepcion(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if(!control.value) return null;     
+      const fechaSeleccionada = this.fechaParser(control.value);
+      const fecha = this.formulario.get('fecha_recepcion')?.value;
+      let fechaRecepcion: Date;
+      if(fecha){
+        fechaRecepcion = this.fechaParser(fecha);
+      }else{
+        fechaRecepcion = new Date();
+        fechaRecepcion.setHours(0, 0, 0, 0);
+      }
+      
+      return (fechaSeleccionada < fechaRecepcion) ? { 'mayor_a': true } : null;
+    };
+  }
+
+  fechaParser(fecha: string): Date {
+    const partesFecha = fecha.split('-'); // Divide la cadena en partes
+    const ano = parseInt(partesFecha[0]);
+    const mes = parseInt(partesFecha[1]) - 1; // Restamos 1 porque los meses en JavaScript van de 0 a 11
+    const dia = parseInt(partesFecha[2]);
+    return new Date(ano, mes, dia);
+  }
+
   //Validador de HH:MM en Data Pesca Hrs
   horaValidador(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const horaRegex = /^([0-9]|[1-9][0-9]|99):([0-5]?[0-9])$/; // Expresión regular para el formato HH:MM
+      const horaRegex = /^(0[1-9]|[1-9][0-9]|1[0-6][0-8]):([0-5]?[0-9])$/; // Expresión regular para el formato HH:MM, acepta desde 01:00 hasta 168:59
       const valid = horaRegex.test(control.value);
       return valid ? null : { 'formato': { value: control.value } };
-    };
+  };
   }
 
   //Validador de porcentaje en Fauna Acompañante
@@ -466,7 +611,7 @@ export class BiologicoComponent implements OnInit{
                                     .map((fg: any) => fg.get('porcentaje')?.value || 0)
                                     .reduce((acc, curr) => acc + curr, 0);
       //console.log('Total Porcentaje: ' + totalPorcentaje);                            
-      return (totalPorcentaje  > 50) ? { 'fauna': { value: control.value } } : null;
+      return (totalPorcentaje  > 99) ? { 'fauna': { value: control.value } } : null;
     };
   }
 
@@ -489,12 +634,35 @@ export class BiologicoComponent implements OnInit{
 
   reload() {
     if(this.flag) {
-      this.formulario.reset();
+      this.integridadTotalFlag = false;
+      this.integridadTotalValue = null;
+      this.flag = false;
+      this.flagAnalisisBtn = false;
+      this.flagFaunaBtn = false;
+      this.especiesObjetivos = [];
+      this.especiesAcompanantes = [];
+      this.previousSelectedFaunaId = [];
+      for (const especie of this.especiesAcompanantesTotales) {
+        delete especie.flag;
+      }
+      //this.formulario.removeControl('integridadtotal');
+      //this.formulario.reset();
       this.initValidacion();
       this.formulario.get('clasificacion_id')?.setValue(1);
       this.formulario.get('puerto_id')?.setValue(1);
       this.formulario.get('departamento_id')?.setValue(1);
-      this.flag = false;
+        
+    }else{
+      if(this.integridadTotalFlag){
+        this.analisis.controls.forEach((fg: any, i: any) => { 
+          fg.get('integridad')?.disable();
+        });
+        this.formulario.get('integridadtotal')?.enable();
+      }
     }
+  }
+
+  loadingEvent(){
+    this.loading.cambiaLoading();
   }
 }
