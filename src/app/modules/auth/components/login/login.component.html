@@ -4,11 +4,11 @@
   <!--begin::Heading-->
   <div class="text-center mb-11">
     <h1 class="text-gray-900 fw-bolder mb-3">
-      Sign In
+      Inicio Sesión
     </h1>
     <!--begin::Subtitle-->
     <div class="text-gray-500 fw-semibold fs-6">
-      Your Social Campaigns
+      Formularios Digitales
     </div>
     <!--end::Subtitle--->
     <!-- <div class="text-gray-500 fw-bold fs-4">
@@ -26,25 +26,12 @@
   <!--begin::Login options-->
   <div class="row g-3 mb-9">
     <!--begin::Col-->
-    <div class="col-md-6">
+    <div class="col">
       <!--begin::Google link--->
       <a href="#"
         class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
         <img alt="Logo" src="./assets/media/svg/brand-logos/google-icon.svg" class="h-15px me-3" />
-        Sign in with Google
-      </a>
-      <!--end::Google link--->
-    </div>
-    <!--end::Col-->
-
-    <!--begin::Col-->
-    <div class="col-md-6">
-      <!--begin::Google link--->
-      <a href="#"
-        class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-        <img alt="Logo" src="./assets/media/svg/brand-logos/apple-black.svg" class="theme-light-show h-15px me-3" />
-        <img alt="Logo" src="./assets/media/svg/brand-logos/apple-black-dark.svg" class="theme-dark-show h-15px me-3" />
-        Sign in with Apple
+        Inicio sesión con Google
       </a>
       <!--end::Google link--->
     </div>
@@ -54,27 +41,15 @@
 
   <!--begin::Separator-->
   <div class="separator separator-content my-14">
-    <span class="w-125px text-gray-500 fw-semibold fs-7">Or with email</span>
+    <span class="w-125px text-gray-500 fw-semibold fs-7">O con cuenta</span>
   </div>
   <!--end::Separator-->
-
-  <!-- begin::Alert info-->
-  <ng-container *ngIf="!hasError">
-    <div class="mb-10 bg-light-info p-8 rounded">
-      <div class="text-info">
-        Use account <strong>{{ defaultAuth.email }}</strong> and password
-        <strong>{{ defaultAuth.password }}</strong> to continue.
-      </div>
-    </div>
-  </ng-container>
-  <!-- end::Alert info-->
-
 
   <!-- begin::Alert error-->
   <ng-container *ngIf="hasError">
     <div class="mb-lg-15 alert alert-danger">
       <div class="alert-text font-weight-bold">
-        The login details are incorrect
+         Las credenciales de acceso son incorrectas
       </div>
     </div>
   </ng-container>
@@ -139,42 +114,20 @@
 
   </div>
   <!--end::Form group-->
-
-  <!--begin::Wrapper-->
-  <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
-    <div></div>
-
-    <!--begin::Link-->
-    <a routerLink="/auth/forgot-password" class="link-primary">
-      Forgot Password ?
-    </a>
-    <!--end::Link-->
-  </div>
-  <!--end::Wrapper-->
-
   <!--begin::Action-->
   <div class="d-grid mb-10">
-    <button type="submit" id="kt_sign_in_submit" class="btn btn-primary" [disabled]="loginForm.invalid">
+    <button type="submit" id="kt_sign_in_submit" class="btn btn-dark" [disabled]="loginForm.invalid">
       <ng-container *ngIf="isLoading$ | async">
         <span class="indicator-progress" [style.display]="'block'">
-          Please wait...
+          Por favor espere...
           <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
         </span>
       </ng-container>
       <ng-container *ngIf="(isLoading$ | async) === false">
-        <span class="indicator-label">Continue</span>
+        <span class="indicator-label">Iniciar Sesión</span>
       </ng-container>
     </button>
   </div>
-
-  <div class="text-gray-500 text-center fw-semibold fs-6">
-    Not a Member yet?
-
-    <a routerLink="/auth/registration" class="link-primary">
-      Sign up
-    </a>
-  </div>
-
   <!--end::Action-->
 </form>
 <!--end::Form-->
