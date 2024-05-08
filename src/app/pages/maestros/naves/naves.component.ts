@@ -85,6 +85,7 @@ export class NavesComponent implements OnInit {
       columns:[
         { title:'Id', data: 'id' },
         { title:'Nombre', data: 'nombre' },
+        { title:'Flota', data: 'flota' },
         { title: 'Última modificación', data: 'updated_at', render: function(data : any, type : string, row : any) {
           if (type === 'display' || type === 'filter') {
             // Formato de fecha 'dd-mm-yyyy'

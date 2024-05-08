@@ -98,6 +98,27 @@
         </div>
         <div class="col-md-6 mb-2">
             <div class="fv-row">                
+                <label for="tipo1" class="form-label">Tipo:</label>
+                <ng-select id="tipo1" formControlName="tipo1" class="form-control form-control-solid"
+                    [ngClass]="{
+                        'is-invalid': (f.tipo1.invalid && (f.tipo1.dirty || f.tipo1.touched)),
+                        'is-valid': f.tipo1.valid
+                    }"                >
+                    @for ( tipo of tipos; track tipo.id ){
+                        <ng-option [value]="tipo.id" [disabled]="">{{tipo.name}}</ng-option>
+                    }
+                </ng-select>
+                <div *ngIf="f.tipo1.errors" class="invalid-feedback">
+                    <div *ngIf="f.tipo1.errors?.['required']">El campo no puede estar vacío</div>
+                    <div *ngIf="f.tipo1.errors?.['min']">Valor no válido</div>
+                    <div *ngIf="f.tipo1.errors?.['max']">Valor no válido</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-2">
+            <div class="fv-row">                
                 <label for="enabled" class="form-label">Estado</label>
                 <ng-select id="enabled" formControlName="enabled" class="form-control form-control-solid"
                     [ngClass]="{

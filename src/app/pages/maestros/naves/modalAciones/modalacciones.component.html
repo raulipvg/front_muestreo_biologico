@@ -22,8 +22,27 @@
     <div class="row">
         <div class="col-md-6 mb-2">
             <div class="fv-row">                
-                <label for="ApellidoInput" class="form-label">Estado</label>
-                <ng-select formControlName="enabled" class="form-control form-control-solid"
+                <label for="flota" class="form-label">Flota</label>
+                <ng-select id="flota" formControlName="flota_id" class="form-control form-control-solid"
+                    [ngClass]="{
+                        'is-invalid': (f.flota_id.invalid && (f.flota_id.dirty || f.flota_id.touched)),
+                        'is-valid': f.flota_id.valid
+                    }"                >
+                    @for ( flota of flotas; track flota.id ){
+                        <ng-option [value]="flota.id" [disabled]="!flota.enabled">{{flota.nombre}}</ng-option>
+                    }
+                </ng-select>
+                <div *ngIf="f.flota_id.errors" class="invalid-feedback">
+                    <div *ngIf="f.flota_id.errors?.['required']">El campo no puede estar vacío</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-2">
+            <div class="fv-row">                
+                <label for="enabled" class="form-label">Estado</label>
+                <ng-select id="enabled" formControlName="enabled" class="form-control form-control-solid"
                     [ngClass]="{
                         'is-invalid': (f.enabled.invalid && (f.enabled.dirty || f.enabled.touched)),
                         'is-valid': f.enabled.valid

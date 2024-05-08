@@ -38,6 +38,11 @@ export class ModalAccionesComponent implements OnInit {
     { id: true, name: 'Habilitado' },
     { id: false, name: 'Deshabilitado' }
   ];
+  tipos = [
+    { id: 1, name: 'OBJETIVO' },
+    { id: 2, name: 'OBJETIVO Y FAUNA' },
+    { id: 3, name: 'FAUNA' }
+  ];
   formulario: FormGroup;
   modalConfig: ModalConfig = {
     modalTitle: `Especie: ${this.nombre}`,
@@ -95,6 +100,11 @@ export class ModalAccionesComponent implements OnInit {
       talla_menor_a: ['',Validators.compose([
                           Validators.required,
                           Validators.min(0)
+                        ])],
+      tipo1: ['',Validators.compose([
+                          Validators.required,
+                          Validators.min(1),
+                          Validators.max(3)
                         ])],
       enabled: ['',Validators.compose([
                     Validators.required,

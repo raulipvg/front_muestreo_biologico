@@ -21,6 +21,8 @@ import { ModalAccionesComponent } from './modalAciones/modalacciones.component';
 })
 export class EspeciesComponent implements OnInit {
 
+  tipos : any[] = ['OBJETIVO','OBJETIVO Y FAUNA', 'FAUNA'];
+
   @Input() dtOptions: any = {};
   @Input() dtTrigger: Subject<any> = new Subject<any>();
   @ViewChild(DataTableDirective, { static: false })
@@ -85,6 +87,16 @@ export class EspeciesComponent implements OnInit {
       columns:[
         { title:'Id', data: 'id' },
         { title:'Nombre', data: 'nombre' },
+        { title:'Tipo', data:'tipo1', render:function(data:any,type:any,row:any){
+          switch(data){
+            case 1:
+              return 'OBJETIVO';
+            case 2:
+              return 'OBJETIVO Y FAUNA';
+            case 3:
+              return 'FAUNA';
+          }
+        }},
         { title: 'Última modificación', data: 'updated_at', render: function(data : any, type : string, row : any) {
           if (type === 'display' || type === 'filter') {
             // Formato de fecha 'dd-mm-yyyy'

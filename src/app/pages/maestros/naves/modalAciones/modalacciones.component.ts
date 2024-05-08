@@ -9,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { booleanValidator } from 'src/app/modules/customValidators';
+import { FlotasService } from 'src/app/services/flotas/flotas.service';
 
 
 @Component({
@@ -37,14 +38,13 @@ export class ModalAccionesComponent implements OnInit {
     { id: true, name: 'Habilitado' },
     { id: false, name: 'Deshabilitado' }
   ];
+  flotas : any[];
   formulario: FormGroup;
   modalConfig: ModalConfig = {
     modalTitle: `Nave: ${this.nombre}`,
     dismissButtonLabel: 'Enviar',
     closeButtonLabel: 'Cerrar',
     onClose(): boolean{ return false;}
-    
-
   };
 
   editar : boolean = false;
@@ -58,13 +58,15 @@ export class ModalAccionesComponent implements OnInit {
 
 
   constructor(
-    private servicio: NavesService, 
+    private servicio: NavesService,
+    private servicioFlotas: FlotasService, 
     private fb: FormBuilder,
     private cdRef: ChangeDetectorRef,
   )
   {};
   ngOnInit(): void {
     this.initValidacion();
+    
   
   }
   initValidacion() {
@@ -75,11 +77,21 @@ export class ModalAccionesComponent implements OnInit {
                 Validators.required,
                 Validators.minLength(4),
                 Validators.maxLength(100)  ])],
+      flota_id: ['',Validators.compose([
+                    Validators.required
+                  ])
+                ],
       enabled: ['',Validators.compose([
                     Validators.required,
                     booleanValidator
                   ])
                 ]
+    });
+
+    this.servicioFlotas.getAll().subscribe({
+      next: (data)=>{
+        this.flotas = data;
+      }
     });
   }
 
