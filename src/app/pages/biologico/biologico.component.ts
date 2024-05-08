@@ -533,12 +533,13 @@ export class BiologicoComponent implements OnInit{
         text: '',
       };
       this.loadingEvent();
+      
       this.respuestasService
-            .create(this.formulario.value)
+            .create(this.formulario.value,this.formData)
             .subscribe({
               next: (data: any) => {           
-                this.formData.append("respuesta_id", data.id);
-                this.respuestasService.upload(this.formData).subscribe();
+                //this.formData.append("respuesta_id", data.id);
+                //this.respuestasService.upload(this.formData).subscribe();
                 this.showAlert(successAlert);
                 this.flag =true;    
               },

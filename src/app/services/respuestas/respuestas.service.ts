@@ -35,13 +35,11 @@ export class RespuestasService {
     return this.http.get(this.url + '/edit', {headers} );
   }
 
-  create(data : any): Observable<any> {
-    return this.http.post<any>(this.url + '/create', data, {headers} );
+  create(data : any, imagen: any): Observable<any> {
+    const params = { data:  JSON.stringify(data) };
+    return this.http.post<any>(this.url + '/create', imagen,{headers:headers, params: params});
   }
 
-  upload(data : any): Observable<any> {
-    return this.http.post<any>(this.url + '/upload', data, {headers} );
-  }
   
 
 
