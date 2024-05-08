@@ -80,7 +80,7 @@ export class BiologicoComponent implements OnInit{
     private fb: FormBuilder,
     private formularioService: FormulariosService,
     private respuestasService: RespuestasService,
-    private cdRef: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef
   ) { };
 
   ngOnInit(): void {
@@ -244,6 +244,10 @@ export class BiologicoComponent implements OnInit{
       calidad_aceite: [,Validators.compose([
                     Validators.min(0),
                     Validators.max(100)
+                  ])
+                ],
+      imagen: [,Validators.compose([
+                    Validators.required
                   ])
                 ],
       // Crear un formulario de tipo array para las tallas
@@ -494,6 +498,16 @@ export class BiologicoComponent implements OnInit{
       fg.get('integridad')?.disable();
     });
   }
+  formData = new FormData();
+  //EVENTO QUE CAPTURA LA IMAGEN
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+
+    this.formData = new FormData();
+    this.formData.append("imagen", file);
+    
+    //ths.formulario.patchValue({ imagen: file });
+  }
   //BTN::ACCION DE GUARDAR FORMULARIO
   guardar() {
     //console.log(this.formulario.value);
@@ -522,7 +536,9 @@ export class BiologicoComponent implements OnInit{
       this.respuestasService
             .create(this.formulario.value)
             .subscribe({
-              next: (data: any) => {
+              next: (data: any) => {           
+                this.formData.append("respuesta_id", data.id);
+                this.respuestasService.upload(this.formData).subscribe();
                 this.showAlert(successAlert);
                 this.flag =true;    
               },

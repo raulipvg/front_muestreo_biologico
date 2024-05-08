@@ -414,27 +414,34 @@
                             <div class="col-md-6 d-flex align-items-stretch">
                                 <div class="d-flex flex-row">
                                     <div class="flex-column">
-                                    <label for="integridadTotal" class="form-label align-self-center pe-2 no-wrap">Integridad Total: </label>
-
-                                    
-                                      <div class="form-check form-check-solid form-switch fv-row ms-3 mt-0 mt-md-1">
-                                        <input
-                                          class="form-check-input w-45px h-30px"
-                                          type="checkbox"
-                                          id="integridadTotal"
-                                          [(ngModel)]="integridadTotalFlag" [ngModelOptions]="{standalone: true}"
-                                          (change)="onSwitchIntegridadTotal($event)"
-                                        /><label class="form-check-label pt-1">Si</label>
-                                      </div>
+                                        <label for="integridadTotal" class="form-label align-self-center mb-0 no-wrap">Imagen:</label>                                   
+                                        <input type="file" formControlName="imagen" class="form-control form-control-solid" 
+                                            accept="image/jpeg, image/png"
+                                            (change)="onFileChange($event)"
+                                            >
+                                        <div *ngIf="f.imagen.errors" class="invalid-feedback">
+                                            <div *ngIf="f.imagen.errors?.['required']">Requerido</div>
+                                        </div> 
+                                    </div>
+                                    <div class="flex-column">
+                                        <label for="integridadTotal" class="form-label align-self-center pe-2 no-wrap">Integridad Total:</label>                                   
+                                        <div class="form-check form-check-solid form-switch fv-row ms-3 mt-0 mt-md-1">
+                                            <input
+                                                class="form-check-input w-45px h-30px"
+                                                type="checkbox"
+                                                id="integridadTotal"
+                                                [(ngModel)]="integridadTotalFlag" [ngModelOptions]="{standalone: true}"
+                                                (change)="onSwitchIntegridadTotal($event)"
+                                            /><label class="form-check-label pt-1">Si</label>
+                                        </div>
                                     </div>
                                     @if(integridadTotalFlag){
-                                        <div class="col-6 col-md-3 d-flex align-items-end flex-fill flex-column">
+                                        <div class="d-flex align-items-end flex-fill flex-column">
                                             <label for="integridadtotal" class="form-label align-self-center pe-2 min-h-10px"></label>
 
                                                 <input id="integridadtotal" type="number" formControlName="integridadtotal" class="form-control form-control-solid" 
                                                     autocomplete="off" [min]="0" [max]="100" step="1"
-                                                    (input)="onIntegridadTotal($event)"
-                                                    
+                                                    (input)="onIntegridadTotal($event)"                                                    
                                                     [ngClass]="{
                                                             'is-invalid': f.integridadtotal.invalid && (f.integridadtotal.dirty || f.integridadtotal.touched),
                                                             'is-valid': f.integridadtotal.valid
@@ -446,6 +453,8 @@
                                             </div>
                                         </div>
                                     }
+                                    
+
                                 </div>
                             </div>
                         </div>
