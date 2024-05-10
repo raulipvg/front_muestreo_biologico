@@ -5,6 +5,7 @@ import { RespuestaComponent } from './maestros/respuesta/respuesta.component';
 import { FormulariosComponent } from './maestros/formularios/formularios.component';
 import { BiologicoComponent } from './biologico/biologico.component';
 import { biologicosRoutes } from './biologico/biologico-routing';
+import { GcallbackComponent } from './gcallback/gcallback.component';
 
 const Routing: Routes = [
   {
@@ -34,6 +35,10 @@ const Routing: Routes = [
   {
     path: 'maestros/formularios',
     component: FormulariosComponent
+  },
+  {
+    path: 'google/callback',
+    component: GcallbackComponent,
   },
   {
     path: '',

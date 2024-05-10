@@ -8,6 +8,7 @@
         flex-nowrap
       "
     >
+    @if(!permi || permi.clasificaciones.p1){
       <li class="nav-item">
         <a
           class="nav-link text-active-primary me-6"
@@ -17,6 +18,8 @@
           Clasificaciones
         </a>
       </li>
+    }
+    @if(!permi || permi.departamentos.p1){
       <li class="nav-item">
         <a
           class="nav-link text-active-primary me-6"
@@ -26,6 +29,8 @@
           Departamentos
         </a>
       </li>
+    }
+    @if(!permi || permi.especies.p1){
       <li class="nav-item">
         <a
           class="nav-link text-active-primary me-6"
@@ -35,6 +40,8 @@
           Especies
         </a>
       </li>
+    }
+      @if(!permi || permi.flotas.p1){
       <li class="nav-item">
         <a
           class="nav-link text-active-primary me-6"
@@ -44,6 +51,8 @@
           Flotas
         </a>
       </li>
+    }
+    @if(!permi || permi.lugaresm.p1){
       <li class="nav-item">
         <a
           class="nav-link text-active-primary me-6"
@@ -53,6 +62,8 @@
           LugaresM
         </a>
       </li>
+    }
+    @if(!permi || permi.naves.p1){
       <li class="nav-item">
         <a
           class="nav-link text-active-primary me-6"
@@ -62,6 +73,8 @@
           Naves
         </a>
       </li>
+    }
+    @if(!permi || permi.personas.p1){
       <li class="nav-item">
         <a
           class="nav-link text-active-primary me-6"
@@ -71,6 +84,8 @@
           Personas
         </a>
       </li>
+    }
+    @if(!permi || permi.plantas.p1){
       <li class="nav-item">
         <a
           class="nav-link text-active-primary me-6"
@@ -80,6 +95,8 @@
           Plantas
         </a>
       </li>
+    }
+    @if(!permi || permi.puertos.p1){
       <li class="nav-item">
         <a
           class="nav-link text-active-primary me-6"
@@ -89,6 +106,7 @@
           Puertos
         </a>
       </li>
+    }
     </ul>
   </div>
 

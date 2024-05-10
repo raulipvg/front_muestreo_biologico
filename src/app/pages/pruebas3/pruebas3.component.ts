@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { languageConfig } from '../../../assets/sass/core/base/datatables/language_es';
 import { UsersService } from '../../services/users/users.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { ChangeDetectorRef } from '@angular/core';
 import { ModalRegistrarComponent } from './modalregistrar/modalregistrar.component'
@@ -19,9 +19,21 @@ import { DepartamentosComponent } from '../maestros/departamentos/departamentos.
 import { PersonasComponent } from '../maestros/personas/personas.component';
 import { FormulariosComponent } from '../maestros/formularios/formularios.component';
 import { LoginService } from 'src/app/services/login/login.service';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { env } from 'src/environments/env';
+import { CookieComponent } from 'src/app/_metronic/kt/components';
+import { Router } from '@angular/router';
 
+
+const headers = new HttpHeaders({
+  'ngrok-skip-browser-warning': 'any-value',
+  'Accept': 'application/json'
+});
+const options = {
+  headers,
+  withCredentials : true,
+  withXsrfConfiguration : true
+}
 
 @Component({
   selector: 'app-pruebas3',
@@ -50,15 +62,16 @@ import { env } from 'src/environments/env';
   styleUrl: './pruebas3.component.scss'
 })
 export class Pruebas3Component implements OnInit{
-  
+  googleRedirectURL = env.GOOGLE_REDIRECT_URL;
   formulario : FormGroup;
   constructor( 
     private servicio : LoginService,
-    private fb : FormBuilder
+    private fb : FormBuilder,
+    private router : Router
   ){}
 
   ngOnInit(){
-    this.creaFormBuilder();  
+    this.creaFormBuilder();
   }
 
   creaFormBuilder(){
@@ -72,15 +85,34 @@ export class Pruebas3Component implements OnInit{
     this.servicio.normal(this.formulario.value).subscribe({
       next: (data : any) => {
         console.log(data);
-      },
-      error: (data: any) => {
-        console.log(data);
+        const veryFarFuture = new Date();
+        veryFarFuture.setFullYear(2147, 11, 31);
+        CookieComponent.set('userToken',data.token,null);
+        CookieComponent.set('permisos',data.permisos,{Expires: veryFarFuture});
       }
     });
   }
 
-  loginGoogle(){
-    window.open(env.GOOGLE_REDIRECT_URL, 'googleLogin', 'width=800,height=600');
+  logout(){
+    this.servicio.logout(CookieComponent.get('userToken')).subscribe((data)=>{
+      CookieComponent.delete('userToken');
+      CookieComponent.delete('permisos');
+      console.log(data);
+      CookieComponent.delete('kt_app_sidebar_menu_scrollst');
+      localStorage.removeItem('v8.2.3-authf649fc9a5f55');
+      localStorage.removeItem('dark-sidebar-v8.2.3-layoutConfig');
+      localStorage.removeItem('v8.2.3-baseLayoutType');
+      this.router.navigate(['/auth/login']);
+    });
   }
 
+  loginGoogle() {
+    window.location.href = env.GOOGLE_REDIRECT_URL;
+    var login = window.open(env.GOOGLE_REDIRECT_URL, '_blank', 'location=no,menubar=no,status=no,toolbar=no,scrollbars=yes,resizable=yes,width=600,height=400');
+    //this.servicio.google().subscribe();
+    /*
+    const urlInicioSesionGoogle = env.GOOGLE_REDIRECT_URL;
+    window.open(urlInicioSesionGoogle, '_blank', 'location=no,menubar=no,status=no,toolbar=no,scrollbars=yes,resizable=yes,width=600,height=400');
+*/
+  }
 }
