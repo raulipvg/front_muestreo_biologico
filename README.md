@@ -1,7 +1,17 @@
 # ENTREGA - SPRINT 4 
+
 # Sistema formularios
 
 Es necesario verificar que el equipo cuente con ``Angular ^17.3.3``, ``NodeJS ^20.11``.
+
+## Varibles de entorno
+
+En src/environments/env.ts realizar las siguientes modificaciones:
+
+    API_URL : 'http://localhost:8000/api/', <- URL del back-end
+
+
+
 
 ## Iniciar el proyecto
 
