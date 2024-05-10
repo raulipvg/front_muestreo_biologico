@@ -8,7 +8,7 @@ export class UsersTable {
       authToken: 'auth-token-8f3ae836da744329a6f93bf20594b5cc',
       refreshToken: 'auth-token-f8c137a2c98743f48b643e71161d90aa',
       roles: [1], // Administrator
-      pic: './assets/media/avatars/300-1.jpg',
+      pic: './assets/media/logos/logo-cc-web-small-dark.png',
       fullname: 'Admin',
       firstname: 'Admin',
       lastname: 'Admin',

@@ -183,7 +183,7 @@ export class RespuestabiologicoComponent implements OnInit{
       title: 'Acciones',
       data: 'actions',
       render: (data: any, type: any, full: any) => {
-        
+        /*
         const verButton = `<button class="btn btn-icon btn-success w-30px h-30px btn-action" data-action="ver"  data-id="${full.id}">
                               <span class="indicator-label">
                                 <i class="ki-duotone ki-eye fs-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
@@ -192,7 +192,7 @@ export class RespuestabiologicoComponent implements OnInit{
                                   <span class="spinner-border spinner-border-sm align-middle"></span>
                               </span>
                           </button>`;
-        
+        */
         const editButton = `
                           <a class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" data-id="${full.id}">
                               <span class="indicator-label">
@@ -205,7 +205,7 @@ export class RespuestabiologicoComponent implements OnInit{
 
         const buttons = [];
 
-        buttons.push(verButton);
+        //buttons.push(verButton);
         buttons.push(editButton);
 
         return buttons.join('');
