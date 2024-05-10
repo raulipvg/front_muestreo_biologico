@@ -146,9 +146,9 @@ export class RespuestabiologicoComponent implements OnInit{
 
             }
             else if(action === 'cambiar-estado'){
-              /*
+              
               this.servicio.cambiarestado(id).subscribe({
-                next: (data: IEspecieModel) => {
+                next: (data: IRespuestaModel) => {
                   if(btn.classList.contains('btn-light-success')){
                     btn.classList.remove('btn-light-success');
                     btn.classList.add('btn-light-warning');
@@ -169,7 +169,7 @@ export class RespuestabiologicoComponent implements OnInit{
                   this.loading.cambiaLoading();
                 }
               });
-              */
+              
             }
           }
           

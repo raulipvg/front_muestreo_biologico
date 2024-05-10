@@ -45,9 +45,9 @@ export class RespuestasService {
     return this.http.post<any>(this.url + '/create', imagen,{headers:headers, params: params});
   }
 
-  
-
-
+  cambiarestado(id: number): Observable<any> {
+    return this.http.post(this.url+'/cambiarestado/', {id});
+  }
   
 }
 
