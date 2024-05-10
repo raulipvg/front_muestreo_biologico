@@ -16,6 +16,7 @@ import { RespuestasService } from 'src/app/services/respuestas/respuestas.servic
 import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-biologico',
@@ -76,20 +77,25 @@ export class BiologicoComponent implements OnInit{
   integridadTotalFlag: boolean = false;
   integridadTotalValue: any = null;
 
+  id: number | null;
+  nombreSubmit: string = 'Guardar';
   constructor(
     private fb: FormBuilder,
     private formularioService: FormulariosService,
     private respuestasService: RespuestasService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private route: ActivatedRoute
   ) { };
 
   ngOnInit(): void {
 
     this.initValidacion();
+    this.id = Number(this.route.snapshot.paramMap.get('id')); //EDICION DE FORMULARIO
    
   }
-
+  selectedFileName: string = '';
   ngAfterViewInit(): void {
+
     this.loadingEvent();
     this.formularioService
           .getselects()
@@ -125,8 +131,55 @@ export class BiologicoComponent implements OnInit{
             }
           })
           .add(() => {
-            this.loadingEvent();
+            if(!this.id){this.loadingEvent()};
           });
+
+    //INICIO::SI ES UNA EDICION
+    if(this.id){
+      //this.loadingEvent();
+      this.nombreSubmit = 'Actualizar';
+      this.respuestasService.get(this.id).subscribe({
+        next: (data: any) => {
+          //console.log(data);
+          //asignar valores en data a los campos del formulario
+        
+          this.formulario.patchValue(data.json);
+          this.formulario.get('id')?.setValue(data.id);
+          
+          this.especiesObjetivos = this.especies.filter(
+                                      especie => data.json.especieobjetivo_id.includes(especie.id)
+                                    );
+          
+          data.json.analisis.forEach((data: any) => {
+            this.addAnalisis(data.especie_id);
+            this.analisis.controls[this.analisis.length - 1].patchValue(data);
+          });
+
+          this.especiesAcompanantes = this.especiesAcompanantesTotales.filter(
+            especie => !data.json.especieobjetivo_id.includes(especie.id)
+          );
+          data.json.fauna_acompanante.forEach((data: any) => {
+            this.addFauna();
+            this.fauna_acompanante.controls[this.fauna_acompanante.length - 1].patchValue(data);
+          });
+
+        if(data.resp_storage.length > 0){
+          this.selectedFileName=data.resp_storage[data.resp_storage.length-1]?.nombre;
+          //Quitar el validador de imagen requerido si ya existe una imagen
+          this.formulario.get('imagen')?.clearValidators();
+          this.formulario.get('imagen')?.updateValueAndValidity(); 
+        }
+          
+        },
+        error: (error: any) => {
+          //console.log(error.error);
+        }
+      })
+      .add(() => {
+        this.loadingEvent();
+      });
+    }
+    //FIN::SI ES UNA EDICION
   }
 
   ngOnDestroy(): void {
@@ -206,7 +259,7 @@ export class BiologicoComponent implements OnInit{
                     Validators.required
                   ])
                 ],
-       agua_descargada: [,Validators.compose([
+      agua_descargada: [,Validators.compose([
                     Validators.required,
                     Validators.min(1),
                     Validators.max(2000)
@@ -293,16 +346,33 @@ export class BiologicoComponent implements OnInit{
 
   flagAnalisisBtn: boolean = false;
   //BTN::ACCION DE AGREGAR FORMULARIO ANALISIS 
-  addAnalisis() {
+  addAnalisis(id?: any) {
+    //VALUES
+    let especie_id: number |null;
+    //VALIDATORS
+    let talla_min: number;
+    let talla_max: number;
+    let peso_min: number;
+    let peso_max: number;
+
+    if(id){
+      especie_id = id;
+      const especieEncontrada= this.especiesObjetivos.find(especie => especie.id === id);
+      talla_min = especieEncontrada?.talla_min || 1;
+      talla_max = especieEncontrada?.talla_max || 200;
+      peso_min = especieEncontrada?.peso_min || 1;
+      peso_max = especieEncontrada?.peso_max || 700;
+    }else{   
+      especie_id = this.especiesObjetivos[0]?.id || null;     
+      talla_min = this.especiesObjetivos[0]?.talla_min || 1;
+      talla_max = this.especiesObjetivos[0]?.talla_max || 200;
+      peso_min = this.especiesObjetivos[0]?.peso_min || 1;
+      peso_max = this.especiesObjetivos[0]?.peso_max || 700;
+    } 
     
-      const especie_id = this.especiesObjetivos[0]?.id || null;
-      const talla_min = this.especiesObjetivos[0]?.talla_min || 1;
-      const talla_max = this.especiesObjetivos[0]?.talla_max || 200;
-      const peso_min = this.especiesObjetivos[0]?.peso_min || 1;
-      const peso_max = this.especiesObjetivos[0]?.peso_max || 700;
-      const prueba = this.integridadTotalValue;
-     
+      
     const nuevoAnalisis = this.fb.group({
+      
       especie_id: [especie_id, Validators.compose([
                     Validators.required
                   ])
@@ -320,7 +390,7 @@ export class BiologicoComponent implements OnInit{
                 ])
             ],
       integridad: [{ 
-                    value: this.integridadTotalValue,
+                    value: this.integridadTotalValue??null,
                     disabled: this.integridadTotalFlag
                   },Validators.compose([
                     Validators.required,
@@ -525,32 +595,52 @@ export class BiologicoComponent implements OnInit{
       const successAlert: SweetAlertOptions = {
         icon: 'success',
         title: 'Exito',
-        text: 'Formulario Ingresado'
+        text: this.id?'Formulario Actualizado':'Formulario Ingresado'
       };
       const errorAlert: SweetAlertOptions = {
         icon: 'error',
         title: 'Error!',
-        text: '',
+        text: this.id?'Error al actualizar el formulario':'Error al ingresar el formulario',
       };
       this.loadingEvent();
       
-      this.respuestasService
-            .create(this.formulario.value,this.formData)
-            .subscribe({
-              next: (data: any) => {           
-                //this.formData.append("respuesta_id", data.id);
-                //this.respuestasService.upload(this.formData).subscribe();
-                this.showAlert(successAlert);
-                this.flag =true;    
-              },
-              error: (error: any) => {
-                this.showAlert(errorAlert);
-                this.flag = false;
-              }
+      //SI ES UNA EDICION
+      if(this.id){
+        this.respuestasService
+              .update(this.formulario.value,this.formData)
+              .subscribe({
+                next: (data: any) => {
+                  this.showAlert(successAlert);
+                  this.flag = true;
+                },
+                error: (error: any) => {
+                  this.showAlert(errorAlert);
+                  this.flag = false;
+                }
               })
               .add(() => {
                 this.loadingEvent();
               });
+
+      }else{ //SI ES UN NUEVO FORMULARIO
+        this.respuestasService
+              .create(this.formulario.value,this.formData)
+              .subscribe({
+                next: (data: any) => {           
+                  //this.formData.append("respuesta_id", data.id);
+                  //this.respuestasService.upload(this.formData).subscribe();
+                  this.showAlert(successAlert);
+                  this.flag =true;    
+                },
+                error: (error: any) => {
+                  this.showAlert(errorAlert);
+                  this.flag = false;
+                }
+                })
+                .add(() => {
+                  this.loadingEvent();
+                });
+        }
     }
   }
   //Validador de fecha mínima en Recepcion
@@ -650,6 +740,7 @@ export class BiologicoComponent implements OnInit{
   }
 
   reload() {
+    //SI GUARDA O EDITA EL FORMULARIO DE FORMA EXITOSA SE REINICIA EL FORMULARIO
     if(this.flag) {
       this.integridadTotalFlag = false;
       this.integridadTotalValue = null;
@@ -668,7 +759,8 @@ export class BiologicoComponent implements OnInit{
       this.formulario.get('clasificacion_id')?.setValue(1);
       this.formulario.get('puerto_id')?.setValue(1);
       this.formulario.get('departamento_id')?.setValue(1);
-        
+      
+    //SI NO GUARDA O EDITA EL FORMULARIO DE FORMA EXITOSA SE MANTIENEN LOS DATOS
     }else{
       if(this.integridadTotalFlag){
         this.analisis.controls.forEach((fg: any, i: any) => { 
