@@ -26,7 +26,7 @@ export class Error500Component implements OnInit, OnDestroy {
       document.body.style.backgroundImage =
         mode === 'dark'
           ? 'url(./assets/media/auth/bg7-dark.jpg)'
-          : 'url(./assets/media/auth/bg7.jpg)';
+          : 'url(./assets/media/auth/bg5-dark.jpg)';
     });
     this.unsubscribe.push(subscr);
   }

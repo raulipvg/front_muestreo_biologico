@@ -16,7 +16,7 @@ import { RespuestasService } from 'src/app/services/respuestas/respuestas.servic
 import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-biologico',
@@ -84,7 +84,8 @@ export class BiologicoComponent implements OnInit{
     private formularioService: FormulariosService,
     private respuestasService: RespuestasService,
     private cdRef: ChangeDetectorRef,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { };
 
   ngOnInit(): void {
@@ -742,6 +743,11 @@ export class BiologicoComponent implements OnInit{
   reload() {
     //SI GUARDA O EDITA EL FORMULARIO DE FORMA EXITOSA SE REINICIA EL FORMULARIO
     if(this.flag) {
+      //SI ES UNA EDICION
+      if(this.id){
+        this.router.navigate(['/biologico']);
+      //SI ES UN GUARDAR
+      }else{
       this.integridadTotalFlag = false;
       this.integridadTotalValue = null;
       this.flag = false;
@@ -759,6 +765,7 @@ export class BiologicoComponent implements OnInit{
       this.formulario.get('clasificacion_id')?.setValue(1);
       this.formulario.get('puerto_id')?.setValue(1);
       this.formulario.get('departamento_id')?.setValue(1);
+      }
       
     //SI NO GUARDA O EDITA EL FORMULARIO DE FORMA EXITOSA SE MANTIENEN LOS DATOS
     }else{
