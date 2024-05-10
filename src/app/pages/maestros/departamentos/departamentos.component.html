@@ -12,47 +12,7 @@
                 <thead>
                 </thead>
                 <tbody class="tabla-body fw-semibold text-gray-600">
-                    @if(allData && allData.length >0){
-                        @for ( data of allData; track data.id ){
-                            <tr>
-                                <td class="p-1">{{ data.id }}</td>
-                                <td class="p-1 text-capitalize text-gray-800 fw-bolder">{{ data.nombre }}</td>
-                                <td class="p-1">{{ data.updated_at }}</td>
-                                <td class="p-1">
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px"
-                                                data-action="cambiar-estado"
-                                                data-kt-indicator="off"
-                                                data-kt-app-page-loading="on"
-                                                [attr.data-id]="data.id" 
-                                                [class.btn-light-success]="data.enabled"  [class.btn-light-warning]="!data.enabled">
-                                            <span class="indicator-label">{{ data.enabled ? 'HABILITADO' : 'DESHABILITADO'}}</span>
-                                            <span class="indicator-progress">
-                                                <span class="spinner-border spinner-border-sm align-middle"></span>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td class="p-1">
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" [attr.data-id]="data.id" ngbTooltip="Editar" placement="top" tooltipClass="black">
-                                            <span class="indicator-label">
-                                                <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
-                                            </span>
-                                            <span class="indicator-progress">
-                                                <span class="spinner-border spinner-border-sm align-middle"></span>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </td> 
-                          </tr>
-                        }
-                        @empty {
-                            <tr>
-                                <td colspan="5">No hay información para mostrar.</td>
-                            </tr>
-                        }
-                    }@else {
+                    @if(cargando){
                         <tr>
                             <td colspan="5" class="">
                                 <div class="flex-column text-center">
@@ -62,6 +22,12 @@
                                 
                             </td>
                         </tr>
+                    }@else if(allData.length === 0){
+                        <tr>
+                            <td colspan="5">No hay información para mostrar.</td>
+                        </tr>
+                    }@else {
+
                     }
                 </tbody>
               </table>
