@@ -174,6 +174,7 @@ export class BiologicoComponent implements OnInit{
         },
         error: (error: any) => {
           //console.log(error.error);
+          this.router.navigate(['/error404']);
         }
       })
       .add(() => {
