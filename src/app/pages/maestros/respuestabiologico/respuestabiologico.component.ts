@@ -56,21 +56,21 @@ export class RespuestabiologicoComponent implements OnInit{
                   extend: 'copy',
                   className: 'btn btn-secondary',
                   exportOptions: {
-                      columns: [0, 1, 2, 3]
+                      columns: [0, 1, 2, 3,4,5,6]
                   }
               },
               {
                   extend: 'excel',
                   className: 'btn btn-secondary',
                   exportOptions: {
-                      columns: [0, 1, 2, 3]
+                    columns: [0, 1, 2, 3,4,5,6]
                   }
               },
               {
                   extend: 'print',
                   className: 'btn btn-secondary',
                   exportOptions: {
-                      columns: [0, 1, 2, 3]
+                    columns: [0, 1, 2, 3,4,5,6]
                   }
               }
           ],      
@@ -87,7 +87,7 @@ export class RespuestabiologicoComponent implements OnInit{
         { title: 'Puerto', data: 'puerto'},
         { title: 'Planta', data: 'planta'},
         { title: 'Analista', data: 'persona'},
-        { title: 'Especies', data: 'nombres_especies'},
+        { title: 'Especie Objetivo', data: 'nombres_especies'},
         { title: 'Fecha', data: 'created_at', render: function(data : any, type : string, row : any) {
           if (type === 'display' || type === 'filter') {
             // Formato de fecha 'dd-mm-yyyy'
@@ -106,6 +106,7 @@ export class RespuestabiologicoComponent implements OnInit{
       createdRow: (row:any, data:any, dataIndex:any) => {
         $(row).children('td').addClass('p-1');
         $(row).children('td:eq(1)').addClass('text-capitalize text-gray-800 fw-bolder');
+        $(row).children('td:eq(-1)').addClass('text-center');
       }
     };
   }
@@ -181,6 +182,7 @@ export class RespuestabiologicoComponent implements OnInit{
     const actionColumn = {
       sortable: false,
       title: 'Acciones',
+      className: 'text-center',
       data: 'actions',
       render: (data: any, type: any, full: any) => {
         /*
@@ -215,6 +217,7 @@ export class RespuestabiologicoComponent implements OnInit{
     const estadoColumn = {
       sortable: false,
       title: 'Estado',
+      className: 'text-center',
       render: (data: any, type: any, full: any) => {
         const estadoButton = `<div class="btn-group btn-group-sm" role="group">
                               <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px
