@@ -27,12 +27,17 @@ export class RespuestasService {
     return this.http.get(this.url + '/getall', {headers} );
   }
 
-  getOne(): Observable<any> {
-    return this.http.get(this.url + '/getone', {headers} );
+  getAllbyFormulario(id:number): Observable<any> {
+    return this.http.get(this.url + '/getall/' + id, {headers} );
   }
 
-  editOne(): Observable<any> {  
-    return this.http.get(this.url + '/edit', {headers} );
+  get(id:number): Observable<any> {
+    return this.http.get(`${this.url}/get/${id}`, {headers} );
+  }
+
+  update(data:any, imagen:any): Observable<any> {
+    const params = { data:  JSON.stringify(data) };  
+    return this.http.post<any>(this.url + '/update', imagen,{headers:headers, params: params});
   }
 
   create(data : any, imagen: any): Observable<any> {

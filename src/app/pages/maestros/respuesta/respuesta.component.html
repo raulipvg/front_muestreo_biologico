@@ -14,10 +14,10 @@
                     @if(allRespuestas && allRespuestas.length >0){
                         @for ( item of allRespuestas; track item.id ){
                             <tr>
-                                <td>{{ item.Id }}</td>
-                                <td>{{ item.Titulo }}</td>
-                                <td>{{ item.Enabled }}</td>
-                                <td>{{ item.created_at}}</td>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.titulo }}</td>
+                                <td>{{ item.created_at }}</td>
+                                <td>{{ item.enabled}}</td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <button class="btn btn-icon btn-success w-30px h-30px btn-action" data-action="ver"  [attr.data-id]="item.id" ngbTooltip="Ver" placement="top">

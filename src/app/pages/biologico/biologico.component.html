@@ -414,11 +414,13 @@
                             <div class="col-md-6 d-flex align-items-stretch">
                                 <div class="d-flex flex-row">
                                     <div class="flex-column">
-                                        <label for="integridadTotal" class="form-label align-self-center mb-0 no-wrap">Imagen:</label>                                   
-                                        <input type="file" formControlName="imagen" class="form-control form-control-solid" 
+                                        <label for="file" class="form-label align-self-center mb-0 no-wrap">Imagen:</label>                                   
+                                        <input id="file" type="file" formControlName="imagen" class="form-control form-control-solid" 
                                             accept="image/jpeg, image/png"
                                             (change)="onFileChange($event)"
                                             >
+                                        <label for="file" class="float-end fw-bold text-success no-wrap">{{selectedFileName}}</label>
+
                                         <div *ngIf="f.imagen.errors" class="invalid-feedback">
                                             <div *ngIf="f.imagen.errors?.['required']">Requerido</div>
                                         </div> 
@@ -647,7 +649,7 @@
             </div>
             <div class="card-footer py-2 px-3">
                 <div class="d-flex justify-content-end">
-                    <button type="submit" [disabled]="this.formulario.invalid" class="btn btn-success">Guardar</button>
+                    <button type="submit" [disabled]="this.formulario.invalid" class="btn btn-success">{{nombreSubmit}}</button>
                 </div>
             </div>
 

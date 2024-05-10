@@ -24,7 +24,7 @@ export const biologicosRoutes: Routes = [
       {
           path: 'departamentos',
           component: DepartamentosComponent,
-        },
+      },
       {
         path: 'especies',
         component: EspeciesComponent,

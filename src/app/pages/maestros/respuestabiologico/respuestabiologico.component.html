@@ -1,0 +1,42 @@
+<div class="d-flex flex-column flex-column-fluid">
+    <div class="card mx-0">
+        <div class="card-header bg-dark">
+            <h3 class="card-title text-uppercase text-white">Respuestas Muestreo Biologico</h3>
+            <div class="m-1">
+                <a type="button" routerLink="/biologico/ingresar" class="btn btn-sm btn-success text-uppercase btn-action justify-content-center">Registrar</a>
+            </div>
+        </div>
+        <div class="card-body pt-2">
+            <!--begin::Tabla Especies-->
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-row-dashed table-hover rounded gy-2 gs-md-3 nowrap">
+                <thead>
+                </thead>
+                <tbody class="tabla-body fw-semibold text-gray-600">
+                    @if(cargando){
+                        <tr>
+                            <td colspan="5" class="">
+                                <div class="flex-column text-center">
+                                    <div class="spinner-border text-warning border-2" role="status"></div>
+                                    <div class="text-gray-800 fs-6 fw-semibold">Cargando</div>
+                                </div>
+                                
+                            </td>
+                        </tr>
+                    }@else if(allData.length === 0){
+                        <tr>
+                            <td colspan="5">No hay información para mostrar.</td>
+                        </tr>
+                    }@else {
+
+                    }
+                </tbody>
+              </table>
+            <!--end::Tabla Usuario-->
+        </div>
+    </div>
+        
+</div>
+<!--end::Content-->
+
+
+<app-page-loading #loading></app-page-loading>

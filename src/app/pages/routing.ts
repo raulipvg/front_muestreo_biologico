@@ -6,6 +6,7 @@ import { FormulariosComponent } from './maestros/formularios/formularios.compone
 import { BiologicoComponent } from './biologico/biologico.component';
 import { biologicosRoutes } from './biologico/biologico-routing';
 import { GcallbackComponent } from './gcallback/gcallback.component';
+import { RespuestabiologicoComponent } from './maestros/respuestabiologico/respuestabiologico.component';
 
 const Routing: Routes = [
   {
@@ -18,6 +19,14 @@ const Routing: Routes = [
   },
   {
     path: 'biologico', // Ruta vacía para BiologicoComponent
+    component: RespuestabiologicoComponent,
+  },
+  {
+    path: 'biologico/ingresar',
+    component: BiologicoComponent,
+  },
+  {
+    path: 'biologico/:id',
     component: BiologicoComponent,
   },
   {
