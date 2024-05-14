@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
 import { ModalAccionesComponent } from './modalAciones/modalacciones.component';
+import { delMaestrosBiologicos, editMaestrosBiologicos, regMaestrosBiologicos } from '../../biologico/maestros.guard';
 
 
 @Component({
@@ -32,7 +33,9 @@ export class NavesComponent implements OnInit {
   allData: INaveModel[];
   estadoBoton : any[];
   private getDataCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
-
+  registrar : boolean = regMaestrosBiologicos();
+  editar : boolean = editMaestrosBiologicos();
+  del : boolean = delMaestrosBiologicos();
   cargando : boolean = false;
 
    constructor(
@@ -134,7 +137,7 @@ export class NavesComponent implements OnInit {
       data: 'actions',
       render: (data: any, type: any, full: any) => {
         const editButton = `
-                          <button class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" data-id="${full.id}">
+                          <button class="btn btn-icon btn-warning w-30px h-30px btn-action ${this.editar ? '' : 'disabled'}" data-action="edit" data-id="${full.id}">
                               <span class="indicator-label">
                                   <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
                               </span>
@@ -157,7 +160,7 @@ export class NavesComponent implements OnInit {
       render: (data: any, type: any, full: any) => {
         const estadoButton = `<div class="btn-group btn-group-sm" role="group">
                               <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px
-                                            ${full.enabled ? 'btn-light-success' : 'btn-light-warning'}"
+                                            ${full.enabled ? 'btn-light-success' : 'btn-light-warning'} ${this.del ? '' : 'disabled'}"
                                             data-action="cambiar-estado"
                                             data-kt-indicator="off"
                                             data-id="${full.id}" >

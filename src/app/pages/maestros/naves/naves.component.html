@@ -2,9 +2,11 @@
     <div class="card mx-0">
         <div class="card-header bg-dark">
             <h3 class="card-title text-uppercase text-white">Naves</h3>
-            <div class="m-1">
-                <button type="button" class="btn btn-sm btn-success text-uppercase btn-action justify-content-center" (click)="this.modal.AbrirModal('create')">Registrar</button>
-            </div>
+            @if(registrar){
+                <div class="m-1">
+                    <button type="button" class="btn btn-sm btn-success text-uppercase btn-action justify-content-center" (click)="this.modal.AbrirModal('create')">Registrar</button>
+                </div>
+                }
         </div>
         <div class="card-body pt-2">
             <!--begin::Tabla Especies-->

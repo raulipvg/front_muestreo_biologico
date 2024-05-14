@@ -46,6 +46,7 @@ export class FormulariosService {
 
   update( data: any): Observable<IFormularioModel> {
     const url = `${this.url}/update`;
+    this.formularioEnabled.find((a:any)=>a.id == data.id).enabled = data.enabled;
     return this.http.post<IFormularioModel>(url, data);
   }
 

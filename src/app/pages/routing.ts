@@ -7,7 +7,8 @@ import { BiologicoComponent } from './biologico/biologico.component';
 import { biologicosRoutes } from './biologico/biologico-routing';
 import { GcallbackComponent } from './gcallback/gcallback.component';
 import { RespuestabiologicoComponent } from './maestros/respuestabiologico/respuestabiologico.component';
-import { formularioBiologico } from '../services/formularios/formularios.guard';
+import { registrarFormularioBiologico, vereditRespFormularioBiologico } from '../services/formularios/formularios.guard';
+import { verMaestrosBiologicos } from './biologico/maestros.guard';
 
 const Routing: Routes = [
   {
@@ -16,7 +17,8 @@ const Routing: Routes = [
   },
   {
     path: 'adm',
-    children:biologicosRoutes
+    children:biologicosRoutes,
+    canActivate: [verMaestrosBiologicos]
   },
   {
     path: 'biologico', // Ruta vacía para BiologicoComponent
@@ -25,11 +27,12 @@ const Routing: Routes = [
   {
     path: 'biologico/ingresar',
     component: BiologicoComponent,
-    canActivate: [formularioBiologico]
+    canActivate: [registrarFormularioBiologico]
   },
   {
     path: 'biologico/:id',
     component: BiologicoComponent,
+    canActivate: [vereditRespFormularioBiologico]
   },
   {
     path: 'pruebas',

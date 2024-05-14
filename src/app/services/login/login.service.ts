@@ -31,17 +31,20 @@ export class LoginService {
 
   normal(data: any){
 
-  return this.http.get(env.CSRF_COOKIE_URL, this.options)
-    .pipe(
-      tap({
-        next: () => {
-          this.options.headers = this.options.headers.append('X-XSRF-TOKEN', CookieComponent.get('XSRF-TOKEN'));
-        },
-      }),
-      switchMap(() => {
-        return this.http.post<ICredencialesModel>(this.url + 'login', data, this.options);
-      })
-    );
+    return this.http.get(env.CSRF_COOKIE_URL, this.options)
+      .pipe(
+        switchMap(() => {
+          const options : any = {
+            headers : new HttpHeaders({
+              'ngrok-skip-browser-warning': 'any-value',
+              'Accept': 'application/json',
+              'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+              }),
+            withCredentials : true
+          }
+          return this.http.post<ICredencialesModel>(this.url + 'login', data, options);
+        })
+      );
   }
 
   logout(userToken:any){

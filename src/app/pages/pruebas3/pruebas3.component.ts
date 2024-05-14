@@ -87,8 +87,12 @@ export class Pruebas3Component implements OnInit{
         console.log(data);
         const veryFarFuture = new Date();
         veryFarFuture.setFullYear(2147, 11, 31);
-        CookieComponent.set('userToken',data.token,null);
-        CookieComponent.set('permisos',data.permisos,{Expires: veryFarFuture});
+        CookieComponent.set('userToken',data.token, {Expires: veryFarFuture});
+        CookieComponent.set('permisosF',data.permisosF,{Expires: veryFarFuture});
+        CookieComponent.set('permisosM',data.permisosM,{Expires: veryFarFuture});
+      },
+      error: (data:any) => {
+        CookieComponent.delete('login-in');
       }
     });
   }
@@ -96,23 +100,19 @@ export class Pruebas3Component implements OnInit{
   logout(){
     this.servicio.logout(CookieComponent.get('userToken')).subscribe((data)=>{
       CookieComponent.delete('userToken');
-      CookieComponent.delete('permisos');
-      console.log(data);
+      CookieComponent.delete('permisosF');
+      CookieComponent.delete('permisosM');
       CookieComponent.delete('kt_app_sidebar_menu_scrollst');
       localStorage.removeItem('v8.2.3-authf649fc9a5f55');
       localStorage.removeItem('dark-sidebar-v8.2.3-layoutConfig');
       localStorage.removeItem('v8.2.3-baseLayoutType');
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['auth/login'], {
+        queryParams: {},
+      });
     });
   }
 
   loginGoogle() {
     window.location.href = env.GOOGLE_REDIRECT_URL;
-    var login = window.open(env.GOOGLE_REDIRECT_URL, '_blank', 'location=no,menubar=no,status=no,toolbar=no,scrollbars=yes,resizable=yes,width=600,height=400');
-    //this.servicio.google().subscribe();
-    /*
-    const urlInicioSesionGoogle = env.GOOGLE_REDIRECT_URL;
-    window.open(urlInicioSesionGoogle, '_blank', 'location=no,menubar=no,status=no,toolbar=no,scrollbars=yes,resizable=yes,width=600,height=400');
-*/
   }
 }
