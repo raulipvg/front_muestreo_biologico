@@ -11,16 +11,16 @@
           <span class="menu-title">Inicio</span>
         </a>
       </div>
-  
-      <!-- Biológico -->
-      <div class="menu-item">
-        <a class="menu-link without-sub" routerLink="/biologico" routerLinkActive="active">
-          <span class="menu-icon">
-            <app-keenicon name="switch" class="fs-2"></app-keenicon>
-          </span>
-          <span class="menu-title">Biológico</span>
-        </a>
-      </div>
+
+          <!-- Biológico -->
+          <div class="menu-item">
+            <a class="menu-link without-sub" routerLink="/biologico" routerLinkActive="active">
+              <span class="menu-icon">
+                <app-keenicon name="switch" class="fs-2"></app-keenicon>
+              </span>
+              <span class="menu-title">Biológico</span>
+            </a>
+          </div>
       <!-- Separator -->
       <div class="menu-item">
         <div class="menu-content pt-8 pb-2">
@@ -47,6 +47,24 @@
                   class="bullet bullet-dot"></span>
               </span>
               <span class="menu-title">Biológico</span>
+              <span class="badge fw-semibold fs-8 px-2 py-1 ms-1 " 
+                [ngClass]="(servicio.formularioEnabled?.[0].enabled) ? 'badge-success' : 'badge-warning'"
+                ngbTooltip="{{(servicio.formularioEnabled?.[0].enabled) ? 'Formulario Habilitado' : 'Formulario Deshabilitado'}}"
+                container="body"
+                placement="end">{{ (servicio.formularioEnabled?.[0].enabled) ? 'HAB' : 'DESHAB' }}
+              </span>
+            </a>
+          </div>
+        </div>
+        <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+          <div class="menu-item menu-accordion">
+            <a class="menu-link without-sub" routerLinkActive="active"
+              routerLink="/maestros/formularios">
+              <span class="menu-bullet">
+                <span
+                  class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Formularios</span>
             </a>
           </div>
         </div>

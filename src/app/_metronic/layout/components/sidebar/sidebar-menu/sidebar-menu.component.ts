@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { FormulariosService } from 'src/app/services/formularios/formularios.service';
 
 @Component({
   selector: 'app-sidebar-menu',
@@ -7,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public servicio: FormulariosService, 
+  ) {
+    this.servicio.getFormulariosEnabled().subscribe();
+  }
 
   ngOnInit(): void {
   }

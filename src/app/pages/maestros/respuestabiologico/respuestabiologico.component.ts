@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
+import { FormulariosService } from 'src/app/services/formularios/formularios.service';
 import { IRespuestaModel, RespuestasService } from 'src/app/services/respuestas/respuestas.service';
 import { languageConfig } from 'src/assets/sass/core/base/datatables/language_es';
 
@@ -36,7 +37,8 @@ export class RespuestabiologicoComponent implements OnInit{
     private cdRef: ChangeDetectorRef,
     private renderer: Renderer2,
     private servicio: RespuestasService,
-    private router: Router
+    private router: Router,
+    public formularios : FormulariosService
   ) { }
 
   ngOnInit(): void {

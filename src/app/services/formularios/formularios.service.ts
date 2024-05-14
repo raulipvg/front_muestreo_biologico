@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
 import { env } from 'src/environments/env';
 
 const headers = new HttpHeaders({
@@ -20,8 +20,19 @@ export interface IFormularioModel {
   providedIn: 'root'
 })
 export class FormulariosService {
+  formularios$: Observable<any>;
+  formulariosSubject: BehaviorSubject<any>;
 
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient) { 
+    this.formulariosSubject = new BehaviorSubject<any>(undefined);
+    this.formularios$ = this.formulariosSubject.asObservable();
+  }
+
+  get formularioEnabled() : any {
+    return this.formulariosSubject.value;
+  }
+
   url = env.API_URL + 'formulario';
   
   getAll(): Observable<any> {
@@ -39,10 +50,23 @@ export class FormulariosService {
   }
 
   cambiarestado(id: number): Observable<any> {
+    let elemento = this.formulariosSubject.value.find((a:any) => a.id == id);
+    elemento.enabled = !elemento.enabled;
     return this.http.post(this.url+'/cambiarestado/', {id});
   }
 
   getselects(): Observable<any> {
     return this.http.get(this.url+'/getselects', {headers} );
+  }
+
+  getFormulariosEnabled(): Observable<any> {
+    return this.http.get(this.url + '/getenabled', { headers })
+      .pipe(
+        tap((data) => this.formulariosSubject.next(data)), // Actualizar BehaviorSubject con la respuesta de la API
+        catchError((error) => {
+          console.error('Error obteniendo formularios:', error);
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      );
   }
 }
