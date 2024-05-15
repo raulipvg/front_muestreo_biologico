@@ -27,8 +27,8 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.auth.logout();
-    document.location.reload();
+    this.auth.logout().subscribe().add(() => {document.location.reload();});
+    
   }
 
 

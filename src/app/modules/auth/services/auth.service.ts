@@ -135,7 +135,7 @@ export class AuthService implements OnDestroy {
           queryParams: {},
         });
       })
-    ).subscribe();
+    );
   }
 
   getUserByToken(): Observable<UserType> {
