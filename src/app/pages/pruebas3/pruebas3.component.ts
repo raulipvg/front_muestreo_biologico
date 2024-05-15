@@ -76,7 +76,7 @@ export class Pruebas3Component implements OnInit{
 
   creaFormBuilder(){
     this.formulario = this.fb.group({
-      username : [, Validators.required],
+      email : [, Validators.required],
       password: [, Validators.required]
     })
   }

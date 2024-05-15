@@ -6,6 +6,9 @@ import { AuthModel } from '../models/auth.model';
 import { AuthHTTPService } from './auth-http';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { CookieComponent } from 'src/app/_metronic/kt/components';
+import { env } from 'src/environments/env';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export type UserType = UserModel | undefined;
 
@@ -33,7 +36,8 @@ export class AuthService implements OnDestroy {
 
   constructor(
     private authHttpService: AuthHTTPService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.currentUserSubject = new BehaviorSubject<UserType>(undefined);
@@ -42,7 +46,7 @@ export class AuthService implements OnDestroy {
     const subscr = this.getUserByToken().subscribe();
     this.unsubscribe.push(subscr);
   }
-
+/*
   // public methods
   login(email: string, password: string): Observable<UserType> {
     this.isLoadingSubject.next(true);
@@ -58,9 +62,66 @@ export class AuthService implements OnDestroy {
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );
+  }*/
+
+  login(email: string, password: string): Observable<UserType> {
+    const options: any = {
+      headers: new HttpHeaders({
+        'ngrok-skip-browser-warning': 'any-value',
+        'Accept': 'application/json'
+      }),
+      withCredentials: true
+    };
+    this.isLoadingSubject.next(true);
+
+    return this.http.get(env.CSRF_COOKIE_URL, options).pipe(
+      switchMap(() => {
+        const csrfToken = CookieComponent.get('XSRF-TOKEN')!;
+        const loginOptions: any = {
+          headers: new HttpHeaders({
+            'ngrok-skip-browser-warning': 'any-value',
+            'Accept': 'application/json',
+            'X-XSRF-TOKEN': csrfToken
+          }),
+          withCredentials: true
+        };
+        return this.http.post<{ user: UserType }>(env.LOGIN_URL, { email, password }, loginOptions).pipe(
+          map((result : any) => {
+            if (result && result.usuario) {
+              this.storeTokens(result);
+              this.currentUserSubject.next(result.usuario);
+              return result.usuario;
+            } else {
+              throw new Error('Credenciales incorrectas');
+            }
+          })
+        );
+      }),
+      catchError((err) => {
+        console.error('Login error:', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  private storeTokens(result: any) {
+    const veryFarFuture = new Date();
+    veryFarFuture.setFullYear(2147, 11, 31);
+    CookieComponent.set('userToken', result.token, { Expires: veryFarFuture });
+    CookieComponent.set('permisosF', result.permisosF, { Expires: veryFarFuture });
+    CookieComponent.set('permisosM', result.permisosM, { Expires: veryFarFuture });
   }
 
   logout() {
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
+    return this.http.post(env.LOGOUT_URL,null,options).pipe();
     localStorage.removeItem(this.authLocalStorageToken);
     this.router.navigate(['/auth/login'], {
       queryParams: {},
@@ -68,25 +129,35 @@ export class AuthService implements OnDestroy {
   }
 
   getUserByToken(): Observable<UserType> {
-    const auth = this.getAuthFromLocalStorage();
-    if (!auth || !auth.authToken) {
+    const auth = CookieComponent.get('userToken');
+    if (!auth || auth === 'undefined') {
+      this.router.navigate(['/auth/login']);
       return of(undefined);
     }
+    const loginOptions: any = {
+      headers: new HttpHeaders({
+        'ngrok-skip-browser-warning': 'any-value',
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+      }),
+      withCredentials: true
+    };
 
     this.isLoadingSubject.next(true);
-    return this.authHttpService.getUserByToken(auth.authToken).pipe(
-      map((user: UserType) => {
-        if (user) {
-          this.currentUserSubject.next(user);
+    return this.http.get<UserType>(env.USER_URL,loginOptions).pipe(
+      map((data: any) => {
+        if (data.usuario) {
+          this.currentUserSubject.next(data.usuario);
+          this.storeTokens(data);
         } else {
           this.logout();
         }
-        return user;
+        return data.usuario;
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
-
+/*
   // need create new user then login
   registration(user: UserModel): Observable<any> {
     this.isLoadingSubject.next(true);
@@ -102,14 +173,7 @@ export class AuthService implements OnDestroy {
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
-
-  forgotPassword(email: string): Observable<boolean> {
-    this.isLoadingSubject.next(true);
-    return this.authHttpService
-      .forgotPassword(email)
-      .pipe(finalize(() => this.isLoadingSubject.next(false)));
-  }
-
+*/
   // private methods
   private setAuthFromLocalStorage(auth: AuthModel): boolean {
     // store auth authToken/refreshToken/epiresIn in local storage to keep user logged in between page refreshes
@@ -122,7 +186,7 @@ export class AuthService implements OnDestroy {
 
   private getAuthFromLocalStorage(): AuthModel | undefined {
     try {
-      const lsValue = localStorage.getItem(this.authLocalStorageToken);
+      const lsValue = localStorage.getItem(CookieComponent.get('userToken')!);
       if (!lsValue) {
         return undefined;
       }
