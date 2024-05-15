@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CookieComponent } from 'src/app/_metronic/kt/components';
 import { env } from 'src/environments/env';
 
 const headers = new HttpHeaders({
@@ -34,15 +35,36 @@ export class PuertosService {
   }
 
   update( data: any): Observable<IPuertoModel> {
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
     const url = `${this.url}/update`;
-    return this.http.post<IPuertoModel>(url, data);
+    return this.http.post<IPuertoModel>(url, data, options);
   }
 
   cambiarestado(id: number): Observable<any> {
-    return this.http.post(this.url+'/cambiarestado/', {id});
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
+    return this.http.post(this.url+'/cambiarestado/', {id}, options);
   }
 
   crear(data: any): Observable<IPuertoModel> {
-    return this.http.post<IPuertoModel>(this.url+'/create/', data);
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
+    return this.http.post<IPuertoModel>(this.url+'/create/', data, options);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
-import { map, catchError, switchMap, finalize } from 'rxjs/operators';
+import { map, catchError, switchMap, finalize, tap } from 'rxjs/operators';
 import { UserModel } from '../models/user.model';
 import { AuthModel } from '../models/auth.model';
 import { AuthHTTPService } from './auth-http';
@@ -89,6 +89,7 @@ export class AuthService implements OnDestroy {
           map((result : any) => {
             if (result && result.usuario) {
               this.storeTokens(result);
+              result.usuario.pic = './assets/media/logos/logo-cc-web-small-dark.png';
               this.currentUserSubject.next(result.usuario);
               return result.usuario;
             } else {
@@ -121,16 +122,32 @@ export class AuthService implements OnDestroy {
       }),
       withCredentials: true
     }
-    return this.http.post(env.LOGOUT_URL,null,options).pipe();
-    localStorage.removeItem(this.authLocalStorageToken);
-    this.router.navigate(['/auth/login'], {
-      queryParams: {},
-    });
+    return this.http.post(env.LOGOUT_URL, null, options).pipe(
+      tap(() => {
+        CookieComponent.delete('userToken');
+        CookieComponent.delete('permisosF');
+        CookieComponent.delete('permisosM');
+        CookieComponent.delete('kt_app_sidebar_menu_scrollst');
+        localStorage.removeItem('v8.2.3-authf649fc9a5f55');
+        localStorage.removeItem('dark-sidebar-v8.2.3-layoutConfig');
+        localStorage.removeItem('v8.2.3-baseLayoutType');
+        this.router.navigate(['/auth/login'], {
+          queryParams: {},
+        });
+      })
+    ).subscribe();
   }
 
   getUserByToken(): Observable<UserType> {
     const auth = CookieComponent.get('userToken');
     if (!auth || auth === 'undefined') {
+      CookieComponent.delete('userToken');
+      CookieComponent.delete('permisosF');
+      CookieComponent.delete('permisosM');
+      CookieComponent.delete('kt_app_sidebar_menu_scrollst');
+      localStorage.removeItem('v8.2.3-authf649fc9a5f55');
+      localStorage.removeItem('dark-sidebar-v8.2.3-layoutConfig');
+      localStorage.removeItem('v8.2.3-baseLayoutType');
       this.router.navigate(['/auth/login']);
       return of(undefined);
     }
