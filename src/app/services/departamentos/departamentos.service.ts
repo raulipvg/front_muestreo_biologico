@@ -1,12 +1,22 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CookieComponent } from 'src/app/_metronic/kt/components/_CookieComponent';
 import { env } from 'src/environments/env';
 
 const headers = new HttpHeaders({
   'ngrok-skip-browser-warning': 'any-value',
   'Accept':'*/*'
 });
+
+const options : any = {
+  headers : new HttpHeaders({
+    'ngrok-skip-browser-warning': 'any-value',
+    'Accept': 'application/json',
+    'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+    }),
+  withCredentials : true
+}
 
 export interface IDepartamentoModel {
   id: number;
@@ -33,16 +43,16 @@ export class DepartamentosService {
     return this.http.get<IDepartamentoModel>(url, {headers} );
   }
 
-  update( data: any): Observable<IDepartamentoModel> {
+  update( data: any): Observable<any> {
     const url = `${this.url}/update`;
-    return this.http.post<IDepartamentoModel>(url, data);
+    return this.http.post<IDepartamentoModel>(url, data, options);
   }
 
   cambiarestado(id: number): Observable<any> {
-    return this.http.post(this.url+'/cambiarestado/', {id});
+    return this.http.post(this.url+'/cambiarestado/', {id}, options);
   }
 
-  crear(data: any): Observable<IDepartamentoModel> {
-    return this.http.post<IDepartamentoModel>(this.url+'/create/', data);
+  crear(data: any): Observable<any> {
+    return this.http.post<IDepartamentoModel>(this.url+'/create/', data,options);
   }
 }

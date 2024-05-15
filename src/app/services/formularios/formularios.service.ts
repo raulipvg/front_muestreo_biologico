@@ -1,12 +1,21 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
+import { CookieComponent } from 'src/app/_metronic/kt/components/_CookieComponent';
 import { env } from 'src/environments/env';
 
 const headers = new HttpHeaders({
   'ngrok-skip-browser-warning': 'any-value',
   'Accept':'*/*'
 });
+const options : any = {
+  headers : new HttpHeaders({
+    'ngrok-skip-browser-warning': 'any-value',
+    'Accept': 'application/json',
+    'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+    }),
+  withCredentials : true
+}
 
 export interface IFormularioModel {
   id: number;
@@ -44,16 +53,16 @@ export class FormulariosService {
     return this.http.get<IFormularioModel>(url, {headers} );
   }
 
-  update( data: any): Observable<IFormularioModel> {
+  update( data: any): Observable<any> {
     const url = `${this.url}/update`;
     this.formularioEnabled.find((a:any)=>a.id == data.id).enabled = data.enabled;
-    return this.http.post<IFormularioModel>(url, data);
+    return this.http.post<IFormularioModel>(url, data, options);
   }
 
   cambiarestado(id: number): Observable<any> {
     let elemento = this.formulariosSubject.value.find((a:any) => a.id == id);
     elemento.enabled = !elemento.enabled;
-    return this.http.post(this.url+'/cambiarestado/', {id});
+    return this.http.post(this.url+'/cambiarestado/', {id}, options);
   }
 
   getselects(): Observable<any> {
