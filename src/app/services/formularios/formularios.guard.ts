@@ -10,18 +10,18 @@ export const registrarFormularioBiologico : CanActivateFn = (route:any, state:an
 
 //VERIFICACION DE EXISTENCIA DE LA COOKIE
   const permiso = validarPermisosFormularioBiologico();
-  if(!permiso || !formularioServicio.formularioEnabled[0].enabled){
-    router.navigate(['error/404']);
+  if(!permiso || !permiso.p6 || !formularioServicio.formularioEnabled[0].enabled){
+    return router.createUrlTree(['error/404']);
   } 
-  return permiso.p5;
+  return permiso.p6;
 }
 
-export const vereditRespFormularioBiologico : CanActivateFn = (route:any, state:any) => {
+export const editRespFormularioBiologico : CanActivateFn = (route:any, state:any) => {
 //VERIFICACION DE EXISTENCIA DE LA COOKIE
 const permiso = validarPermisosFormularioBiologico();
-  if(!permiso){
+  if(!permiso || !permiso.p7){
     const router = inject(Router);
-    router.navigate(['error/404']);
+    return router.createUrlTree(['error/404']);
   } 
   return permiso.p7;
 }
@@ -32,11 +32,11 @@ export function privilegiosFormularioBiologico (p : number):boolean {
 
   if(!permiso){
     const router = inject(Router);
-    router.navigate(['error/404']);
+    router.createUrlTree(['error/404']);
   }
-  if(p==5) return permiso.p5;
-  else if(p==6) return permiso.p6;
-  else return permiso.p7;
+  if(p==6) return permiso.p6;
+  else if(p==7) return permiso.p7;
+  else return permiso.p8;
 
 }
 

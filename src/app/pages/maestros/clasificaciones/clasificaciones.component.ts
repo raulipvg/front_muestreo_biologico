@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
 import { ModalAccionesComponent } from './modalAciones/modalacciones.component';
-import { delMaestrosBiologicos, editMaestrosBiologicos, regMaestrosBiologicos } from '../../biologico/maestros.guard';
+import { privilegiosMaestrosBiologicos } from '../../biologico/maestros.guard';
 
 
 @Component({
@@ -35,9 +35,9 @@ export class ClasificacionesComponent implements OnInit {
   private getDataCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
   
   //PRIVILEGIOS DE ACCESO AL TEMPLATE
-  registrar : boolean = regMaestrosBiologicos();
-  editar : boolean = editMaestrosBiologicos();
-  del : boolean = delMaestrosBiologicos();
+  registrar : boolean = privilegiosMaestrosBiologicos(2);
+  editar : boolean = privilegiosMaestrosBiologicos(3);
+  del : boolean = privilegiosMaestrosBiologicos(4);
   cargando : boolean = false;
 
    constructor(
@@ -208,13 +208,12 @@ export class ClasificacionesComponent implements OnInit {
         // Este código se ejecutará cuando getUsers() haya completado su ejecución
         this.renderer.listen(containerElement, 'click', (event) => {
           const btn = event.target.closest('.btn-action');
-          if (btn) {
-            btn.setAttribute('data-kt-indicator','on');
-            this.loading.cambiaLoading();
-
+          if (btn) {            
             const { action, id } = btn.dataset;
             //ACCIONES
-            if(action === 'edit' || action === 'ver'){
+            if((action === 'edit' || action === 'ver') &&  this.editar){
+              btn.setAttribute('data-kt-indicator','on');
+              this.loading.cambiaLoading();
                 this.servicio.get(id).subscribe({
                   next: (data: IClasificacionModel) => {
                     this.modal.AbrirModal(action, id,data);
@@ -229,7 +228,9 @@ export class ClasificacionesComponent implements OnInit {
                   }
                 });
             }
-            else if(action === 'cambiar-estado'){
+            else if(action === 'cambiar-estado' && this.del){
+              btn.setAttribute('data-kt-indicator','on');
+              this.loading.cambiaLoading();
               this.servicio.cambiarestado(id).subscribe({
                 next: (data: IClasificacionModel) => {
                   if(btn.classList.contains('btn-light-success')){

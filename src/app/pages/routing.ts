@@ -7,13 +7,19 @@ import { BiologicoComponent } from './biologico/biologico.component';
 import { biologicosRoutes } from './biologico/biologico-routing';
 import { GcallbackComponent } from './gcallback/gcallback.component';
 import { RespuestabiologicoComponent } from './maestros/respuestabiologico/respuestabiologico.component';
-import { registrarFormularioBiologico, vereditRespFormularioBiologico } from '../services/formularios/formularios.guard';
+import { registrarFormularioBiologico, editRespFormularioBiologico } from '../services/formularios/formularios.guard';
 import { verMaestrosBiologicos } from './biologico/maestros.guard';
+import { verMaestroFormulario } from './maestros/formularios/maestroformularios.guard';
 
 const Routing: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+  },
+  {
+    path: 'adm/formularios',
+    component: FormulariosComponent,
+    canActivate: [verMaestroFormulario]
   },
   {
     path: 'adm',
@@ -32,7 +38,7 @@ const Routing: Routes = [
   {
     path: 'biologico/:id',
     component: BiologicoComponent,
-    canActivate: [vereditRespFormularioBiologico]
+    canActivate: [editRespFormularioBiologico]
   },
   {
     path: 'pruebas',
@@ -45,10 +51,6 @@ const Routing: Routes = [
   {
     path: 'maestros/respuestas',
     component: RespuestaComponent
-  },
-  {
-    path: 'maestros/formularios',
-    component: FormulariosComponent
   },
   {
     path: '',

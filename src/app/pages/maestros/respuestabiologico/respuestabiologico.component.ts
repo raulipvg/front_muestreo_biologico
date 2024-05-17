@@ -34,7 +34,7 @@ export class RespuestabiologicoComponent implements OnInit{
   cargando: boolean = false;
   
   //PRVILEGIOS DE ACCESO AL TEMPLATE
-  registrar: boolean = privilegiosFormularioBiologico(5);
+  registrar: boolean = privilegiosFormularioBiologico(6);
   editar: boolean = privilegiosFormularioBiologico(7);
   del: boolean = privilegiosFormularioBiologico(8);
 

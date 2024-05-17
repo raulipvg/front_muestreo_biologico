@@ -119,13 +119,9 @@ export class AuthService implements OnDestroy {
         return of(undefined);
       },
       error: (data:any)=>{
-        console.log(data)
-        CookieComponent.delete('userToken');
-        CookieComponent.delete('kt_app_sidebar_menu_scrollst');
-        localStorage.removeItem('v8.2.3-authf649fc9a5f55');
-        localStorage.removeItem('dark-sidebar-v8.2.3-layoutConfig');
-        localStorage.removeItem('v8.2.3-baseLayoutType');
-        this.router.navigate(['/']);
+        //console.log(data)
+        this.deleteCookies();
+        this.router.navigate(['/auth/login']);
         return of(undefined);
       }
     });
@@ -149,13 +145,7 @@ export class AuthService implements OnDestroy {
     }
     return this.http.post(env.LOGOUT_URL, null, options).pipe(
       tap(() => {
-        CookieComponent.delete('userToken');
-        CookieComponent.delete('permisosF');
-        CookieComponent.delete('permisosM');
-        CookieComponent.delete('kt_app_sidebar_menu_scrollst');
-        localStorage.removeItem('v8.2.3-authf649fc9a5f55');
-        localStorage.removeItem('dark-sidebar-v8.2.3-layoutConfig');
-        localStorage.removeItem('v8.2.3-baseLayoutType');
+        this.deleteCookies();
         this.router.navigate(['/auth/login'], {
           queryParams: {},
         });
@@ -169,13 +159,7 @@ export class AuthService implements OnDestroy {
       if(window.location.pathname.includes('google/callback')){
         return of(undefined);
       }
-      CookieComponent.delete('userToken');
-      CookieComponent.delete('permisosF');
-      CookieComponent.delete('permisosM');
-      CookieComponent.delete('kt_app_sidebar_menu_scrollst');
-      localStorage.removeItem('v8.2.3-authf649fc9a5f55');
-      localStorage.removeItem('dark-sidebar-v8.2.3-layoutConfig');
-      localStorage.removeItem('v8.2.3-baseLayoutType');
+      this.deleteCookies();
       this.router.navigate(['/auth/login']);
       return of(undefined);
     }
@@ -220,6 +204,17 @@ export class AuthService implements OnDestroy {
     );
   }
 */
+  //eliminar cookies
+  deleteCookies(){
+    CookieComponent.delete('userToken');
+    CookieComponent.delete('permisosF');
+    CookieComponent.delete('permisosM');
+    CookieComponent.delete('kt_app_sidebar_menu_scrollst');
+    localStorage.removeItem('v8.2.3-authf649fc9a5f55');
+    localStorage.removeItem('dark-sidebar-v8.2.3-layoutConfig');
+    localStorage.removeItem('v8.2.3-baseLayoutType');
+
+  }
   // private methods
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());

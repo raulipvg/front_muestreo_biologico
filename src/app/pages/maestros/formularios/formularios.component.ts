@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { KTHelpers, KTUtil } from 'src/app/_metronic/kt';
 import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
 import { CommonModule } from '@angular/common';
+import { privilegiosMaestroFormulario } from 'src/app/pages/maestros/formularios/maestroformularios.guard';
 
 
 @Component({
@@ -36,7 +37,11 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
   estadoBoton : any[];
   private getDataCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
 
+
   cargando : boolean = false;
+  //PRIVILEGIOS
+  editar : boolean = privilegiosMaestroFormulario(3);
+  del : boolean = privilegiosMaestroFormulario(4);
 
    constructor(
     private servicio: FormulariosService, 
@@ -136,7 +141,7 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
       data: 'actions',
       render: (data: any, type: any, full: any) => {
         const editButton = `
-                          <button class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" data-id="${full.id}">
+                          <button class="btn btn-icon btn-warning w-30px h-30px btn-action ${this.editar ? '' : 'disabled'}" data-action="edit" data-id="${full.id}">
                               <span class="indicator-label">
                                   <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
                               </span>
@@ -159,7 +164,7 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
       render: (data: any, type: any, full: any) => {
         const estadoButton = `<div class="btn-group btn-group-sm" role="group">
                               <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px
-                                            ${full.enabled ? 'btn-light-success' : 'btn-light-warning'}"
+                                            ${full.enabled ? 'btn-light-success' : 'btn-light-warning'} ${this.del ? '' : 'disabled'}"
                                             data-action="cambiar-estado"
                                             data-kt-indicator="off"
                                             data-id="${full.id}" >
@@ -207,12 +212,12 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
         this.renderer.listen(containerElement, 'click', (event) => {
           const btn = event.target.closest('.btn-action');
           if (btn) {
-            btn.setAttribute('data-kt-indicator','on');
-            this.loading.cambiaLoading();
 
             const { action, id } = btn.dataset;
             //ACCIONES
-            if(action === 'edit' || action === 'ver'){
+            if( (action === 'edit' || action === 'ver') && this.editar){
+              btn.setAttribute('data-kt-indicator','on');
+              this.loading.cambiaLoading();
                 this.servicio.get(id).subscribe({
                   next: (data: IFormularioModel) => {
                     this.modal.AbrirModal(action, id,data);
@@ -227,7 +232,9 @@ export class FormulariosComponent implements OnInit, AfterViewInit {
                   }
                 });
             }
-            else if(action === 'cambiar-estado'){
+            else if(action === 'cambiar-estado' && this.del){
+              btn.setAttribute('data-kt-indicator','on');
+              this.loading.cambiaLoading();
               this.servicio.cambiarestado(id).subscribe({
                 next: (data: IFormularioModel) => {
                   if(btn.classList.contains('btn-light-success')){

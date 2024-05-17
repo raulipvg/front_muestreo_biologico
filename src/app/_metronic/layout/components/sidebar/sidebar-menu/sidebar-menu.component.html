@@ -11,7 +11,7 @@
           <span class="menu-title">Inicio</span>
         </a>
       </div>
-
+        
           <!-- Biológico -->
           <div class="menu-item">
             <a class="menu-link without-sub" routerLink="/biologico" routerLinkActive="active">
@@ -21,6 +21,7 @@
               <span class="menu-title">Biológico</span>
             </a>
           </div>
+        
       <!-- Separator -->
       <div class="menu-item">
         <div class="menu-content pt-8 pb-2">
@@ -39,6 +40,7 @@
           <span class="menu-arrow"></span>
         </span>
         <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+          @if(verBiologico){
           <div class="menu-item menu-accordion">
             <a class="menu-link without-sub" routerLinkActive="active"
               routerLink="/adm">
@@ -55,11 +57,13 @@
               </span>
             </a>
           </div>
+        }
         </div>
+        @if(verFormulario){
         <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
           <div class="menu-item menu-accordion">
             <a class="menu-link without-sub" routerLinkActive="active"
-              routerLink="/maestros/formularios">
+              routerLink="/adm/formularios">
               <span class="menu-bullet">
                 <span
                   class="bullet bullet-dot"></span>
@@ -68,6 +72,7 @@
             </a>
           </div>
         </div>
+      }
       </div>
     <!--end::Menu-->
   </div>

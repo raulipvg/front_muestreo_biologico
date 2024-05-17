@@ -4,38 +4,23 @@ import { CookieComponent } from "src/app/_metronic/kt/components";
 
 export const verMaestrosBiologicos: CanActivateFn= (route:any, state:any) => {
     const permisos = validarPermisosMaestrosBiologicos();
-    if(!permisos){
+    if(!permisos || !permisos.p1){
         const router = inject(Router);
-        router.navigate(['error/404']);
+        return router.createUrlTree(['error/404']);
     } 
     return permisos.p1;
 }
 
-export function regMaestrosBiologicos () : boolean {
+export function privilegiosMaestrosBiologicos(p: number): boolean {
     const permisos = validarPermisosMaestrosBiologicos();
     if(!permisos){
         const router = inject(Router);
-        router.navigate(['error/404']);
+        router.createUrlTree(['error/404']);
     } 
-    return permisos.p2;
-}
-
-export function editMaestrosBiologicos(): boolean {
-    const permisos = validarPermisosMaestrosBiologicos();
-    if(!permisos) {
-        const router = inject(Router);
-        router.navigate(['error/404']);
-    }
-    return permisos.p3;
-}
-
-export function delMaestrosBiologicos(): boolean {
-    const permisos = validarPermisosMaestrosBiologicos();
-    if(!permisos){
-        const router = inject(Router);
-        router.navigate(['error/404']);
-    } 
-    return permisos.p4;
+    if(p==1) return permisos.p1;
+    else if(p==2) return permisos.p2;
+    else if(p==3) return permisos.p3;
+    else return permisos.p4;
 }
 
 function validarPermisosMaestrosBiologicos(): boolean|any{

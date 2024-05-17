@@ -7,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
 import { ModalAccionesComponent } from './modalAciones/modalacciones.component';
 import { NgxMaskDirective, NgxMaskService, provideNgxMask } from 'ngx-mask';
-import { delMaestrosBiologicos, editMaestrosBiologicos, regMaestrosBiologicos } from '../../biologico/maestros.guard';
+import { privilegiosMaestrosBiologicos } from '../../biologico/maestros.guard';
 
 
 @Component({
@@ -36,9 +36,9 @@ export class PersonasComponent implements OnInit {
   allData: IPersonaModel[];
   estadoBoton : any[];
   private getDataCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
-  registrar : boolean = regMaestrosBiologicos();
-  editar : boolean = editMaestrosBiologicos();
-  del : boolean = delMaestrosBiologicos();
+  registrar : boolean = privilegiosMaestrosBiologicos(2);
+  editar : boolean = privilegiosMaestrosBiologicos(3);
+  del : boolean = privilegiosMaestrosBiologicos(4);
   cargando : boolean = false;
 
    constructor(
@@ -228,12 +228,12 @@ export class PersonasComponent implements OnInit {
         this.renderer.listen(containerElement, 'click', (event) => {
           const btn = event.target.closest('.btn-action');
           if (btn) {
-            btn.setAttribute('data-kt-indicator','on');
-            this.loading.cambiaLoading();
 
             const { action, id } = btn.dataset;
             //ACCIONES
-            if(action === 'edit' || action === 'ver'){
+            if( (action === 'edit' || action === 'ver') && this.editar){
+              btn.setAttribute('data-kt-indicator','on');
+              this.loading.cambiaLoading();
                 this.servicio.get(id).subscribe({
                   next: (data: IPersonaModel) => {
                     this.modal.AbrirModal(action, id,data);
@@ -248,7 +248,9 @@ export class PersonasComponent implements OnInit {
                   }
                 });
             }
-            else if(action === 'cambiar-estado'){
+            else if(action === 'cambiar-estado' && this.del){
+              btn.setAttribute('data-kt-indicator','on');
+              this.loading.cambiaLoading();
               this.servicio.cambiarestado(id).subscribe({
                 next: (data: IPersonaModel) => {
                   if(btn.classList.contains('btn-light-success')){
