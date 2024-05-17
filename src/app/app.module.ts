@@ -1,4 +1,4 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, inject } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 // #fake-start#
 import { FakeAPIService } from './_fake/fake-api.service';
+import { of } from 'rxjs';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {

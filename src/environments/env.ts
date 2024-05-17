@@ -17,5 +17,5 @@ export const env = {
     LOGOUT_URL : 'http://localhost:8000/logout',
     USER_URL : 'http://localhost:8000/api/persona/getuser',
     GOOGLE_REDIRECT_URL : 'http://localhost:8000/login/google/redirect',
-    
+    GOOGLE_CALLBACK_URL : 'http://localhost:8000/login/google/callback'
 }

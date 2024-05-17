@@ -2,9 +2,6 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
 import { map, catchError, switchMap, finalize, tap } from 'rxjs/operators';
 import { UserModel } from '../models/user.model';
-import { AuthModel } from '../models/auth.model';
-import { AuthHTTPService } from './auth-http';
-import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { CookieComponent } from 'src/app/_metronic/kt/components';
 import { env } from 'src/environments/env';
@@ -18,7 +15,6 @@ export type UserType = UserModel | undefined;
 export class AuthService implements OnDestroy {
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
-  private authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY}`;
 
   // public fields
   currentUser$: Observable<UserType>;
@@ -35,7 +31,6 @@ export class AuthService implements OnDestroy {
   }
 
   constructor(
-    private authHttpService: AuthHTTPService,
     private router: Router,
     private http: HttpClient
   ) {
@@ -106,12 +101,42 @@ export class AuthService implements OnDestroy {
     );
   }
 
+  google(){
+    const options : any = {
+      headers: new HttpHeaders({
+        'ngrok-skip-browser-warning': 'any-value',
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+      }),
+      withCredentials: true
+    }
+    this.http.get(`${env.GOOGLE_CALLBACK_URL+location.search}`,options).subscribe({
+      next: (data:any)=>{
+        this.storeTokens(data);
+        data.usuario.pic = './assets/media/logos/logo-cc-web-small-dark.png';
+        this.currentUserSubject.next(data.usuario);
+        this.router.navigate(['/']);
+        return of(undefined);
+      },
+      error: (data:any)=>{
+        console.log(data)
+        CookieComponent.delete('userToken');
+        CookieComponent.delete('kt_app_sidebar_menu_scrollst');
+        localStorage.removeItem('v8.2.3-authf649fc9a5f55');
+        localStorage.removeItem('dark-sidebar-v8.2.3-layoutConfig');
+        localStorage.removeItem('v8.2.3-baseLayoutType');
+        this.router.navigate(['/']);
+        return of(undefined);
+      }
+    });
+  }
+
   private storeTokens(result: any) {
-    const veryFarFuture = new Date();
-    veryFarFuture.setFullYear(2147, 11, 31);
-    CookieComponent.set('userToken', result.token, { Expires: veryFarFuture });
-    CookieComponent.set('permisosF', result.permisosF, { Expires: veryFarFuture });
-    CookieComponent.set('permisosM', result.permisosM, { Expires: veryFarFuture });
+    let expTime = new Date();
+    expTime = new Date(expTime.getTime() + 60*60*10000);
+    CookieComponent.set('userToken', result.token, { Expires: expTime });
+    CookieComponent.set('permisosF', result.permisosF, { Expires: expTime });
+    CookieComponent.set('permisosM', result.permisosM, { Expires: expTime });
   }
 
   logout() {
@@ -141,6 +166,9 @@ export class AuthService implements OnDestroy {
   getUserByToken(): Observable<UserType> {
     const auth = CookieComponent.get('userToken');
     if (!auth || auth === 'undefined') {
+      if(window.location.pathname.includes('google/callback')){
+        return of(undefined);
+      }
       CookieComponent.delete('userToken');
       CookieComponent.delete('permisosF');
       CookieComponent.delete('permisosM');
@@ -164,6 +192,7 @@ export class AuthService implements OnDestroy {
     return this.http.get<UserType>(env.USER_URL,loginOptions).pipe(
       map((data: any) => {
         if (data.usuario) {
+          data.usuario.pic = './assets/media/logos/logo-cc-web-small-dark.png';
           this.currentUserSubject.next(data.usuario);
           this.storeTokens(data);
         } else {
@@ -192,30 +221,6 @@ export class AuthService implements OnDestroy {
   }
 */
   // private methods
-  private setAuthFromLocalStorage(auth: AuthModel): boolean {
-    // store auth authToken/refreshToken/epiresIn in local storage to keep user logged in between page refreshes
-    if (auth && auth.authToken) {
-      localStorage.setItem(this.authLocalStorageToken, JSON.stringify(auth));
-      return true;
-    }
-    return false;
-  }
-
-  private getAuthFromLocalStorage(): AuthModel | undefined {
-    try {
-      const lsValue = localStorage.getItem(CookieComponent.get('userToken')!);
-      if (!lsValue) {
-        return undefined;
-      }
-
-      const authData = JSON.parse(lsValue);
-      return authData;
-    } catch (error) {
-      console.error(error);
-      return undefined;
-    }
-  }
-
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }

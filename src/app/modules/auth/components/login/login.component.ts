@@ -6,6 +6,7 @@ import { UserModel } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieComponent } from 'src/app/_metronic/kt/components';
+import { env } from 'src/environments/env';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   hasError: boolean;
   returnUrl: string;
   isLoading$: Observable<boolean>;
+  googleUrl = env.GOOGLE_REDIRECT_URL;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -90,28 +92,28 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 */
 
-submit() {
-  this.hasError = false;
+  submit() {
+    this.hasError = false;
 
-  const loginSubscr = this.authService
-    .login(this.f.email.value, this.f.password.value)
-    .pipe(first())
-    .subscribe(
-      (user: UserModel | undefined) => {
-        if (user) {
-          this.router.navigate([this.returnUrl]);
-        } else {
+    const loginSubscr = this.authService
+      .login(this.f.email.value, this.f.password.value)
+      .pipe(first())
+      .subscribe(
+        (user: UserModel | undefined) => {
+          if (user) {
+            this.router.navigate([this.returnUrl]);
+          } else {
+            this.hasError = true;
+            }
+        },
+        (error) => {
+          console.error('Login error:', error);
           this.hasError = true;
-          }
-      },
-      (error) => {
-        console.error('Login error:', error);
-        this.hasError = true;
-      }
-    );
+        }
+      );
 
-  this.unsubscribe.push(loginSubscr);
-}
+    this.unsubscribe.push(loginSubscr);
+  }
 
 
   ngOnDestroy() {

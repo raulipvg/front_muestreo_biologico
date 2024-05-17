@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './modules/auth/services/auth.guard';
+import { GcallbackComponent } from './pages/gcallback/gcallback.component';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,10 @@ export const routes: Routes = [
     path: 'error',
     loadChildren: () =>
       import('./modules/errors/errors.module').then((m) => m.ErrorsModule),
+  },
+  {
+    path: 'google/callback',
+    component: GcallbackComponent
   },
   {
     path: '',

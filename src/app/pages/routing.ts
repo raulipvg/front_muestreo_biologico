@@ -51,10 +51,6 @@ const Routing: Routes = [
     component: FormulariosComponent
   },
   {
-    path: 'google/callback',
-    component: GcallbackComponent,
-  },
-  {
     path: '',
     redirectTo: '/home',
     pathMatch: 'full',
