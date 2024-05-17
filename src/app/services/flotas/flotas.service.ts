@@ -35,12 +35,12 @@ export class FlotasService {
   url = env.API_URL + 'flota'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall', {headers} );
+    return this.http.get(this.url+'/getall', options );
   }
 
-  get(id: number): Observable<IFlotaModel> {
+  get(id: number): Observable<any> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IFlotaModel>(url, {headers} );
+    return this.http.get<IFlotaModel>(url, options );
   }
 
   update( data: any): Observable<any> {

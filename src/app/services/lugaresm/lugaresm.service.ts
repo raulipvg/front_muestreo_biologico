@@ -35,12 +35,12 @@ export class LugaresmService {
   url = env.API_URL + 'lugarm'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall', {headers} );
+    return this.http.get(this.url+'/getall', options );
   }
 
-  get(id: number): Observable<ILugarmModel> {
+  get(id: number): Observable<any> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<ILugarmModel>(url, {headers} );
+    return this.http.get<ILugarmModel>(url,options );
   }
 
   update( data: any): Observable<any> {

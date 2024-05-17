@@ -28,15 +28,36 @@ export class RespuestasService {
   url = env.API_URL + 'respuesta';
 
   getAll(): Observable<any> {
-    return this.http.get(this.url + '/getall', {headers} );
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
+    return this.http.get(this.url + '/getall', options );
   }
 
   getAllbyFormulario(id:number): Observable<any> {
-    return this.http.get(this.url + '/getall/' + id, {headers} );
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
+    return this.http.get(this.url + '/getall/' + id, options );
   }
 
   get(id:number): Observable<any> {
-    return this.http.get(`${this.url}/get/${id}`, {headers} );
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
+    return this.http.get(`${this.url}/get/${id}`, options );
   }
 
   update(data:any, imagen:any): Observable<any> {

@@ -36,12 +36,12 @@ export class ClasificacionesService {
   url = env.API_URL + 'clasificacion'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall', {headers} );
+    return this.http.get(this.url+'/getall', options );
   }
 
-  get(id: number): Observable<IClasificacionModel> {
+  get(id: number): Observable<any> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IClasificacionModel>(url, {headers} );
+    return this.http.get(url, options );
   }
 
   update( data: any): Observable<any> {

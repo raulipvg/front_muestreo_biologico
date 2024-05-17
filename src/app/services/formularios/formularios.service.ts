@@ -45,12 +45,12 @@ export class FormulariosService {
   url = env.API_URL + 'formulario';
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall', {headers} );
+    return this.http.get(this.url+'/getall', options );
   }
 
-  get(id: number): Observable<IFormularioModel> {
+  get(id: number): Observable<any> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IFormularioModel>(url, {headers} );
+    return this.http.get<IFormularioModel>(url, options );
   }
 
   update( data: any): Observable<any> {
@@ -66,11 +66,11 @@ export class FormulariosService {
   }
 
   getselects(): Observable<any> {
-    return this.http.get(this.url+'/getselects', {headers} );
+    return this.http.get(this.url+'/getselects', options );
   }
 
   getFormulariosEnabled(): Observable<any> {
-    return this.http.get(this.url + '/getenabled', { headers })
+    return this.http.get(this.url + '/getenabled', options)
       .pipe(
         tap((data) => this.formulariosSubject.next(data)), // Actualizar BehaviorSubject con la respuesta de la API
         catchError((error) => {

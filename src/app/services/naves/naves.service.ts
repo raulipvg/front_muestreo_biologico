@@ -27,16 +27,37 @@ export class NavesService {
   url = env.API_URL + 'nave';
 
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall', {headers} );
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
+    return this.http.get(this.url+'/getall', options );
   }
   
   getAllActivos(): Observable<any> {
-    return this.http.get(this.url+'/getall/1', {headers} );
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
+    return this.http.get(this.url+'/getall/1', options );
   }
 
-  get(id: number): Observable<INaveModel> {
+  get(id: number): Observable<any> {
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
     const url = `${this.url}/get/${id}`;
-    return this.http.get<INaveModel>(url, {headers} );
+    return this.http.get<INaveModel>(url, options );
   }
 
   update( data: any): Observable<INaveModel> {

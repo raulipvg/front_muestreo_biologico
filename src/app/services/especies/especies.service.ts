@@ -41,16 +41,16 @@ export class EspeciesService {
   url = env.API_URL + 'especie'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall', {headers} );
+    return this.http.get(this.url+'/getall', options );
   }
 
   getAllActivos(): Observable<any> {
-    return this.http.get(this.url+'/getall/1', {headers} );
+    return this.http.get(this.url+'/getall/1', options );
   }
 
-  get(id: number): Observable<IEspecieModel> {
+  get(id: number): Observable<any> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IEspecieModel>(url, {headers} );
+    return this.http.get<IEspecieModel>(url, options );
   }
 
   update( data: any): Observable<any> {

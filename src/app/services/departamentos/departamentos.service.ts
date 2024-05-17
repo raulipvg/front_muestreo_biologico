@@ -35,12 +35,12 @@ export class DepartamentosService {
   url = env.API_URL + 'departamento'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall', {headers} );
+    return this.http.get(this.url+'/getall', options );
   }
 
-  get(id: number): Observable<IDepartamentoModel> {
+  get(id: number): Observable<any> {
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IDepartamentoModel>(url, {headers} );
+    return this.http.get<IDepartamentoModel>(url, options );
   }
 
   update( data: any): Observable<any> {

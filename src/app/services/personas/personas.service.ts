@@ -28,12 +28,26 @@ export class PersonasService {
   url = env.API_URL + 'persona'
   
   getAll(): Observable<any> {
-    return this.http.get(this.url+'/getall', {headers} );
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
+    return this.http.get(this.url+'/getall', options );
   }
 
   get(id: number): Observable<IPersonaModel> {
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    }
     const url = `${this.url}/get/${id}`;
-    return this.http.get<IPersonaModel>(url, {headers} );
+    return this.http.get<IPersonaModel>(url, options );
   }
 
   update( data: any): Observable<IPersonaModel> {
