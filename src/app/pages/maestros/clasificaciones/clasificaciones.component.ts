@@ -33,6 +33,8 @@ export class ClasificacionesComponent implements OnInit {
   allData: IClasificacionModel[];
   estadoBoton : any[];
   private getDataCompleted = new Subject<void>(); // Subject para indicar que getUsers() ha completado
+  
+  //PRIVILEGIOS DE ACCESO AL TEMPLATE
   registrar : boolean = regMaestrosBiologicos();
   editar : boolean = editMaestrosBiologicos();
   del : boolean = delMaestrosBiologicos();

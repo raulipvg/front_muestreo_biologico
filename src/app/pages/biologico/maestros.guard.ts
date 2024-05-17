@@ -3,17 +3,46 @@ import { inject } from "@angular/core";
 import { CookieComponent } from "src/app/_metronic/kt/components";
 
 export const verMaestrosBiologicos: CanActivateFn= (route:any, state:any) => {
-    return JSON.parse(CookieComponent.get('permisosM')!).find((a:any)=>a.p_id==1).p1;
+    const permisos = validarPermisosMaestrosBiologicos();
+    if(!permisos){
+        const router = inject(Router);
+        router.navigate(['error/404']);
+    } 
+    return permisos.p1;
 }
 
 export function regMaestrosBiologicos () : boolean {
-    return JSON.parse(CookieComponent.get('permisosM')!).find((a:any)=>a.p_id==1).p2;
+    const permisos = validarPermisosMaestrosBiologicos();
+    if(!permisos){
+        const router = inject(Router);
+        router.navigate(['error/404']);
+    } 
+    return permisos.p2;
 }
 
 export function editMaestrosBiologicos(): boolean {
-    return JSON.parse(CookieComponent.get('permisosM')!).find((a:any)=>a.p_id==1).p3;
+    const permisos = validarPermisosMaestrosBiologicos();
+    if(!permisos) {
+        const router = inject(Router);
+        router.navigate(['error/404']);
+    }
+    return permisos.p3;
 }
 
 export function delMaestrosBiologicos(): boolean {
-    return JSON.parse(CookieComponent.get('permisosM')!).find((a:any)=>a.p_id==1).p4;
+    const permisos = validarPermisosMaestrosBiologicos();
+    if(!permisos){
+        const router = inject(Router);
+        router.navigate(['error/404']);
+    } 
+    return permisos.p4;
+}
+
+function validarPermisosMaestrosBiologicos(): boolean|any{
+    const permisos = CookieComponent.get('permisosM');
+    if(!permisos) return false;
+    const permisosArray = JSON.parse(permisos);
+    const permisoEncontrado = permisosArray.find((a:any)=>a.p_id==1);
+    if(!permisoEncontrado) return false;
+    return permisoEncontrado;
 }

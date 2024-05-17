@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
+import { privilegiosFormularioBiologico } from 'src/app/services/formularios/formularios.guard';
 import { FormulariosService } from 'src/app/services/formularios/formularios.service';
 import { IRespuestaModel, RespuestasService } from 'src/app/services/respuestas/respuestas.service';
 import { languageConfig } from 'src/assets/sass/core/base/datatables/language_es';
@@ -32,6 +33,10 @@ export class RespuestabiologicoComponent implements OnInit{
   private getDataCompleted = new Subject<void>(); // Subject para saber cuando se completó la petición de datos
   cargando: boolean = false;
   
+  //PRVILEGIOS DE ACCESO AL TEMPLATE
+  registrar: boolean = privilegiosFormularioBiologico(5);
+  editar: boolean = privilegiosFormularioBiologico(7);
+  del: boolean = privilegiosFormularioBiologico(8);
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -136,20 +141,20 @@ export class RespuestabiologicoComponent implements OnInit{
         this.renderer.listen(containerElement, 'click', (event) => {
           const btn = event.target.closest('.btn-action');
           if (btn) {
-            btn.setAttribute('data-kt-indicator','on');
-            this.loading.cambiaLoading();
-
             const { action, id } = btn.dataset;
             //ACCIONES
-            if(action === 'edit' || action === 'ver'){
+            if((action === 'edit' || action === 'ver') && this.editar ){
               //console.log('edit/ver: '+id)
               //llamar a la ruta /biologico/:id
+              btn.setAttribute('data-kt-indicator','on');
+              this.loading.cambiaLoading();
               this.router.navigate(['/biologico', id]);       
 
 
             }
-            else if(action === 'cambiar-estado'){
-              
+            else if(action === 'cambiar-estado' && this.del){
+              btn.setAttribute('data-kt-indicator','on');
+              this.loading.cambiaLoading();
               this.servicio.cambiarestado(id).subscribe({
                 next: (data: IRespuestaModel) => {
                   if(btn.classList.contains('btn-light-success')){
@@ -198,7 +203,7 @@ export class RespuestabiologicoComponent implements OnInit{
                           </button>`;
         */
         const editButton = `
-                          <a class="btn btn-icon btn-warning w-30px h-30px btn-action" data-action="edit" data-id="${full.id}">
+                          <a class="btn btn-icon btn-warning w-30px h-30px btn-action ${this.editar? '':'disabled'}" data-action="edit" data-id="${full.id}">
                               <span class="indicator-label">
                                   <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
                               </span>
@@ -223,7 +228,8 @@ export class RespuestabiologicoComponent implements OnInit{
       render: (data: any, type: any, full: any) => {
         const estadoButton = `<div class="btn-group btn-group-sm" role="group">
                               <button class="btn btn-sm fs-7 text-uppercase btn-action justify-content-center p-1 w-115px
-                                            ${full.enabled ? 'btn-light-success' : 'btn-light-warning'}"
+                                            ${full.enabled ? 'btn-light-success' : 'btn-light-warning'}                                            
+                                            ${this.del? '':'disabled'}"
                                             data-action="cambiar-estado"
                                             data-kt-indicator="off"
                                             data-id="${full.id}" >

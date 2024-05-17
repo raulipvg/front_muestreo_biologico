@@ -2,7 +2,7 @@
     <div class="card mx-0">
         <div class="card-header bg-dark">
             <h3 class="card-title text-uppercase text-white">Respuestas Muestreo Biologico</h3>
-            @if(formularios.formularioEnabled?.[0].enabled){
+            @if(formularios.formularioEnabled?.[0].enabled && registrar){
             <div class="m-1">
                 <a type="button" routerLink="/biologico/ingresar" class="btn btn-sm btn-success text-uppercase btn-action justify-content-center">Registrar</a>
             </div>

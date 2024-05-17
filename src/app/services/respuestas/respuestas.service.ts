@@ -40,8 +40,17 @@ export class RespuestasService {
   }
 
   update(data:any, imagen:any): Observable<any> {
-    const params = { data:  JSON.stringify(data) };  
-    return this.http.post<any>(this.url + '/update', imagen,{headers:headers, params: params});
+    const params = { data:  JSON.stringify(data) };
+    const options : any = {
+      headers : new HttpHeaders({
+        'ngrok-skip-browser-warning': 'any-value',
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        }),
+      withCredentials : true,
+      params : params
+    }  
+    return this.http.post<any>(this.url + '/update', imagen,options);
   }
 
   create(data : any, imagen: any): Observable<any> {
@@ -55,11 +64,19 @@ export class RespuestasService {
       withCredentials : true,
       params : params
     }
-    return this.http.post<any>(this.url + '/create', imagen,{headers:headers, params: params});
+    return this.http.post<any>(this.url + '/create', imagen,options);
   }
 
   cambiarestado(id: number): Observable<any> {
-    return this.http.post(this.url+'/cambiarestado/', {id});
+    const options : any = {
+      headers : new HttpHeaders({
+        'ngrok-skip-browser-warning': 'any-value',
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        }),
+      withCredentials : true
+    }
+    return this.http.post(this.url+'/cambiarestado/', {id},options);
   }
   
 }
