@@ -16,7 +16,6 @@ const options : any = {
     }),
   withCredentials : true
 }
-
 export interface IFormularioModel {
   id: number;
   titulo?: null | string;
@@ -70,6 +69,15 @@ export class FormulariosService {
   }
 
   getFormulariosEnabled(): Observable<any> {
+    const XSRF= CookieComponent.get('XSRF-TOKEN');
+    const options : any = {
+      headers : new HttpHeaders({
+        'ngrok-skip-browser-warning': 'any-value',
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN': XSRF!
+        }),
+      withCredentials : true
+    }
     return this.http.get(this.url + '/getenabled', options)
       .pipe(
         tap((data) => this.formulariosSubject.next(data)), // Actualizar BehaviorSubject con la respuesta de la API

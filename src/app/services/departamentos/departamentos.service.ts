@@ -9,14 +9,6 @@ const headers = new HttpHeaders({
   'Accept':'*/*'
 });
 
-const options : any = {
-  headers : new HttpHeaders({
-    'ngrok-skip-browser-warning': 'any-value',
-    'Accept': 'application/json',
-    'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
-    }),
-  withCredentials : true
-}
 
 export interface IDepartamentoModel {
   id: number;
@@ -35,24 +27,70 @@ export class DepartamentosService {
   url = env.API_URL + 'departamento'
   
   getAll(): Observable<any> {
+    
+    const options : any = {
+      headers : new HttpHeaders({
+        'ngrok-skip-browser-warning': 'any-value',
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        }),
+      withCredentials : true
+    };
     return this.http.get(this.url+'/getall', options );
   }
 
   get(id: number): Observable<any> {
+    
+  const options : any = {
+    headers : new HttpHeaders({
+      'ngrok-skip-browser-warning': 'any-value',
+      'Accept': 'application/json',
+      'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+      }),
+    withCredentials : true
+  };
     const url = `${this.url}/get/${id}`;
     return this.http.get<IDepartamentoModel>(url, options );
   }
 
   update( data: any): Observable<any> {
+    
+    const options : any = {
+      headers : new HttpHeaders({
+        'ngrok-skip-browser-warning': 'any-value',
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        }),
+      withCredentials : true
+    };
+
     const url = `${this.url}/update`;
     return this.http.post<IDepartamentoModel>(url, data, options);
   }
 
   cambiarestado(id: number): Observable<any> {
+    
+    const options : any = {
+      headers : new HttpHeaders({
+        'ngrok-skip-browser-warning': 'any-value',
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        }),
+      withCredentials : true
+    };
     return this.http.post(this.url+'/cambiarestado/', {id}, options);
   }
 
   crear(data: any): Observable<any> {
+    
+  const options : any = {
+    headers : new HttpHeaders({
+      'ngrok-skip-browser-warning': 'any-value',
+      'Accept': 'application/json',
+      'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+      }),
+    withCredentials : true
+  };
     return this.http.post<IDepartamentoModel>(this.url+'/create/', data,options);
   }
 }
