@@ -155,6 +155,7 @@ export class AuthService implements OnDestroy {
 
   getUserByToken(): Observable<UserType> {
     const auth = CookieComponent.get('userToken');
+    const xsrf = CookieComponent.get('XSRF-TOKEN');
     if (!auth || auth === 'undefined') {
       if(window.location.pathname.includes('google/callback')){
         return of(undefined);
@@ -163,11 +164,17 @@ export class AuthService implements OnDestroy {
       this.router.navigate(['/auth/login']);
       return of(undefined);
     }
+    if (!xsrf || xsrf === 'undefined') {
+      this.deleteCookies();
+      this.router.createUrlTree(['/auth/login']);
+      //this.router.navigate(['/auth/login']);
+      return of(undefined);
+    }
     const loginOptions: any = {
       headers: new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
         'Accept': 'application/json',
-        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        'X-XSRF-TOKEN': xsrf
       }),
       withCredentials: true
     };
