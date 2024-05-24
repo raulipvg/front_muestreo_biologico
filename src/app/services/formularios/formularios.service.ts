@@ -4,18 +4,6 @@ import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
 import { CookieComponent } from 'src/app/_metronic/kt/components/_CookieComponent';
 import { env } from 'src/environments/env';
 
-const headers = new HttpHeaders({
-  'ngrok-skip-browser-warning': 'any-value',
-  'Accept':'*/*'
-});
-const options : any = {
-  headers : new HttpHeaders({
-    'ngrok-skip-browser-warning': 'any-value',
-    'Accept': 'application/json',
-    'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
-    }),
-  withCredentials : true
-}
 export interface IFormularioModel {
   id: number;
   titulo?: null | string;
@@ -44,37 +32,71 @@ export class FormulariosService {
   url = env.API_URL + 'formulario';
   
   getAll(): Observable<any> {
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    };
     return this.http.get(this.url+'/getall', options );
   }
 
   get(id: number): Observable<any> {
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    };
     const url = `${this.url}/get/${id}`;
     return this.http.get<IFormularioModel>(url, options );
   }
 
   update( data: any): Observable<any> {
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    };
     const url = `${this.url}/update`;
     this.formularioEnabled.find((a:any)=>a.id == data.id).enabled = data.enabled;
     return this.http.post<IFormularioModel>(url, data, options);
   }
 
   cambiarestado(id: number): Observable<any> {
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    };
     let elemento = this.formulariosSubject.value.find((a:any) => a.id == id);
     elemento.enabled = !elemento.enabled;
     return this.http.post(this.url+'/cambiarestado/', {id}, options);
   }
 
   getselects(): Observable<any> {
+    const options = {
+      headers : new HttpHeaders({
+        'Accept': 'application/json',
+        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+      }),
+      withCredentials: true
+    };
     return this.http.get(this.url+'/getselects', options );
   }
 
   getFormulariosEnabled(): Observable<any> {
-    const XSRF= CookieComponent.get('XSRF-TOKEN');
     const options : any = {
       headers : new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
         'Accept': 'application/json',
-        'X-XSRF-TOKEN': XSRF!
+        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
         }),
       withCredentials : true
     }
