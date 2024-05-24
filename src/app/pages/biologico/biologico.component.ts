@@ -90,9 +90,9 @@ export class BiologicoComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.initValidacion();
-    this.id = Number(this.route.snapshot.paramMap.get('id')); //EDICION DE FORMULARIO
    
+    this.id = Number(this.route.snapshot.paramMap.get('id')); //EDICION DE FORMULARIO
+    this.initValidacion();
   }
   selectedFileName: string = '';
   ngAfterViewInit(): void {
@@ -146,7 +146,7 @@ export class BiologicoComponent implements OnInit{
         
           this.formulario.patchValue(data.json);
           this.formulario.get('id')?.setValue(data.id);
-          
+          this.formulario.get('fecha_recepcion')?.disable();
           this.especiesObjetivos = this.especies.filter(
                                       especie => data.json.especieobjetivo_id.includes(especie.id)
                                     );
@@ -204,8 +204,8 @@ export class BiologicoComponent implements OnInit{
                 ],
       fecha_recepcion: [,Validators.compose([
                     Validators.required,
-                    this.fechaMinRecepcion,
-                    this.fechaMaxRecepcion              
+                    !this.id?this.fechaMinRecepcion:null,
+                    !this.id?this.fechaMaxRecepcion:null              
                   ])
                 ],
       planta_id: [,Validators.compose([
@@ -608,6 +608,7 @@ export class BiologicoComponent implements OnInit{
       
       //SI ES UNA EDICION
       if(this.id){
+        this.formulario.get('fecha_recepcion')?.enable();
         this.respuestasService
               .update(this.formulario.value,this.formData)
               .subscribe({
