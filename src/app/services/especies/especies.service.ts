@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CookieComponent } from 'src/app/_metronic/kt/components/_CookieComponent';
 import { env } from 'src/environments/env';
 
 export interface IEspecieModel {
@@ -29,8 +28,7 @@ export class EspeciesService {
   getAll(): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     };
@@ -40,8 +38,7 @@ export class EspeciesService {
   getAllActivos(): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     };
@@ -51,8 +48,7 @@ export class EspeciesService {
   get(id: number): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     };
@@ -63,8 +59,7 @@ export class EspeciesService {
   update( data: any): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     };
@@ -75,8 +70,7 @@ export class EspeciesService {
   cambiarestado(id: number): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     };
@@ -86,8 +80,7 @@ export class EspeciesService {
   crear(data: any): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     };

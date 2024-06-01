@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CookieComponent } from 'src/app/_metronic/kt/components';
 import { env } from 'src/environments/env';
 
 const headers = new HttpHeaders({
@@ -31,7 +30,7 @@ export class PersonasService {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
       }),
       withCredentials: true
     }
@@ -42,7 +41,7 @@ export class PersonasService {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
       }),
       withCredentials: true
     }
@@ -54,7 +53,7 @@ export class PersonasService {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
       }),
       withCredentials: true
     }
@@ -66,7 +65,7 @@ export class PersonasService {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
       }),
       withCredentials: true
     }
@@ -77,7 +76,7 @@ export class PersonasService {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
       }),
       withCredentials: true
     }

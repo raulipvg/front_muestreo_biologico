@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CookieComponent } from 'src/app/_metronic/kt/components';
 import { env } from 'src/environments/env';
 
 const headers = new HttpHeaders({
@@ -30,8 +29,7 @@ export class RespuestasService {
   getAll(): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     }
@@ -41,8 +39,7 @@ export class RespuestasService {
   getAllbyFormulario(id:number): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     }
@@ -52,8 +49,7 @@ export class RespuestasService {
   get(id:number): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     }
@@ -65,8 +61,7 @@ export class RespuestasService {
     const options : any = {
       headers : new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        'Accept': 'application/json'
         }),
       withCredentials : true,
       params : params
@@ -79,8 +74,7 @@ export class RespuestasService {
     const options : any = {
       headers : new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        'Accept': 'application/json'
         }),
       withCredentials : true,
       params : params
@@ -92,8 +86,7 @@ export class RespuestasService {
     const options : any = {
       headers : new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        'Accept': 'application/json'
         }),
       withCredentials : true
     }

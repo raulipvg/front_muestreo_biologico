@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CookieComponent } from 'src/app/_metronic/kt/components';
 import { env } from 'src/environments/env';
 
 const headers = new HttpHeaders({
@@ -28,8 +27,7 @@ export class PuertosService {
   getAll(): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     }
@@ -39,8 +37,7 @@ export class PuertosService {
   get(id: number): Observable<IPuertoModel> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     }
@@ -51,8 +48,7 @@ export class PuertosService {
   update( data: any): Observable<IPuertoModel> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     }
@@ -63,8 +59,7 @@ export class PuertosService {
   cambiarestado(id: number): Observable<any> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     }
@@ -74,8 +69,7 @@ export class PuertosService {
   crear(data: any): Observable<IPuertoModel> {
     const options = {
       headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Accept': 'application/json'
       }),
       withCredentials: true
     }

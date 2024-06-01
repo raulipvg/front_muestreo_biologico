@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CookieComponent } from 'src/app/_metronic/kt/components/_CookieComponent';
 import { env } from 'src/environments/env';
 
 const headers = new HttpHeaders({
@@ -31,8 +30,7 @@ export class DepartamentosService {
     const options : any = {
       headers : new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        'Accept': 'application/json'
         }),
       withCredentials : true
     };
@@ -44,8 +42,7 @@ export class DepartamentosService {
   const options : any = {
     headers : new HttpHeaders({
       'ngrok-skip-browser-warning': 'any-value',
-      'Accept': 'application/json',
-      'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+      'Accept': 'application/json'
       }),
     withCredentials : true
   };
@@ -58,8 +55,7 @@ export class DepartamentosService {
     const options : any = {
       headers : new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        'Accept': 'application/json'
         }),
       withCredentials : true
     };
@@ -73,8 +69,7 @@ export class DepartamentosService {
     const options : any = {
       headers : new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        'Accept': 'application/json'
         }),
       withCredentials : true
     };
@@ -86,8 +81,7 @@ export class DepartamentosService {
   const options : any = {
     headers : new HttpHeaders({
       'ngrok-skip-browser-warning': 'any-value',
-      'Accept': 'application/json',
-      'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+      'Accept': 'application/json'
       }),
     withCredentials : true
   };

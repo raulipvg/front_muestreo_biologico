@@ -5,7 +5,6 @@ import { first } from 'rxjs/operators';
 import { UserModel } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CookieComponent } from 'src/app/_metronic/kt/components';
 import { env } from 'src/environments/env';
 
 @Component({
@@ -36,7 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {
     this.isLoading$ = this.authService.isLoading$;
     // redirect to home if already logged in
-    if (this.authService.currentUserValue && CookieComponent.get('userToken')!='undefined') {
+    if (this.authService.currentUserValue && localStorage.getItem('userToken')!='undefined') {
       this.router.navigate(['/']);
     }
   }

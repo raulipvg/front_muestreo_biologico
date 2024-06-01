@@ -1,7 +1,6 @@
 import { CanActivateFn, Router } from "@angular/router";
 import { FormulariosService } from "./formularios.service";
 import { inject } from "@angular/core";
-import { CookieComponent } from "src/app/_metronic/kt/components";
 
 
 export const registrarFormularioBiologico : CanActivateFn = (route:any, state:any) => {
@@ -42,7 +41,7 @@ export function privilegiosFormularioBiologico (p : number):boolean {
 
 
 function validarPermisosFormularioBiologico(): boolean|any{
-  const permisos = CookieComponent.get('permisosF'); 
+  const permisos = localStorage.getItem('permisosF'); 
   if(!permisos) return false;
   const permisosArray = JSON.parse(permisos);
   const permisoEncontrado = permisosArray.find(

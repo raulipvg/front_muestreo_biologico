@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
-import { CookieComponent } from 'src/app/_metronic/kt/components/_CookieComponent';
 import { env } from 'src/environments/env';
 
 export interface IFormularioModel {
@@ -35,7 +34,7 @@ export class FormulariosService {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
       }),
       withCredentials: true
     };
@@ -46,7 +45,7 @@ export class FormulariosService {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
       }),
       withCredentials: true
     };
@@ -58,7 +57,7 @@ export class FormulariosService {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
       }),
       withCredentials: true
     };
@@ -71,7 +70,7 @@ export class FormulariosService {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
       }),
       withCredentials: true
     };
@@ -84,7 +83,8 @@ export class FormulariosService {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
+        
       }),
       withCredentials: true
     };
@@ -96,7 +96,7 @@ export class FormulariosService {
       headers : new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
         'Accept': 'application/json',
-        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
         }),
       withCredentials : true
     }

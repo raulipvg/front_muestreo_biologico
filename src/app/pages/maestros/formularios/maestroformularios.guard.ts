@@ -1,6 +1,5 @@
 import { CanActivateFn, Router } from "@angular/router";
 import { inject } from "@angular/core";
-import { CookieComponent } from "src/app/_metronic/kt/components";
 
 export const verMaestroFormulario: CanActivateFn= (route:any, state:any) => {
     const permisos = validarPermisosMaestroFormulario();
@@ -24,7 +23,7 @@ export function privilegiosMaestroFormulario(p: number): boolean {
 }
 
 function validarPermisosMaestroFormulario(): boolean|any{
-    const permisos = CookieComponent.get('permisosM');
+    const permisos = localStorage.getItem('permisosM');
     if(!permisos) return false;
     const permisosArray = JSON.parse(permisos);
     const permisoEncontrado = permisosArray.find((a:any)=>a.p_id==2);

@@ -1,9 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
+import { Observable, BehaviorSubject, of, Subscription, throwError } from 'rxjs';
 import { map, catchError, switchMap, finalize, tap } from 'rxjs/operators';
 import { UserModel } from '../models/user.model';
 import { Router } from '@angular/router';
-import { CookieComponent } from 'src/app/_metronic/kt/components';
 import { env } from 'src/environments/env';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -68,45 +67,27 @@ export class AuthService implements OnDestroy {
       withCredentials: true
     };
     this.isLoadingSubject.next(true);
-
-    return this.http.get(env.CSRF_COOKIE_URL, options).pipe(
-      switchMap(() => {
-        const csrfToken = CookieComponent.get('XSRF-TOKEN')!;
-        const loginOptions: any = {
-          headers: new HttpHeaders({
-            'ngrok-skip-browser-warning': 'any-value',
-            'Accept': 'application/json',
-            'X-XSRF-TOKEN': csrfToken
-          }),
-          withCredentials: true
-        };
-        return this.http.post<{ user: UserType }>(env.LOGIN_URL, { email, password }, loginOptions).pipe(
-          map((result : any) => {
-            if (result && result.usuario) {
-              this.storeTokens(result);
-              result.usuario.pic = './assets/media/logos/logo-cc-web-small-dark.png';
-              this.currentUserSubject.next(result.usuario);
-              return result.usuario;
-            } else {
-              throw new Error('Credenciales incorrectas');
-            }
-          })
-        );
-      }),
-      catchError((err) => {
-        console.error('Login error:', err);
-        return of(undefined);
-      }),
-      finalize(() => this.isLoadingSubject.next(false))
+    return this.http.post<{ user: UserType }>(env.API_URL + 'login', { email, password }, options).pipe(
+      map((result : any) => {
+        if (result && result.usuario) {
+          this.storeTokens(result);
+          result.usuario.pic = './assets/media/logos/logo-cc-web-small-dark.png';
+          this.currentUserSubject.next(result.usuario);
+          return result.usuario;
+        } else {
+          throw new Error('Credenciales incorrectas');
+        }
+      },
+      finalize(() => this.isLoadingSubject.next(false)))
     );
+    
   }
 
   google(){
     const options : any = {
       headers: new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN': CookieComponent.get('XSRF-TOKEN')!
+        'Accept': 'application/json'
       }),
       withCredentials: true
     }
@@ -119,8 +100,7 @@ export class AuthService implements OnDestroy {
         return of(undefined);
       },
       error: (data:any)=>{
-        //console.log(data)
-        this.deleteCookies();
+        this.deleteStorage();
         this.router.navigate(['/auth/login']);
         return of(undefined);
       }
@@ -130,57 +110,52 @@ export class AuthService implements OnDestroy {
   private storeTokens(result: any) {
     let expTime = new Date();
     expTime = new Date(expTime.getTime() + 60*60*10000);
-    CookieComponent.set('userToken', result.token, { Expires: expTime });
-    CookieComponent.set('permisosF', result.permisosF, { Expires: expTime });
-    CookieComponent.set('permisosM', result.permisosM, { Expires: expTime });
+    localStorage.setItem('userToken', result.token);
+    localStorage.setItem('permisosF', result.permisosF);
+    localStorage.setItem('permisosM', result.permisosM);
   }
 
   logout() {
     const options = {
       headers : new HttpHeaders({
         'Accept': 'application/json',
-        'X-XSRF-TOKEN' : CookieComponent.get('XSRF-TOKEN')!,
+        'authorization' : 'Bearer '+localStorage.getItem('userToken')!
       }),
       withCredentials: true
     }
-    return this.http.post(env.LOGOUT_URL, null, options).pipe(
-      tap(() => {
-        this.deleteCookies();
-        this.router.navigate(['/auth/login'], {
-          queryParams: {},
-        });
+    return this.http.post(env.API_URL + 'logout', null, options).pipe(
+      tap(async () => {
+        await this.deleteStorage();
+        this.router.navigate(['/auth/login'], { queryParams: {} });
+      }),
+      catchError(error => {
+        this.deleteStorage();
+        return throwError('Logout failed. Please try again.');
       })
     );
   }
 
   getUserByToken(): Observable<UserType> {
-    const auth = CookieComponent.get('userToken');
-    const xsrf = CookieComponent.get('XSRF-TOKEN');
+    let auth = localStorage.getItem('userToken');
     if (!auth || auth === 'undefined') {
       if(window.location.pathname.includes('google/callback')){
         return of(undefined);
       }
-      this.deleteCookies();
+      this.deleteStorage();
       this.router.navigate(['/auth/login']);
       return of(undefined);
     }
-    if (!xsrf || xsrf === 'undefined') {
-      this.deleteCookies();
-      this.router.createUrlTree(['/auth/login']);
-      //this.router.navigate(['/auth/login']);
-      return of(undefined);
-    }
-    const loginOptions: any = {
+    let loginOptions: any = {
       headers: new HttpHeaders({
         'ngrok-skip-browser-warning': 'any-value',
         'Accept': 'application/json',
-        'X-XSRF-TOKEN': xsrf
+        'authorization' : 'Bearer '+localStorage.getItem('userToken')!
       }),
       withCredentials: true
     };
 
     this.isLoadingSubject.next(true);
-    return this.http.get<UserType>(env.USER_URL,loginOptions).pipe(
+    return this.http.get<UserType>(env.API_URL+'persona/getuser',loginOptions).pipe(
       map((data: any) => {
         if (data.usuario) {
           data.usuario.pic = './assets/media/logos/logo-cc-web-small-dark.png';
@@ -191,35 +166,17 @@ export class AuthService implements OnDestroy {
         }
         return data.usuario;
       }),
-      finalize(() => this.isLoadingSubject.next(false))
-    );
-  }
-/*
-  // need create new user then login
-  registration(user: UserModel): Observable<any> {
-    this.isLoadingSubject.next(true);
-    return this.authHttpService.createUser(user).pipe(
-      map(() => {
-        this.isLoadingSubject.next(false);
-      }),
-      switchMap(() => this.login(user.email, user.password)),
-      catchError((err) => {
-        console.error('err', err);
-        return of(undefined);
+      catchError(error =>{
+        this.deleteStorage();
+        return throwError('Logout failed. Please try again.');
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
-*/
-  //eliminar cookies
-  deleteCookies(){
-    CookieComponent.delete('userToken');
-    CookieComponent.delete('permisosF');
-    CookieComponent.delete('permisosM');
-    CookieComponent.delete('kt_app_sidebar_menu_scrollst');
-    localStorage.removeItem('v8.2.3-authf649fc9a5f55');
-    localStorage.removeItem('dark-sidebar-v8.2.3-layoutConfig');
-    localStorage.removeItem('v8.2.3-baseLayoutType');
+
+  //eliminar storage
+  deleteStorage(){
+    localStorage.clear()
 
   }
   // private methods
