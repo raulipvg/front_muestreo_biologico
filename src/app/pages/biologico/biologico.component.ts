@@ -9,7 +9,7 @@ import { IPlantaModel } from 'src/app/services/plantas/plantas.service';
 import { FormulariosService } from 'src/app/services/formularios/formularios.service';
 import { ILugarmModel } from 'src/app/services/lugaresm/lugaresm.service';
 import { IClasificacionModel } from 'src/app/services/clasificaciones/clasificaciones.service';
-import{ IPuertoModel } from 'src/app/services/puertos/puertos.service';
+import { IPuertoModel } from 'src/app/services/puertos/puertos.service';
 import { IDepartamentoModel } from 'src/app/services/departamentos/departamentos.service';
 import { IPersonaModel } from 'src/app/services/personas/personas.service';
 import { RespuestasService } from 'src/app/services/respuestas/respuestas.service';
@@ -185,7 +185,7 @@ export class BiologicoComponent implements OnInit{
   }
 
   ngOnDestroy(): void {
-    
+   
   }
 
   initValidacion() {
@@ -564,9 +564,9 @@ export class BiologicoComponent implements OnInit{
   //EVENTO QUE CAPTURA EL VALOR DE INTEGRIDAD TOTAL
   onIntegridadTotal(event: any) {
     //console.log(event.target.value);
-    this.integridadTotalValue = event.target.value;
+    this.integridadTotalValue = Number(event.target.value);
     this.analisis.controls.forEach((fg: any, i: any) => { 
-      fg.get('integridad')?.setValue(event.target.value);
+      fg.get('integridad')?.setValue(this.integridadTotalValue);
       fg.get('integridad')?.disable();
     });
   }

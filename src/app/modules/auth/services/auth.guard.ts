@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
-import { FormulariosService } from 'src/app/services/formularios/formularios.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard  {
-  constructor(private authService: AuthService,
-    private formularioServicio : FormulariosService
+  constructor(private authService: AuthService
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentUser = this.authService.currentUserValue;
+    const test= this.authService.getUserByToken();
     if (currentUser) {
       // logged in so return true
       return true;

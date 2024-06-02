@@ -3,7 +3,7 @@ import { FormulariosService } from "./formularios.service";
 import { inject } from "@angular/core";
 
 
-export const registrarFormularioBiologico : CanActivateFn = (route:any, state:any) => {
+export const  registrarFormularioBiologico : CanActivateFn = (route:any, state:any) => {
   const formularioServicio = inject(FormulariosService);
   const router = inject(Router);
 

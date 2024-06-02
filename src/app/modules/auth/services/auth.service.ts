@@ -1,10 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, BehaviorSubject, of, Subscription, throwError } from 'rxjs';
-import { map, catchError, switchMap, finalize, tap } from 'rxjs/operators';
+import { map, catchError, finalize, tap } from 'rxjs/operators';
 import { UserModel } from '../models/user.model';
 import { Router } from '@angular/router';
 import { env } from 'src/environments/env';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { getOptions, getOptionsSimple } from 'src/app/services/global';
+
 
 export type UserType = UserModel | undefined;
 
@@ -59,13 +61,7 @@ export class AuthService implements OnDestroy {
   }*/
 
   login(email: string, password: string): Observable<UserType> {
-    const options: any = {
-      headers: new HttpHeaders({
-        'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json'
-      }),
-      withCredentials: true
-    };
+    const options: any = getOptionsSimple();
     this.isLoadingSubject.next(true);
     return this.http.post<{ user: UserType }>(env.API_URL + 'login', { email, password }, options).pipe(
       map((result : any) => {
@@ -84,13 +80,7 @@ export class AuthService implements OnDestroy {
   }
 
   google(){
-    const options : any = {
-      headers: new HttpHeaders({
-        'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json'
-      }),
-      withCredentials: true
-    }
+    const options : any = getOptionsSimple();
     this.http.get(`${env.GOOGLE_CALLBACK_URL+location.search}`,options).subscribe({
       next: (data:any)=>{
         this.storeTokens(data);
@@ -116,13 +106,8 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
-    const options = {
-      headers : new HttpHeaders({
-        'Accept': 'application/json',
-        'authorization' : 'Bearer '+localStorage.getItem('userToken')!
-      }),
-      withCredentials: true
-    }
+    const options : any = getOptions();
+   
     return this.http.post(env.API_URL + 'logout', null, options).pipe(
       tap(async () => {
         await this.deleteStorage();
@@ -145,14 +130,7 @@ export class AuthService implements OnDestroy {
       this.router.navigate(['/auth/login']);
       return of(undefined);
     }
-    let loginOptions: any = {
-      headers: new HttpHeaders({
-        'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json',
-        'authorization' : 'Bearer '+localStorage.getItem('userToken')!
-      }),
-      withCredentials: true
-    };
+    let loginOptions: any = getOptions();
 
     this.isLoadingSubject.next(true);
     return this.http.get<UserType>(env.API_URL+'persona/getuser',loginOptions).pipe(
@@ -168,7 +146,11 @@ export class AuthService implements OnDestroy {
       }),
       catchError(error =>{
         this.deleteStorage();
+        if(error.status === 400){
+          this.router.navigate(['auth/login']);
+        }
         return throwError('Logout failed. Please try again.');
+        
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );
@@ -177,7 +159,6 @@ export class AuthService implements OnDestroy {
   //eliminar storage
   deleteStorage(){
     localStorage.clear()
-
   }
   // private methods
   ngOnDestroy() {
