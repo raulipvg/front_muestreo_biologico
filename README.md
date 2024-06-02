@@ -1,24 +1,4 @@
-# ENTREGA - SPRINT 4 
-
-## IMPORTANTE:
-
-Debido al cambio a la autenticación hacia JWT, todas las solicitudes deben incluir el header `Authorization` con la palabra `Bearer ` (y un espacio) y luego valor del token de usuario asignado por el backend. Se puede acceder a este token con `localStorage.getItem('userToken')!`. Además, los headers deben ir acompañados con `withCredentials: true`.
-
-Ejemplo:
-
-    const options : any = {
-      headers : new HttpHeaders({
-        'ngrok-skip-browser-warning': 'any-value',
-        'Accept': 'application/json',
-        'Authorization' : 'Bearer '+ localStorage.getItem('userToken')
-        }),
-      withCredentials : true
-    }
-
-Hasta el momento, están actualizados los servicios:
-- Formularios       (Necesario para el sidebar)
-- Clasificaciones   (Como ejemplo)
-- Personas          (Necesario para los datos de usuario/nombres)
+# ENTREGA - SPRINT 4 - CAMBIOS DE INICIO DE SESION SANCTUM A JWT TOKEN
 
 # Sistema formularios
 
