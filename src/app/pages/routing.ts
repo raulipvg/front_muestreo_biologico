@@ -5,7 +5,7 @@ import { FormulariosComponent } from './maestros/formularios/formularios.compone
 import { BiologicoComponent } from './biologico/biologico.component';
 import { biologicosRoutes } from './biologico/biologico-routing';
 import { RespuestabiologicoComponent } from './maestros/respuestabiologico/respuestabiologico.component';
-import { registrarFormularioBiologico, editRespFormularioBiologico } from '../services/formularios/formularios.guard';
+import { registrarFormularioBiologico, editRespFormularioBiologico, formularioEnabled } from '../services/formularios/formularios.guard';
 import { verMaestrosBiologicos } from './biologico/maestros.guard';
 import { verMaestroFormulario } from './maestros/formularios/maestroformularios.guard';
 
@@ -31,7 +31,7 @@ const Routing: Routes = [
   {
     path: 'biologico/ingresar',
     component: BiologicoComponent,
-    canActivate: [registrarFormularioBiologico]
+    canActivate: [formularioEnabled,registrarFormularioBiologico]
   },
   {
     path: 'biologico/:id',

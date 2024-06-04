@@ -18,19 +18,24 @@ export interface IFormularioModel {
   providedIn: 'root'
 })
 export class FormulariosService {
-  formulariosSubject: BehaviorSubject<any>;
+  formulariosSubject = new BehaviorSubject<any>(undefined);
+  url = env.API_URL + 'formulario';
 
 
   constructor(private http: HttpClient) {
-    this.formulariosSubject = new BehaviorSubject<any>(undefined);
+    
+    this.loadFormulariosEnabled();
   }
 
   get formularioEnabled() : any {
     return this.formulariosSubject.value;
   }
 
-  url = env.API_URL + 'formulario';
   
+  private loadFormulariosEnabled(): void {
+    this.getFormulariosEnabled().subscribe();
+  }
+
   getAll(): Observable<any> {
     const options = getOptions();
     return this.http.get(this.url+'/getall', options )
@@ -90,9 +95,12 @@ export class FormulariosService {
                   );
   }
 
-  getFormulariosEnabled(): Observable<any> {
+  getFormulariosEnabled(id?: number): Observable<any> {
     const options = getOptions();
-    return this.http.get(this.url + '/getenabled', options)
+    if(id){
+      return this.http.get(`${this.url}/getenabled/${id}`, options)
+    }else{
+      return this.http.get(`${this.url}/getenabled/`, options)
       .pipe(
         tap((data) => this.formulariosSubject.next(data)), // Actualizar BehaviorSubject con la respuesta de la API
         catchError((error) => {
@@ -100,6 +108,7 @@ export class FormulariosService {
           return of(null); // Retornar un observable vacío en caso de error
         })
       );
+    }
   }
 
 }

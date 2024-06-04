@@ -15,11 +15,22 @@ export class SidebarMenuComponent implements OnInit {
   constructor(
     public servicio: FormulariosService, 
   ) {
-    this.servicio.getFormulariosEnabled().subscribe();
+    //this.servicio.getFormulariosEnabled().subscribe();
+    
   }
  
 
   ngOnInit(): void {
+    this.servicio.formulariosSubject.subscribe((data) => {
+      if (data !== undefined) {
+        this.onFormulariosEnabledLoaded(data);
+      }
+    });
+  }
+  onFormulariosEnabledLoaded(data: any): void {
+    console.log('Formularios Enabled Data:', data);
+    // Ahora puedes usar los datos cargados
+    // this.servicio.getFormulariosEnabled().subscribe();
   }
 
 }
