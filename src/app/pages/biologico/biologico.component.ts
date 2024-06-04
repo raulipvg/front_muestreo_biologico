@@ -17,6 +17,7 @@ import { SwalComponent, SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { PageLoadingComponent } from 'src/app/modules/page-loading/page-loading.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-biologico',
@@ -77,8 +78,9 @@ export class BiologicoComponent implements OnInit{
   integridadTotalFlag: boolean = false;
   integridadTotalValue: any = null;
 
-  id: number | null;
+  id: number;
   nombreSubmit: string = 'Guardar';
+  
   constructor(
     private fb: FormBuilder,
     private formularioService: FormulariosService,
@@ -120,6 +122,11 @@ export class BiologicoComponent implements OnInit{
               this.departamentos = data.departamentos;
               this.formulario.get('departamento_id')?.setValue(1);
               this.personas = data.personas;
+              
+              //SI ES UNA EDICION
+              if(this.id > 0){
+                this.getDataBiologico(this.id);
+              }
             },
             error: (error: any) => {
               //console.log('Error al cargar los selectores');
@@ -132,56 +139,11 @@ export class BiologicoComponent implements OnInit{
             }
           })
           .add(() => {
-            if(!this.id){this.loadingEvent()};
+            if(!this.id){
+              this.loadingEvent()
+            };       
           });
 
-    //INICIO::SI ES UNA EDICION
-    if(this.id){
-      //this.loadingEvent();
-      this.nombreSubmit = 'Actualizar';
-      this.respuestasService.get(this.id).subscribe({
-        next: (data: any) => {
-          //console.log(data);
-          //asignar valores en data a los campos del formulario
-        
-          this.formulario.patchValue(data.json);
-          this.formulario.get('id')?.setValue(data.id);
-          this.formulario.get('fecha_recepcion')?.disable();
-          this.especiesObjetivos = this.especies.filter(
-                                      especie => data.json.especieobjetivo_id.includes(especie.id)
-                                    );
-          
-          data.json.analisis.forEach((data: any) => {
-            this.addAnalisis(data.especie_id);
-            this.analisis.controls[this.analisis.length - 1].patchValue(data);
-          });
-
-          this.especiesAcompanantes = this.especiesAcompanantesTotales.filter(
-            especie => !data.json.especieobjetivo_id.includes(especie.id)
-          );
-          data.json.fauna_acompanante.forEach((data: any) => {
-            this.addFauna();
-            this.fauna_acompanante.controls[this.fauna_acompanante.length - 1].patchValue(data);
-          });
-
-        if(data.resp_storage.length > 0){
-          this.selectedFileName=data.resp_storage[data.resp_storage.length-1]?.nombre;
-          //Quitar el validador de imagen requerido si ya existe una imagen
-          this.formulario.get('imagen')?.clearValidators();
-          this.formulario.get('imagen')?.updateValueAndValidity(); 
-        }
-          
-        },
-        error: (error: any) => {
-          //console.log(error.error);
-          this.router.navigate(['/error404']);
-        }
-      })
-      .add(() => {
-        this.loadingEvent();
-      });
-    }
-    //FIN::SI ES UNA EDICION
   }
 
   ngOnDestroy(): void {
@@ -261,15 +223,15 @@ export class BiologicoComponent implements OnInit{
                     Validators.required
                   ])
                 ],
-      agua_descargada: [,Validators.compose([
+      agua_descargada: [0,Validators.compose([
                     Validators.required,
-                    Validators.min(1),
+                    Validators.min(0),
                     Validators.max(2000)
                   ])
                 ],
-      cuenta: [,Validators.compose([
+      cuenta: [0,Validators.compose([
                     Validators.required,
-                    Validators.min(1),
+                    Validators.min(0),
                     Validators.max(500)
                   ])
                 ],
@@ -285,7 +247,7 @@ export class BiologicoComponent implements OnInit{
                     Validators.max(30)
                   ])
                 ],
-      ph: [,Validators.compose([
+      ph: [0,Validators.compose([
                     Validators.required,
                     Validators.min(0),
                     Validators.max(14)
@@ -296,7 +258,7 @@ export class BiologicoComponent implements OnInit{
                     Validators.max(100)
                   ])
                 ],
-      calidad_aceite: [,Validators.compose([
+      calidad_aceite: [0,Validators.compose([
                     Validators.min(0),
                     Validators.max(100)
                   ])
@@ -326,7 +288,50 @@ export class BiologicoComponent implements OnInit{
     return (this.formulario.controls['fauna_acompanante'] as FormArray);
   }
 
+  getDataBiologico(id: number){
+    this.nombreSubmit = 'Actualizar';
+    this.respuestasService.get(id).subscribe({
+      next: (data: any) => {
+        //console.log(data);
+        //asignar valores en data a los campos del formulario
+      
+        this.formulario.patchValue(data.json);
+        this.formulario.get('id')?.setValue(data.id);
+        this.formulario.get('fecha_recepcion')?.disable();
+        this.especiesObjetivos = this.especies.filter(
+                                    especie => data.json.especieobjetivo_id.includes(especie.id)
+                                  );
+        
+        data.json.analisis.forEach((data: any) => {
+          this.addAnalisis(data.especie_id);
+          this.analisis.controls[this.analisis.length - 1].patchValue(data);
+        });
 
+        this.especiesAcompanantes = this.especiesAcompanantesTotales.filter(
+          especie => !data.json.especieobjetivo_id.includes(especie.id)
+        );
+        data.json.fauna_acompanante.forEach((data: any) => {
+          this.addFauna();
+          this.fauna_acompanante.controls[this.fauna_acompanante.length - 1].patchValue(data);
+        });
+
+      if(data.resp_storage.length > 0){
+        this.selectedFileName=data.resp_storage[data.resp_storage.length-1]?.nombre;
+        //Quitar el validador de imagen requerido si ya existe una imagen
+        this.formulario.get('imagen')?.clearValidators();
+        this.formulario.get('imagen')?.updateValueAndValidity(); 
+      }
+        
+      },
+      error: (error: any) => {
+        //console.log(error.error);
+        this.router.navigate(['/error404']);
+      }
+    })
+    .add(() => {
+      this.loadingEvent();
+    });
+  }
   getFormControl(formArray:FormArray, i:number, nombre: string){
     let fg = formArray.controls[i] as FormGroup;
     return fg.controls[nombre];
