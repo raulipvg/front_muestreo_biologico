@@ -235,13 +235,13 @@ export class BiologicoComponent implements OnInit{
                     Validators.max(500)
                   ])
                 ],
-      tvn: [,Validators.compose([
+      tvn: [0,Validators.compose([
                     Validators.required,
-                    Validators.min(1),
+                    Validators.min(0),
                     Validators.max(300)
                   ])
                 ],
-      temperatura: [,Validators.compose([
+      temperatura: [0,Validators.compose([
                     Validators.required,
                     Validators.min(0),
                     Validators.max(30)
@@ -253,18 +253,18 @@ export class BiologicoComponent implements OnInit{
                     Validators.max(14)
                   ])
                 ],
-      grasa: [,Validators.compose([
+      grasa: [0,Validators.compose([
                     Validators.min(0),
                     Validators.max(100)
                   ])
                 ],
-      calidad_aceite: [0,Validators.compose([
-                    Validators.min(0),
-                    Validators.max(100)
+      calidad_aceite: [,Validators.compose([
+                    Validators.minLength(1),
+                    Validators.maxLength(50)
                   ])
                 ],
       imagen: [,Validators.compose([
-                    Validators.required
+                    
                   ])
                 ],
       // Crear un formulario de tipo array para las tallas
@@ -276,17 +276,6 @@ export class BiologicoComponent implements OnInit{
               
     });
   }
-  //GETTERS
-  get f() { 
-    return this.formulario.controls; 
-  }
-  get analisis() {
-    return (this.formulario.controls['analisis'] as FormArray);
-  }
-  //ACCION DE AGREGAR FORMULARIO FAUNA
-  get fauna_acompanante(){
-    return (this.formulario.controls['fauna_acompanante'] as FormArray);
-  }
 
   getDataBiologico(id: number){
     this.nombreSubmit = 'Actualizar';
@@ -294,13 +283,13 @@ export class BiologicoComponent implements OnInit{
       next: (data: any) => {
         //console.log(data);
         //asignar valores en data a los campos del formulario
-      
+        this.especiesObjetivos = this.especies.filter(
+          especie => data.json.especieobjetivo_id.includes(especie.id)
+        );
         this.formulario.patchValue(data.json);
         this.formulario.get('id')?.setValue(data.id);
         this.formulario.get('fecha_recepcion')?.disable();
-        this.especiesObjetivos = this.especies.filter(
-                                    especie => data.json.especieobjetivo_id.includes(especie.id)
-                                  );
+        
         
         data.json.analisis.forEach((data: any) => {
           this.addAnalisis(data.especie_id);
@@ -332,6 +321,19 @@ export class BiologicoComponent implements OnInit{
       this.loadingEvent();
     });
   }
+  //GETTERS
+  get f() { 
+    return this.formulario.controls; 
+  }
+  get analisis() {
+    return (this.formulario.controls['analisis'] as FormArray);
+  }
+  //ACCION DE AGREGAR FORMULARIO FAUNA
+  get fauna_acompanante(){
+    return (this.formulario.controls['fauna_acompanante'] as FormArray);
+  }
+
+  
   getFormControl(formArray:FormArray, i:number, nombre: string){
     let fg = formArray.controls[i] as FormGroup;
     return fg.controls[nombre];
@@ -585,6 +587,27 @@ export class BiologicoComponent implements OnInit{
     
     //ths.formulario.patchValue({ imagen: file });
   }
+
+  onNumEnteroChange(event: KeyboardEvent): void {
+    if (event.key === '.' || event.key === ',' || event.key === '-' || event.key === 'e') {
+      event.preventDefault();
+    }
+  }
+
+  onNumDecimalChange(event: KeyboardEvent): void {
+    if (event.key === 'e' ) {
+      event.preventDefault();
+    }
+  }
+
+  onHHMMChange(event: KeyboardEvent): void {
+    const allowedKeys = '0123456789:';
+    const controlKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Enter', 'Escape'];
+
+    if (!allowedKeys.includes(event.key) && !controlKeys.includes(event.key)) {
+        event.preventDefault();
+    }
+  }
   //BTN::ACCION DE GUARDAR FORMULARIO
   guardar() {
     //console.log(this.formulario.value);
@@ -710,14 +733,13 @@ export class BiologicoComponent implements OnInit{
   }
 
   //Validador de HH:MM en Data Pesca Hrs
-  horaValidador(): ValidatorFn {
+ horaValidador(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const horaRegex = /^(0[1-9]|[1-9][0-9]|1[0-6][0-8]):([0-5]?[0-9])$/; // Expresión regular para el formato HH:MM, acepta desde 01:00 hasta 168:59
+      const horaRegex = /^(0?[1-9]|[1-9][0-9]|1[0-6][0-8]):([0-5]?[0-9])$/; // Expresión regular para el formato H:MM y HH:MM, acepta desde 1:00 hasta 168:59
       const valid = horaRegex.test(control.value);
       return valid ? null : { 'formato': { value: control.value } };
-  };
+    };
   }
-
   //Validador de porcentaje en Fauna Acompañante
   porcentajeValidador(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {

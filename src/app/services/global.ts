@@ -4,7 +4,6 @@ import { HttpHeaders } from "@angular/common/http";
 export function getOptions(): any {
   return {
     headers : new HttpHeaders({
-      'ngrok-skip-browser-warning': 'any-value',
       'Accept': 'application/json',
       'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
     }),
@@ -15,7 +14,6 @@ export function getOptions(): any {
 export function getOptionsWithParams(params: any): any {
   return {
     headers : new HttpHeaders({
-      'ngrok-skip-browser-warning': 'any-value',
       'Accept': 'application/json',
       'Authorization' : 'Bearer '+ localStorage.getItem('userToken')!
     }),
@@ -27,7 +25,6 @@ export function getOptionsWithParams(params: any): any {
 export function getOptionsSimple(): any {
   return {
     headers : new HttpHeaders({
-      'ngrok-skip-browser-warning': 'any-value',
       'Accept': 'application/json',
     }),
     withCredentials : true

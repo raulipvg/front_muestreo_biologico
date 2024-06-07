@@ -98,7 +98,7 @@
                             <div class="col-md-3">
                                 <label for="hrspesca" class="form-label mb-0">Data Pesca (HH:MM):</label>
                                 <input id="hrspesca" type="string" formControlName="hrs_pesca" class="form-control form-control-solid" 
-                                    autocomplete="new-hrspesca" spellcheck="false"
+                                    autocomplete="new-hrspesca" spellcheck="false" (keypress)="onHHMMChange($event)"
                                     [ngClass]="{
                                         'is-invalid': f.hrs_pesca.invalid && (f.hrs_pesca.dirty || f.hrs_pesca.touched),
                                         'is-valid': f.hrs_pesca.valid
@@ -310,7 +310,7 @@
                             <div class="col-6 col-md d-flex flex-column justify-content-start">
                                 <label for="aguadescargada" class="form-label mb-0">Agua Descargada (gr):</label>
                                     <input id="aguadescargada" type="number" formControlName="agua_descargada" class="form-control form-control-solid" 
-                                        step="50" autocomplete="off"
+                                        step="50" autocomplete="off" (keypress)="onNumDecimalChange($event)"
                                         [ngClass]="{
                                                 'is-invalid': f.agua_descargada.invalid && (f.agua_descargada.dirty || f.agua_descargada.touched),
                                                 'is-valid': f.agua_descargada.valid
@@ -325,7 +325,7 @@
                             <div class="col-6 col-md d-flex flex-column justify-content-start">
                                 <label for="cuenta" class="form-label mb-0">Cuenta (N°/Lt):</label>
                                 <input id="cuenta" type="number" formControlName="cuenta" class="form-control form-control-solid" 
-                                    step="5" autocomplete="off"
+                                    step="0" autocomplete="off" (keypress)="onNumEnteroChange($event)"
                                     [ngClass]="{
                                             'is-invalid': f.cuenta.invalid && (f.cuenta.dirty || f.cuenta.touched),
                                             'is-valid': f.cuenta.valid
@@ -340,7 +340,7 @@
                             <div class="col-6 col-md d-flex flex-column justify-content-start">
                                 <label for="tvn" class="form-label mb-0">TVN (mgN/100gr):</label>
                                     <input id="tvn" type="number" formControlName="tvn" class="form-control form-control-solid" 
-                                        step="10" autocomplete="off"
+                                        step="10" autocomplete="off" (keypress)="onNumEnteroChange($event)"
                                         [ngClass]="{
                                             'is-invalid': f.tvn.invalid && (f.tvn.dirty || f.tvn.touched),
                                             'is-valid': f.tvn.valid
@@ -354,7 +354,7 @@
                             <div class="col-6 col-md d-flex flex-column justify-content-start">
                                 <label for="temperatura" class="form-label mb-0">Temperatura C°:</label>
                                     <input id="temperatura" type="number" formControlName="temperatura" class="form-control form-control-solid" 
-                                        step="0.1" autocomplete="off"
+                                        step="0.1" autocomplete="off" (keypress)="onNumDecimalChange($event)"
                                         [ngClass]="{
                                                 'is-invalid': f.temperatura.invalid && (f.temperatura.dirty || f.temperatura.touched),
                                                 'is-valid': f.temperatura.valid
@@ -368,7 +368,7 @@
                             <div class="col-6 col-md d-flex flex-column justify-content-start">
                                 <label for="ph" class="form-label mb-0">pH:</label>
                                     <input id="ph" type="number" formControlName="ph" class="form-control form-control-solid"
-                                        step="0.1" autocomplete="off"
+                                        step="0.1" autocomplete="off" (keypress)="onNumEnteroChange($event)"
                                         [ngClass]="{
                                                 'is-invalid': f.ph.invalid && (f.ph.dirty || f.ph.touched),
                                                 'is-valid': f.ph.valid
@@ -386,22 +386,22 @@
                         <div class="row">
                             <div class="col-6 col-md-3 d-flex flex-column justify-content-start">
                                 <label for="calidadaceite" class="form-label mb-0">Calidad Aceite:</label>
-                                <input id="calidadaceite" type="number" formControlName="calidad_aceite" class="form-control form-control-solid" 
+                                <input id="calidadaceite" type="text" formControlName="calidad_aceite" class="form-control form-control-solid" 
                                     step="1" autocomplete="off"
                                     [ngClass]="{
                                             'is-invalid': f.calidad_aceite.invalid && (f.calidad_aceite.dirty || f.calidad_aceite.touched),
                                             'is-valid': f.calidad_aceite.valid
                                     }">
                                 <div *ngIf="f.calidad_aceite.errors" class="invalid-feedback">
-                                    <div *ngIf="f.calidad_aceite.errors?.['min']">Valor mínimo 0</div>
-                                    <div *ngIf="f.calidad_aceite.errors?.['max']">Valor máximo 100</div>
+                                    <div *ngIf="f.calidad_aceite.errors?.['minLength']">Largo mínimo 1</div>
+                                    <div *ngIf="f.calidad_aceite.errors?.['maxLength']">Largo máximo 50</div>
                                 </div>
                             
                             </div>
                             <div class="col-6 col-md-3 d-flex flex-column justify-content-start">
                                 <label for="grasa" class="form-label mb-0">Grasa:</label>
                                     <input id="grasa" type="number" formControlName="grasa" class="form-control form-control-solid" 
-                                        autocomplete="off"
+                                        autocomplete="off" (keypress)="onNumEnteroChange($event)"
                                         [ngClass]="{
                                                 'is-invalid': f.grasa.invalid && (f.grasa.dirty || f.grasa.touched),
                                                 'is-valid': f.grasa.valid
